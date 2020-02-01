@@ -1,0 +1,3 @@
+name: Construkt
+main: com.github.razz0991.construkt.Construkt
+version: ${project.version}
