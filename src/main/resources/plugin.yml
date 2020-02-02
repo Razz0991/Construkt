@@ -1,3 +1,11 @@
 name: Construkt
 main: com.github.razz0991.construkt.Construkt
 version: ${project.version}
+author: _Razz_
+commands:
+   construkt:
+      description: Enables or disables Construkt.
+      usage: /construkt
+      permission: construkt.toggle
+      permission-message: You don't have permission to use Construkt!
+      
