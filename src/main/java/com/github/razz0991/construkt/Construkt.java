@@ -1,4 +1,22 @@
 package com.github.razz0991.construkt;
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,20 +30,37 @@ public class Construkt extends JavaPlugin {
 		getLogger().info("Construkt starting...");
 		getServer().getPluginManager().registerEvents(new CktEvents(), this);
 		getLogger().info("Construkt started.");
+		
+		for(Player ply : getServer().getOnlinePlayers()) {
+			Players.addPlayer(ply);
+		}
+		
 	}
 	
 	@Override
 	public void onDisable() {
 		getLogger().info("Construkt disabling...");
+		
+		for (UUID id : Players.getAllPlayers()) {
+			Players.removePlayer(id);
+		}
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("construkt")) {
 			if (sender instanceof Player) {
-				Player ply = (Player)sender;
-				Players.getPlayerInfo(ply).toggleConstruktEnabled();
-				return true;
+				Player player = (Player)sender;
+				PlayerInfo plyInfo = Players.getPlayerInfo(player);
+				if (args.length == 0) {
+					plyInfo.toggleConstruktEnabled();
+					return true;
+				}
+				else {
+					String shape = args[0];
+					plyInfo.setShape(shape);
+					return true;
+				}
 			}
 		}
 		return false;

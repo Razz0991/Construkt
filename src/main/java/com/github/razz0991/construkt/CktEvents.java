@@ -1,7 +1,10 @@
 package com.github.razz0991.construkt;
-
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -36,32 +39,22 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.PLACE) {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
-				if (ply.getBlockData() != null && ply.getFirstLocation() != null) {
-					int[] x, y, z;
-					Location first, second;
-					first = ply.getFirstLocation();
-					second = ev.getBlock().getLocation();
-					x = CktUtil.smallestNumber(first.getBlockX(), second.getBlockX());
-					y = CktUtil.smallestNumber(first.getBlockY(), second.getBlockY());
-					z = CktUtil.smallestNumber(first.getBlockZ(), second.getBlockZ());
-					
-					// Fill area loops
-					for (int lz = z[0]; lz <= z[1]; lz++) {
-						for (int lx = x[0]; lx <= x[1]; lx++) {
-							for (int ly = y[0]; ly <= y[1]; ly++) {
-								Location position = new Location(ev.getBlock().getWorld(), lx, ly, lz);
-								// Only place blocks in air blocks.
-								if (position.getBlock().getType() == Material.AIR)
-									position.getBlock().setBlockData(ply.getBlockData().clone());
-							}
-						}
-					}
-				}
+				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+				ply.getShape().getLoop().runLoop(locations, true, ply.getBlockData(), ply.getShape());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
 				ply.setBlockData(null);
 				ply.setMode(CktMode.NONE);
 				ply.setFirstLocation(null);
+			}
+			else if (ply.getMode() == CktMode.BREAK) {
+				if (ply.getFirstLocation().equals(ev.getBlock().getLocation())) {
+					// Undo first break
+					ply.setBlockData(null);
+					ply.setMode(CktMode.NONE);
+					ply.setFirstLocation(null);
+					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block breakage.");
+				}
 			}
 		}
 	}
@@ -81,30 +74,33 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.BREAK) {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
-				if (ply.getBlockData() != null && ply.getFirstLocation() != null) {
-					int[] x, y, z;
-					Location first, second;
-					first = ply.getFirstLocation();
-					second = ev.getBlock().getLocation();
-					x = CktUtil.smallestNumber(first.getBlockX(), second.getBlockX());
-					y = CktUtil.smallestNumber(first.getBlockY(), second.getBlockY());
-					z = CktUtil.smallestNumber(first.getBlockZ(), second.getBlockZ());
-					
-					// Clear area loops
-					for (int lz = z[0]; lz <= z[1]; lz++) {
-						for (int lx = x[0]; lx <= x[1]; lx++) {
-							for (int ly = y[0]; ly <= y[1]; ly++) {
-								Location position = new Location(ev.getBlock().getWorld(), lx, ly, lz);
-								position.getBlock().setType(Material.AIR);
-							}
-						}
-					}
-				}
+				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+				ply.getShape().getLoop().runLoop(locations, false, null, ply.getShape());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
 				ply.setBlockData(null);
 				ply.setMode(CktMode.NONE);
 				ply.setFirstLocation(null);
+			}
+			else if (ply.getMode() == CktMode.PLACE) {
+				if (ply.getFirstLocation().equals(ev.getBlock().getLocation())) {
+					// Undo first place
+					ply.setBlockData(null);
+					ply.setMode(CktMode.NONE);
+					ply.setFirstLocation(null);
+					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block placement.");
+				}
+				else {
+					// Replace mode
+					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
+					Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+					ply.getShape().getLoop().runLoop(locations, false, ply.getBlockData(), ply.getShape());
+					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
+					
+					ply.setBlockData(null);
+					ply.setMode(CktMode.NONE);
+					ply.setFirstLocation(null);
+				}
 			}
 		}
 	}

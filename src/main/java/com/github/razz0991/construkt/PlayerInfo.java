@@ -1,11 +1,18 @@
 package com.github.razz0991.construkt;
-
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+
+import com.github.razz0991.construkt.shapes.BaseShape;
+import com.github.razz0991.construkt.shapes.Shapes;
 
 public class PlayerInfo {
 	private UUID plyId;
@@ -15,6 +22,7 @@ public class PlayerInfo {
 	private Location firstLocation = null;
 	
 	private CktMode mode = CktMode.NONE;
+	private String shape = "cuboid";
 	
 	public PlayerInfo(Player player) {
 		plyId = player.getUniqueId();
@@ -63,6 +71,19 @@ public class PlayerInfo {
 
 	public void setFirstLocation(Location firstLocation) {
 		this.firstLocation = firstLocation;
+	}
+	
+	public BaseShape getShape() {
+		return Shapes.getShape(shape);
+	}
+	
+	public void setShape(String shape) {
+		if (Shapes.hasShape(shape)) {
+			this.shape = shape;
+			CktUtil.messagePlayer(getPlayer(), "Changed shape to " + shape);
+			return;
+		}
+		CktUtil.messagePlayer(getPlayer(), "No shape found by the name \"" + shape + "\"");
 	}
 
 }

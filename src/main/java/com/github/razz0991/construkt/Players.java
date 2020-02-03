@@ -1,7 +1,13 @@
 package com.github.razz0991.construkt;
-
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -17,8 +23,12 @@ public class Players {
 	
 	public static void removePlayer(Player player) {
 		UUID uid = player.getUniqueId();
-		if (players.containsKey(uid))
-			players.remove(uid);
+		removePlayer(uid);
+	}
+	
+	public static void removePlayer(UUID playerId) {
+		if (players.containsKey(playerId))
+			players.remove(playerId);
 	}
 	
 	public static PlayerInfo getPlayerInfo(Player player) {
@@ -26,5 +36,9 @@ public class Players {
 		if (players.containsKey(uid))
 			return players.get(uid);
 		return null;
+	}
+	
+	public static Set<UUID> getAllPlayers() {
+		return new HashSet<UUID>(players.keySet());
 	}
 }

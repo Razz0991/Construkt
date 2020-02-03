@@ -8,4 +8,5 @@ commands:
       usage: /construkt
       permission: construkt.toggle
       permission-message: You don't have permission to use Construkt!
+      aliases: [ckt]
       
