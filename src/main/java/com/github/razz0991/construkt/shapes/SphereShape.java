@@ -22,7 +22,7 @@ public class SphereShape extends BaseShape{
 				firstLocation.getY() + dist, 
 				firstLocation.getZ() + dist);
 		
-		if (center.distance(loopPosition) <= dist + 1)
+		if (center.distance(loopPosition) < dist + 0.5)
 			return true;
 		return false;
 	}
