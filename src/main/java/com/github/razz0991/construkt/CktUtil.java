@@ -1,10 +1,13 @@
 package com.github.razz0991.construkt;
+import java.util.Map;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
  *  Full disclaimer in Construkt.java
  */
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class CktUtil {
@@ -24,6 +27,50 @@ public class CktUtil {
 			output[0] = first;
 			output[1] = second;
 			return output;
+		}
+	}
+	
+	public static Location[] areaRange(Location location1, Location location2){
+
+		int[] x, y, z;
+		x = smallestNumber(location1.getBlockX(), location2.getBlockX());
+		y = smallestNumber(location1.getBlockY(), location2.getBlockY());
+		z = smallestNumber(location1.getBlockZ(), location2.getBlockZ());
+		
+		return new Location[] {new Location(location1.getWorld(), x[0], y[0], z[0]),
+				new Location(location1.getWorld(), x[1], y[1], z[1])};
+	}
+	
+	public static int[] locationToArray(Location loc, char[] order) {
+		int[] output = new int[order.length];
+		for (int i = 0; i < order.length; i++) {
+			if (order[i] == 'x')
+				output[i] = loc.getBlockX();
+			else if (order[i] == 'y')
+				output[i] = loc.getBlockY();
+			else if (order[i] == 'z')
+				output[i] = loc.getBlockZ();
+		}
+		return output;
+	}
+	
+	public static void updateCoordinates(int[] coords, char[] order, Map<Character, Integer> missingVals, Location toUpdate) {
+		if (missingVals != null) {
+			if (missingVals.containsKey('x'))
+				toUpdate.setX(missingVals.get('x'));
+			if (missingVals.containsKey('y'))
+				toUpdate.setY(missingVals.get('y'));
+			if (missingVals.containsKey('z'))
+				toUpdate.setZ(missingVals.get('z'));
+		}
+		
+		for (int i = 0; i < order.length; i++) {
+			if (order[i] == 'x')
+				toUpdate.setX(coords[i]);
+			else if (order[i] == 'y')
+				toUpdate.setY(coords[i]);
+			else if (order[i] == 'z')
+				toUpdate.setZ(coords[i]);
 		}
 	}
 

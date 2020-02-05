@@ -39,8 +39,9 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.PLACE) {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
-				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-				ply.getShape().getLoop().runLoop(locations, true, ply.getBlockData(), ply.getShape());
+//				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+//				ply.getShape().getLoop().runLoop(locations, true, ply.getBlockData(), ply.getShape());
+				ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, true, ply.getBlockData());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
 				ply.setBlockData(null);
@@ -74,8 +75,9 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.BREAK) {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
-				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-				ply.getShape().getLoop().runLoop(locations, false, null, ply.getShape());
+//				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+//				ply.getShape().getLoop().runLoop(locations, false, null, ply.getShape());
+				ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, false, null);
 				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
 				ply.setBlockData(null);
@@ -93,8 +95,9 @@ public class CktEvents implements Listener {
 				else {
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
-					Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-					ply.getShape().getLoop().runLoop(locations, false, ply.getBlockData(), ply.getShape());
+//					Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
+//					ply.getShape().getLoop().runLoop(locations, false, ply.getBlockData(), ply.getShape());
+					ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, false, ply.getBlockData());
 					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
 					
 					ply.setBlockData(null);
