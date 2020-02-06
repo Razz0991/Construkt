@@ -1,4 +1,5 @@
 package com.github.razz0991.construkt.shapes;
+import java.util.HashMap;
 import java.util.Map;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -9,13 +10,19 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 public class SphereShape extends BaseShape{
+	
+	private final boolean hollowModeDefault = false;
+	private final String hollowModeName = "hollow";
 
 	@Override
 	public Map<String, ShapeParameter<?>> getDefaultParameters() {
-		return null;
+		Map<String, ShapeParameter<?>> parameters = new HashMap<String, ShapeParameter<?>>();
+		parameters.put(hollowModeName, new BooleanShapeParameter(hollowModeDefault));
+		return parameters;
 	}
 	
 	public Location[] shapeLocations(Location firstLocation, Location secondLocation) {
@@ -43,8 +50,15 @@ public class SphereShape extends BaseShape{
 
 		do {
 			if (canPlace(data.getCurrentLocation(), parameters)) {
-				if (center.distance(data.getCurrentLocation()) < dist + 0.5)
-					setBlock(blockData, data.getCurrentLocation());
+				if (parseBooleanShapeParameter(parameters.get(hollowModeName), hollowModeDefault)) {
+					double curDist = center.distance(data.getCurrentLocation());
+					if (curDist < dist + 0.5 && curDist > dist - 0.5)
+						setBlock(blockData, data.getCurrentLocation());
+				}
+				else {
+					if (center.distance(data.getCurrentLocation()) < dist + 0.5)
+						setBlock(blockData, data.getCurrentLocation());
+				}
 			}
 			
 			data.incrementLoop();
