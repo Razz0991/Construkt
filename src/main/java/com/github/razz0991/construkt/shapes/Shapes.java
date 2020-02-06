@@ -15,6 +15,7 @@ public class Shapes {
 	static {
 		shapes.put("cuboid", new CuboidShape());
 		shapes.put("sphere", new SphereShape());
+		shapes.put("hollow_cuboid", new HollowCuboidShape());
 	}
 	
 	public static BaseShape getShape(String name) {
