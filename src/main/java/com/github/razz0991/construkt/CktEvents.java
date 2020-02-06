@@ -64,6 +64,7 @@ public class CktEvents implements Listener {
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE) {
 				// Begin break mode.
+				ply.setBlockData(ev.getBlock().getBlockData());
 				ply.setMode(CktMode.BREAK);
 				ply.setFirstLocation(ev.getBlock().getLocation());
 				
@@ -73,7 +74,8 @@ public class CktEvents implements Listener {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
 				Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();
-				parameters.put("place_in_air", new BooleanShapeParameter(false));
+				BooleanShapeParameter air = new BooleanShapeParameter(false);
+				parameters.put("place_in_air", air);
 				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, null);
 				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
@@ -89,7 +91,8 @@ public class CktEvents implements Listener {
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
 					Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();
-					parameters.put("place_in_air", new BooleanShapeParameter(false));
+					BooleanShapeParameter air = new BooleanShapeParameter(false);
+					parameters.put("place_in_air", air);
 					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, ply.getBlockData());
 					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
 					
