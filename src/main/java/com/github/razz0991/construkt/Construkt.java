@@ -16,12 +16,16 @@ package com.github.razz0991.construkt;
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.github.razz0991.construkt.shapes.Shapes;
 
 public class Construkt extends JavaPlugin {
 	
@@ -65,4 +69,29 @@ public class Construkt extends JavaPlugin {
 		}
 		return false;
 	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("construkt")) {
+			if (sender instanceof Player && args.length == 1) {
+				List<String> output = new ArrayList<String>();
+				for (String shape : Shapes.getAllShapes()) {
+					if (shape.startsWith(args[0]))
+						output.add(shape);
+				}
+				return output;
+			}
+		}
+		return null;
+	}
 }
+
+
+
+
+
+
+
+
+
+
