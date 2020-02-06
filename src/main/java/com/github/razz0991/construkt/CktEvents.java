@@ -1,4 +1,6 @@
 package com.github.razz0991.construkt;
+import java.util.Map;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -10,6 +12,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 public class CktEvents implements Listener {
 	
@@ -38,7 +43,7 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.PLACE) {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
-				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), true, ply.getBlockData());
+				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), ply.getAllParameters(), ply.getBlockData());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
 				ply.resetMode();
@@ -59,14 +64,17 @@ public class CktEvents implements Listener {
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE) {
 				// Begin break mode.
-				ply.resetMode();
+				ply.setMode(CktMode.BREAK);
+				ply.setFirstLocation(ev.getBlock().getLocation());
 				
 				CktUtil.messagePlayer(ev.getPlayer(), "First block broken.");
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
-				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), false, null);
+				Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();
+				parameters.put("place_in_air", new BooleanShapeParameter(false));
+				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, null);
 				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
 				ply.resetMode();
@@ -80,8 +88,13 @@ public class CktEvents implements Listener {
 				else {
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
-					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), false, ply.getBlockData());
+					Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();
+					parameters.put("place_in_air", new BooleanShapeParameter(false));
+					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, ply.getBlockData());
 					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
+					
+					//Allow broken block to be replaced too
+					ev.setCancelled(true);
 					
 					ply.resetMode();
 				}

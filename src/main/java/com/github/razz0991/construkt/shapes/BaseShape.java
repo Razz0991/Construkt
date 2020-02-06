@@ -1,4 +1,6 @@
 package com.github.razz0991.construkt.shapes;
+import java.util.Map;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -9,9 +11,14 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.CktUtil;
+import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 public abstract class BaseShape {
-	public abstract boolean generateShape(Location firstPoint, Location secondPoint, boolean placeInAir, BlockData blockData);
+	
+	public abstract Map<String, ShapeParameter<?>> getDefaultParameters();
+	public abstract boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData);
 	
 	public void setBlock(BlockData blockData, Location loc) {
 		if (blockData != null)
@@ -20,12 +27,30 @@ public abstract class BaseShape {
 			loc.getBlock().setType(Material.AIR);
 	}
 	
-	public boolean canPlace(Location current, boolean placeInAir) {
+	public boolean canPlace(Location current, Map<String, ShapeParameter<?>> parameters) {
+		boolean placeInAir = true;
+		if (parameters.containsKey("place_in_air")) {
+			placeInAir = parseBooleanShapeParameter(parameters.get("place_in_air"), placeInAir);
+		}
 		if ((placeInAir && current.getBlock().getType() == Material.AIR) ||
 				(!placeInAir && current.getBlock().getType() != Material.AIR)) {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean parseBooleanShapeParameter(ShapeParameter<?> parameter, boolean defaultValue) {
+		if (parameter instanceof BooleanShapeParameter) {
+			return ((BooleanShapeParameter)parameter).getParameter();
+		}
+		return defaultValue;
+	}
+	
+	public int parseIntegerShapeParameter(ShapeParameter<?> parameter, int defaultValue) {
+		if (parameter instanceof IntegerShapeParameter) {
+			return ((IntegerShapeParameter)parameter).getParameter();
+		}
+		return defaultValue;
 	}
 	
 	class AreaData {

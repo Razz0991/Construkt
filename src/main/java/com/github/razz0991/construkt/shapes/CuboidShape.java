@@ -1,4 +1,6 @@
 package com.github.razz0991.construkt.shapes;
+import java.util.Map;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -7,20 +9,27 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+
 public class CuboidShape extends BaseShape{
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, boolean placeInAir, BlockData blockData) {
+	public Map<String, ShapeParameter<?>> getDefaultParameters() {
+		return null;
+	}
+
+	@Override
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
 		AreaData data = new AreaData(firstPoint, secondPoint);
 
 		do {
-			if (canPlace(data.getCurrentLocation(), placeInAir))
+			if (canPlace(data.getCurrentLocation(), parameters))
 				setBlock(blockData, data.getCurrentLocation());
 			
 			data.incrementLoop();
 		} while (!data.isLoopFinished());
 		
-		if (canPlace(data.getCurrentLocation(), placeInAir))
+		if (canPlace(data.getCurrentLocation(), parameters))
 			setBlock(blockData, data.getCurrentLocation());
 		
 		return true;

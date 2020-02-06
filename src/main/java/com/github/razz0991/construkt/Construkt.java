@@ -61,6 +61,15 @@ public class Construkt extends JavaPlugin {
 					return true;
 				}
 				else {
+					// Set Parameter
+					if ((args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter")) &&
+							args.length >= 2) {
+						if (args.length == 3) {
+							plyInfo.setParameter(args[1], args[2]);
+							return true;
+						}
+					}
+					// Otherwise set shape
 					String shape = args[0];
 					plyInfo.setShape(shape);
 					return true;
@@ -73,13 +82,34 @@ public class Construkt extends JavaPlugin {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("construkt")) {
-			if (sender instanceof Player && args.length == 1) {
-				List<String> output = new ArrayList<String>();
-				for (String shape : Shapes.getAllShapes()) {
-					if (shape.startsWith(args[0]))
-						output.add(shape);
+			if (sender instanceof Player) {
+				PlayerInfo plyInfo = Players.getPlayerInfo((Player)sender);
+				if (args.length == 1) {
+					List<String> output = new ArrayList<String>();
+					if ("par".startsWith(args[0]))
+						output.add("par");
+					if ("parameter".startsWith(args[0]))
+						output.add("parameter");
+					
+					for (String shape : Shapes.getAllShapes()) {
+						if (shape.startsWith(args[0]))
+							output.add(shape);
+					}
+					return output;
 				}
-				return output;
+				else if(args.length == 2 && (args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter"))) {
+					List<String> output = new ArrayList<String>();
+					
+					for (String par : plyInfo.getAllParameterKeys()) {
+						if (par.startsWith(args[1]))
+							output.add(par);
+					}
+					
+					return output;
+				}
+				else if(args.length == 3 && (args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter"))) {
+					return new ArrayList<String>();
+				}
 			}
 		}
 		return null;
