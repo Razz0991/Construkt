@@ -6,11 +6,8 @@ import org.bukkit.block.data.BlockData;
 public class HollowCuboidShape extends BaseShape{
 
 	@Override
-	public boolean generateShape(Location[] locations, boolean placeInAir, BlockData blockData) {
-		if (locations.length != 2)
-			return false;
-		
-		AreaData data = new AreaData(locations[0], locations[1]);
+	public boolean generateShape(Location firstPoint, Location secondPoint, boolean placeInAir, BlockData blockData) {
+		AreaData data = new AreaData(firstPoint, secondPoint);
 
 		do {
 			if (canPlace(data.getCurrentLocation(), placeInAir) && isEdge(data))

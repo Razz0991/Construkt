@@ -11,7 +11,7 @@ import org.bukkit.block.data.BlockData;
 import com.github.razz0991.construkt.CktUtil;
 
 public abstract class BaseShape {
-	public abstract boolean generateShape(Location[] locations, boolean placeInAir, BlockData blockData);
+	public abstract boolean generateShape(Location firstPoint, Location secondPoint, boolean placeInAir, BlockData blockData);
 	
 	public void setBlock(BlockData blockData, Location loc) {
 		if (blockData != null)

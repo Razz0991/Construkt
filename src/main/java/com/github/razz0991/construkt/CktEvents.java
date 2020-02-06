@@ -4,7 +4,6 @@ package com.github.razz0991.construkt;
  *
  *  Full disclaimer in Construkt.java
  */
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -39,21 +38,15 @@ public class CktEvents implements Listener {
 			else if (ply.getMode() == CktMode.PLACE) {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
-//				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-//				ply.getShape().getLoop().runLoop(locations, true, ply.getBlockData(), ply.getShape());
-				ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, true, ply.getBlockData());
+				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), true, ply.getBlockData());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
-				ply.setBlockData(null);
-				ply.setMode(CktMode.NONE);
-				ply.setFirstLocation(null);
+				ply.resetMode();
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
 				if (ply.getFirstLocation().equals(ev.getBlock().getLocation())) {
 					// Undo first break
-					ply.setBlockData(null);
-					ply.setMode(CktMode.NONE);
-					ply.setFirstLocation(null);
+					ply.resetMode();
 					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block breakage.");
 				}
 			}
@@ -66,43 +59,31 @@ public class CktEvents implements Listener {
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE) {
 				// Begin break mode.
-				ply.setBlockData(ev.getBlock().getBlockData());
-				ply.setMode(CktMode.BREAK);
-				ply.setFirstLocation(ev.getBlock().getLocation());
+				ply.resetMode();
 				
 				CktUtil.messagePlayer(ev.getPlayer(), "First block broken.");
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
-//				Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-//				ply.getShape().getLoop().runLoop(locations, false, null, ply.getShape());
-				ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, false, null);
+				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), false, null);
 				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
-				ply.setBlockData(null);
-				ply.setMode(CktMode.NONE);
-				ply.setFirstLocation(null);
+				ply.resetMode();
 			}
 			else if (ply.getMode() == CktMode.PLACE) {
 				if (ply.getFirstLocation().equals(ev.getBlock().getLocation())) {
 					// Undo first place
-					ply.setBlockData(null);
-					ply.setMode(CktMode.NONE);
-					ply.setFirstLocation(null);
+					ply.resetMode();
 					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block placement.");
 				}
 				else {
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
-//					Location[] locations = ply.getShape().shapeLocations(ply.getFirstLocation(), ev.getBlock().getLocation());
-//					ply.getShape().getLoop().runLoop(locations, false, ply.getBlockData(), ply.getShape());
-					ply.getShape().generateShape(new Location[] {ply.getFirstLocation(), ev.getBlock().getLocation()}, false, ply.getBlockData());
+					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), false, ply.getBlockData());
 					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
 					
-					ply.setBlockData(null);
-					ply.setMode(CktMode.NONE);
-					ply.setFirstLocation(null);
+					ply.resetMode();
 				}
 			}
 		}

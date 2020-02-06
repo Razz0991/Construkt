@@ -26,14 +26,11 @@ public class SphereShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location[] locations, boolean placeInAir, BlockData blockData) {
-		if (locations.length != 2)
-			return false;
-		
-		Location[] sphereBoundry = shapeLocations(locations[0], locations[1]);
+	public boolean generateShape(Location firstPoint, Location secondPoint, boolean placeInAir, BlockData blockData) {
+		Location[] sphereBoundry = shapeLocations(firstPoint, secondPoint);
 		AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1]);
 		double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
-		Location center = locations[0];
+		Location center = firstPoint;
 
 		do {
 			if (canPlace(data.getCurrentLocation(), placeInAir)) {

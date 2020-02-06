@@ -85,5 +85,11 @@ public class PlayerInfo {
 		}
 		CktUtil.messagePlayer(getPlayer(), "No shape found by the name \"" + shape + "\"");
 	}
+	
+	public void resetMode() {
+		setBlockData(null);
+		setMode(CktMode.NONE);
+		setFirstLocation(null);
+	}
 
 }
