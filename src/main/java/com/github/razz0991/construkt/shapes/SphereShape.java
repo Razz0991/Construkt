@@ -7,8 +7,6 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.CktUtil;
-
 public class SphereShape extends BaseShape{
 	
 	public Location[] shapeLocations(Location firstLocation, Location secondLocation) {
@@ -33,34 +31,22 @@ public class SphereShape extends BaseShape{
 			return false;
 		
 		Location[] sphereBoundry = shapeLocations(locations[0], locations[1]);
-		Location first = sphereBoundry[0];
-		Location second = sphereBoundry[1];
-		Location current = first.clone();
-		double dist = (second.getX() - first.getX()) / 2;
-		Location center = new Location(
-				first.getWorld(), 
-				first.getX() + dist, 
-				first.getY() + dist, 
-				first.getZ() + dist);
-		char[] order = {'y', 'x', 'z'};
-		int[] from = CktUtil.locationToArray(first, order);
-		int[] to = CktUtil.locationToArray(second, order);
-		int[] increment = {1, 1, 1};
-		int[] currentArr = CktUtil.locationToArray(current, order);
+		AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1]);
+		double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
+		Location center = locations[0];
 
 		do {
-			if (canPlace(current, placeInAir)) {
-				if (center.distance(current) < dist + 0.5)
-					setBlock(blockData, current);
+			if (canPlace(data.getCurrentLocation(), placeInAir)) {
+				if (center.distance(data.getCurrentLocation()) < dist + 0.5)
+					setBlock(blockData, data.getCurrentLocation());
 			}
 			
-			incrementLoop(from, to, increment, currentArr);
-			CktUtil.updateCoordinates(currentArr, order, null, current);
-		} while (!current.equals(second));
+			data.incrementLoop();
+		} while (!data.isLoopFinished());
 		
-		if (canPlace(current, placeInAir)) {
-			if (center.distance(current) < dist + 0.5)
-				setBlock(blockData, current);
+		if (canPlace(data.getCurrentLocation(), placeInAir)) {
+			if (center.distance(data.getCurrentLocation()) < dist + 0.5)
+				setBlock(blockData, data.getCurrentLocation());
 		}
 		
 		return true;

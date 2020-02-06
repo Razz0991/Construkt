@@ -1,5 +1,4 @@
 package com.github.razz0991.construkt;
-import java.util.Map;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -54,16 +53,7 @@ public class CktUtil {
 		return output;
 	}
 	
-	public static void updateCoordinates(int[] coords, char[] order, Map<Character, Integer> missingVals, Location toUpdate) {
-		if (missingVals != null) {
-			if (missingVals.containsKey('x'))
-				toUpdate.setX(missingVals.get('x'));
-			if (missingVals.containsKey('y'))
-				toUpdate.setY(missingVals.get('y'));
-			if (missingVals.containsKey('z'))
-				toUpdate.setZ(missingVals.get('z'));
-		}
-		
+	public static void updateCoordinates(int[] coords, char[] order, Location toUpdate) {
 		for (int i = 0; i < order.length; i++) {
 			if (order[i] == 'x')
 				toUpdate.setX(coords[i]);
