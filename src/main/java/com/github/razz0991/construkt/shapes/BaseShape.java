@@ -127,6 +127,30 @@ public abstract class BaseShape {
 		boolean isLoopFinished() {
 			return currentLocation.equals(toLocation);
 		}
+		
+		int getYSize() {
+			return toLocation.getBlockY() - fromLocation.getBlockY();
+		}
+		
+		int getXSize() {
+			return toLocation.getBlockX() - fromLocation.getBlockX();
+		}
+		
+		int getZSize() {
+			return toLocation.getBlockZ() - fromLocation.getBlockZ();
+		}
+		
+		int getCurrentNormalizedX() {
+			return currentLocation.getBlockX() - fromLocation.getBlockX();
+		}
+		
+		int getCurrentNormalizedY() {
+			return currentLocation.getBlockY() - fromLocation.getBlockY();
+		}
+		
+		int getCurrentNormalizedZ() {
+			return currentLocation.getBlockZ() - fromLocation.getBlockZ();
+		}
 	}
 }
 

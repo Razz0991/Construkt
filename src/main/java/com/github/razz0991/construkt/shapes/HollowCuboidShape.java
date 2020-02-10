@@ -1,5 +1,9 @@
 package com.github.razz0991.construkt.shapes;
-
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 import java.util.HashMap;
 import java.util.Map;
 
