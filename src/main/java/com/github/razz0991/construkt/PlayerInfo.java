@@ -123,8 +123,7 @@ public class PlayerInfo {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a boolean value.");
 				return;
 			}
-			BooleanShapeParameter par = new BooleanShapeParameter(Boolean.parseBoolean(value));
-			parameters.put(name.toLowerCase(), par);
+			((BooleanShapeParameter)parameters.get(name)).setParameter(Boolean.parseBoolean(value));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
 			return;
 		}
@@ -133,9 +132,9 @@ public class PlayerInfo {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
 				return;
 			}
-			IntegerShapeParameter par = new IntegerShapeParameter(Integer.parseInt(value));
-			parameters.put(name.toLowerCase(), par);
-			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
+			IntegerShapeParameter par = (IntegerShapeParameter)parameters.get(name);
+			par.setParameter(Integer.parseInt(value));
+			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + par.getParameter());
 			return;
 		}
 		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");

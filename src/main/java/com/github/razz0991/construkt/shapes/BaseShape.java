@@ -86,24 +86,48 @@ public abstract class BaseShape {
 			this(firstPoint, secondPoint, new char[] {'y', 'x', 'z'}, new int[] {1, 1, 1});
 		}
 		
+		void setCurrentX(int x) {
+			currentLocation.setX(x);
+			for (int i = 0; i < order.length; i++) {
+				if (order[i] == 'x')
+					current[i] = x;
+			}
+		}
+		
+		void setCurrentY(int y) {
+			currentLocation.setY(y);
+			for (int i = 0; i < order.length; i++) {
+				if (order[i] == 'y')
+					current[i] = y;
+			}
+		}
+		
+		void setCurrentZ(int z) {
+			currentLocation.setZ(z);
+			for (int i = 0; i < order.length; i++) {
+				if (order[i] == 'z')
+					current[i] = z;
+			}
+		}
+		
 		Location getFirstPoint() {
-			return firstPoint;
+			return firstPoint.clone();
 		}
 		
 		Location getSecondPoint() {
-			return secondPoint;
+			return secondPoint.clone();
 		}
 		
 		Location getFromLocation() {
-			return fromLocation;
+			return fromLocation.clone();
 		}
 		
 		Location getToLocation() {
-			return toLocation;
+			return toLocation.clone();
 		}
 		
 		Location getCurrentLocation() {
-			return currentLocation;
+			return currentLocation.clone();
 		}
 		
 		void incrementLoop() {

@@ -86,8 +86,6 @@ public class Construkt extends JavaPlugin {
 				PlayerInfo plyInfo = Players.getPlayerInfo((Player)sender);
 				if (args.length == 1) {
 					List<String> output = new ArrayList<String>();
-					if ("par".startsWith(args[0]))
-						output.add("par");
 					if ("parameter".startsWith(args[0]))
 						output.add("parameter");
 					
@@ -97,7 +95,7 @@ public class Construkt extends JavaPlugin {
 					}
 					return output;
 				}
-				else if(args.length == 2 && (args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter"))) {
+				else if(args.length == 2 && args[0].equalsIgnoreCase("parameter")) {
 					List<String> output = new ArrayList<String>();
 					
 					for (String par : plyInfo.getAllParameterKeys()) {
@@ -107,7 +105,7 @@ public class Construkt extends JavaPlugin {
 					
 					return output;
 				}
-				else if(args.length == 3 && (args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter"))) {
+				else if(args.length == 3 && args[0].equalsIgnoreCase("parameter")) {
 					return new ArrayList<String>();
 				}
 			}

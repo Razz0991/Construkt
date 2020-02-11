@@ -17,6 +17,7 @@ public class Shapes {
 		shapes.put("sphere", new SphereShape());
 		shapes.put("hollow_cuboid", new HollowCuboidShape());
 		shapes.put("terrain", new TerrainShape());
+		shapes.put("overlay", new Overlay());
 	}
 	
 	public static BaseShape getShape(String name) {
