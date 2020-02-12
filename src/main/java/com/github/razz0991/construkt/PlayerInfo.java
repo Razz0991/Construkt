@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -45,10 +46,21 @@ public class PlayerInfo {
 		cktEnabled = !cktEnabled;
 		Player ply = getPlayer();
 		
-		if (cktEnabled)
-			CktUtil.messagePlayer(ply, "Ready to build!");
+		if (cktEnabled) {
+			String[] toMessage = new String[2 + parameters.size()];
+			toMessage[0] = ChatColor.AQUA + "Ready to build!";
+			toMessage[1] = ChatColor.DARK_AQUA + "Shape: " + ChatColor.RESET + shape;
+			
+			int inc = 2;
+			for (String msg : getChatParameters()) {
+				toMessage[inc] = msg;
+				inc++;
+			}
+			
+			CktUtil.messagePlayer(ply, toMessage);
+		}
 		else
-			CktUtil.messagePlayer(ply, "Building disabled");
+			CktUtil.messagePlayer(ply, ChatColor.RED + "Building disabled");
 	}
 	
 	public Player getPlayer() {
@@ -89,13 +101,46 @@ public class PlayerInfo {
 	public void setShape(String shape) {
 		if (Shapes.hasShape(shape)) {
 			this.shape = shape;
-			CktUtil.messagePlayer(getPlayer(), "Changed shape to " + shape);
 			clearParameters();
+			
 			if (getShape().getDefaultParameters() != null)
 				parameters = getShape().getDefaultParameters();
+			
+			String[] toMessage = new String[1 + parameters.size()];
+			toMessage[0] = ChatColor.AQUA + "Changed shape to " + shape;
+			int inc = 1;
+			for (String msg : getChatParameters()) {
+				toMessage[inc] = msg;
+				inc++;
+			}
+			CktUtil.messagePlayer(getPlayer(), toMessage);
 			return;
 		}
 		CktUtil.messagePlayer(getPlayer(), "No shape found by the name \"" + shape + "\"");
+	}
+	
+	private String[] getChatParameters() {
+		String[] toMessage = new String[parameters.size()];
+		int inc = 0;
+		for (String par : parameters.keySet()) {
+			ShapeParameter<?> parObj = parameters.get(par);
+			if (parObj instanceof BooleanShapeParameter) {
+				toMessage[inc] = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
+						((BooleanShapeParameter)parObj).getParameter();
+			}
+			else if (parObj instanceof IntegerShapeParameter) {
+				IntegerShapeParameter intPar = (IntegerShapeParameter)parObj;
+				String out = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
+						intPar.getParameter();
+				if (intPar.isLimited()) {
+					out += ChatColor.GRAY + " (" + intPar.getMinValue() + " to " + intPar.getMaxValue() + ")";
+				}
+				toMessage[inc] = out;
+			}
+			inc++;
+		}
+		
+		return toMessage;
 	}
 	
 	public ShapeParameter<?> getParameter(String name) {

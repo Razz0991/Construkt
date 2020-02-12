@@ -37,5 +37,17 @@ public class IntegerShapeParameter implements ShapeParameter<Integer>{
 		}
 		value = toSet;
 	}
+	
+	public boolean isLimited() {
+		return useLimit;
+	}
+	
+	public int getMinValue() {
+		return minValue;
+	}
+	
+	public int getMaxValue() {
+		return maxValue;
+	}
 
 }

@@ -1,18 +1,32 @@
 package com.github.razz0991.construkt;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
  *  Full disclaimer in Construkt.java
  */
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 public class CktUtil {
 	
 	public static void messagePlayer(Player player, String message) {
-		player.sendMessage(ChatColor.AQUA + "[Construkt] " + ChatColor.RESET + message);
+		player.sendMessage(ChatColor.BLUE + "[Construkt] " + ChatColor.RESET + message);
+	}
+	
+	public static void messagePlayer(Player player, String[] messages) {
+		String[] outMessages = new String[2 + messages.length];
+		
+		outMessages[0] = ChatColor.BLUE + "---------- [Construkt] ----------";
+		int inc = 1;
+		for (String msg : messages) {
+			outMessages[inc] = msg;
+			inc++;
+		}
+		outMessages[outMessages.length - 1] = ChatColor.BLUE + "-------------------------------";
+		
+		player.sendMessage(outMessages);
 	}
 	
 	public static int[] smallestNumber(int first, int second) {
