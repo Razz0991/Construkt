@@ -68,6 +68,10 @@ public class Construkt extends JavaPlugin {
 							plyInfo.setParameter(args[1], args[2]);
 							return true;
 						}
+						else if (args.length == 2) {
+							plyInfo.getParameterInfo(args[1]);
+							return true;
+						}
 					}
 					// Otherwise set shape
 					String shape = args[0];
@@ -105,7 +109,7 @@ public class Construkt extends JavaPlugin {
 					
 					return output;
 				}
-				else if(args.length == 3 && args[0].equalsIgnoreCase("parameter")) {
+				else if(args.length >= 2) {
 					return new ArrayList<String>();
 				}
 			}

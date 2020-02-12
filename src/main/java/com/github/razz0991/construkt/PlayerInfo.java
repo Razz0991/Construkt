@@ -143,6 +143,33 @@ public class PlayerInfo {
 		return toMessage;
 	}
 	
+	public void getParameterInfo(String name) {
+		if (!parameters.containsKey(name)) {
+			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
+			return;
+		}
+		String[] toMessage = new String[2];
+		ShapeParameter<?> parObj = parameters.get(name);
+		if (parObj instanceof BooleanShapeParameter) {
+			toMessage[0] = ChatColor.AQUA + name + " accepts boolean values.";
+			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
+					((BooleanShapeParameter)parObj).getParameter();
+		}
+		else if (parObj instanceof IntegerShapeParameter) {
+			IntegerShapeParameter intPar = (IntegerShapeParameter)parObj;
+			toMessage[0] = ChatColor.AQUA + name + " accepts full number values.";
+			
+			if (intPar.isLimited()) {
+				toMessage[0] += ChatColor.GRAY + " (" + intPar.getMinValue() + " to " + intPar.getMaxValue() + ")";
+			}
+			
+			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
+					intPar.getParameter();;
+		}
+		
+		CktUtil.messagePlayer(getPlayer(), toMessage);
+	}
+	
 	public ShapeParameter<?> getParameter(String name) {
 		if (parameters.containsKey(name))
 			return parameters.get(name);
