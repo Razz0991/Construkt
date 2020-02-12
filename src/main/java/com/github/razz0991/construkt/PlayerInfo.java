@@ -1,11 +1,7 @@
 package com.github.razz0991.construkt;
+
 import java.util.HashMap;
 import java.util.HashSet;
-/*  Construkt Bukkit plugin for Minecraft.
- *  Copyright (C) 2020 _Razz_
- *
- *  Full disclaimer in Construkt.java
- */
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +19,11 @@ import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class PlayerInfo {
 	private UUID plyId;
 	private boolean cktEnabled = false;
@@ -71,14 +72,29 @@ public class PlayerInfo {
 		}
 	}
 	
+	/**
+	 * Gets the Bukkit Player object
+	 * @return <code>Player</code>
+	 */
 	public Player getPlayer() {
 		return Bukkit.getServer().getPlayer(plyId);
 	}
 	
+	/**
+	 * Gets the data from the first block that was placed.<br>
+	 * If the block has changed from when it was first placed, the data will still be
+	 * that of the original block.
+	 * @return <code>BlockData</code> or <code>null</code> if the first block hasn't been assigned.
+	 */
 	public BlockData getBlockData() {
 		return blkData;
 	}
 	
+	/**
+	 * Sets the data for a shape to use in placement.<br>
+	 * This is done automatically via events.
+	 * @param data The <code>BlockData</code> to be saved
+	 */
 	public void setBlockData(BlockData data) {
 		if (data != null)
 			blkData = data.clone();
@@ -86,26 +102,46 @@ public class PlayerInfo {
 			blkData = null;
 	}
 	
+	/**
+	 * Gets what the player did in the first action. Used to determine what placement
+	 * mode the player is in.
+	 * @return <code>CktMode</code> -
+	 * <code>NONE, PLACE, BREAK</code>
+	 */
 	public CktMode getMode() {
 		return mode;
 	}
 	
-	public void setMode(CktMode mode) {
+	// Sets the action the player first took.
+	void setMode(CktMode mode) {
 		this.mode = mode;
 	}
-
+	
+	/**
+	 * Gets the <code>Location</code> of the first block placement.
+	 * @return <code>Location</code>
+	 */
 	public Location getFirstLocation() {
-		return firstLocation;
+		return firstLocation.clone();
 	}
 
-	public void setFirstLocation(Location firstLocation) {
+	// Sets the Location of the first block placement.
+	void setFirstLocation(final Location firstLocation) {
 		this.firstLocation = firstLocation;
 	}
 	
+	/**
+	 * Gets the shape thats currently active on the player.
+	 * @return <code>BaseShape</code> - The primitive version of the shape.
+	 */
 	public BaseShape getShape() {
 		return Shapes.getShape(shape);
 	}
 	
+	/**
+	 * Sets the players active shape. Function was made to be called via command.
+	 * @param shape - The name of the shape
+	 */
 	public void setShape(String shape) {
 		if (Shapes.hasShape(shape)) {
 			this.shape = shape;
@@ -151,7 +187,8 @@ public class PlayerInfo {
 		return toMessage;
 	}
 	
-	public void getParameterInfo(String name) {
+	// Method for player to get information on a parameter via command.
+	void getParameterInfo(String name) {
 		if (!parameters.containsKey(name)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
@@ -178,21 +215,36 @@ public class PlayerInfo {
 		CktUtil.messagePlayer(getPlayer(), toMessage);
 	}
 	
+	/**
+	 * Gets a set parameter via its name.
+	 * @param name The name of the parameter
+	 * @return <code>ShapeParameter</code> in its primitive form or 
+	 * <code>null</code> if one isn't found by the name entered.
+	 */
 	public ShapeParameter<?> getParameter(String name) {
 		if (parameters.containsKey(name))
 			return parameters.get(name);
 		return null;
 	}
 	
+	/**
+	 * Gets all set parameter names.
+	 * @return A <code>Set</code> of <code>Strings</code> of the parameters.
+	 */
 	public Set<String> getAllParameterKeys() {
 		return new HashSet<String>(parameters.keySet());
 	}
 	
+	/**
+	 * Gets a copy of the <code>Map</code> containing all the set parameters.
+	 * @return A copy of the parameters.
+	 */
 	public Map<String, ShapeParameter<?>> getAllParameters(){
 		return new HashMap<String, ShapeParameter<?>>(parameters);
 	}
 	
-	public void setParameter(String name, String value) {
+	// The method run via the parameter command.
+	void setParameter(String name, String value) {
 		if (!parameters.containsKey(name)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
@@ -220,7 +272,7 @@ public class PlayerInfo {
 		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");
 	}
 	
-	public void clearParameters() {
+	private void clearParameters() {
 		parameters.clear();
 	}
 	

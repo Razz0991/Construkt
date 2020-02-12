@@ -1,5 +1,10 @@
 package com.github.razz0991.construkt.shapes.parameters;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class IntegerShapeParameter implements ShapeParameter<Integer>{
 	
 	private int value;
@@ -38,14 +43,26 @@ public class IntegerShapeParameter implements ShapeParameter<Integer>{
 		value = toSet;
 	}
 	
+	/**
+	 * Checks if this parameter is limited.
+	 * @return true if the parameter has been limited
+	 */
 	public boolean isLimited() {
 		return useLimit;
 	}
 	
+	/**
+	 * Gets the minimum value of this parameter.
+	 * @return The minimum value
+	 */
 	public int getMinValue() {
 		return minValue;
 	}
-	
+
+	/**
+	 * Gets the maximum value of this parameter.
+	 * @return The maximum value
+	 */
 	public int getMaxValue() {
 		return maxValue;
 	}

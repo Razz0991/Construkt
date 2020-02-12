@@ -1,18 +1,19 @@
 package com.github.razz0991.construkt.shapes;
+
 import java.util.HashMap;
 import java.util.Map;
 
-/*  Construkt Bukkit plugin for Minecraft.
- *  Copyright (C) 2020 _Razz_
- *
- *  Full disclaimer in Construkt.java
- */
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class SphereShape extends BaseShape{
 	
 	private final boolean hollowModeDefault = false;
@@ -25,7 +26,7 @@ public class SphereShape extends BaseShape{
 		return parameters;
 	}
 	
-	public Location[] shapeLocations(Location firstLocation, Location secondLocation) {
+	public Location[] radiusToCube(Location firstLocation, Location secondLocation) {
 		// Sphere uses radius locations, so need different locations.
 		double dist = firstLocation.distance(secondLocation);
 		dist = Math.ceil(dist);
@@ -43,7 +44,7 @@ public class SphereShape extends BaseShape{
 
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
-		Location[] sphereBoundry = shapeLocations(firstPoint, secondPoint);
+		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);
 		AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1]);
 		double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
 		Location center = firstPoint;

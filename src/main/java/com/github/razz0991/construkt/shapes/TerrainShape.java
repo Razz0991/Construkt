@@ -9,6 +9,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -49,6 +50,7 @@ public class TerrainShape extends BaseShape {
 		return true;
 	}
 	
+	// Gets the noise from the current location in the loop
 	private double getNoise(SimplexOctaveGenerator generator, AreaData data) {
 		double noise = generator.noise(data.getCurrentLocation().getX(), data.getCurrentLocation().getZ(), 1, 16, true);
 		noise = (noise + 1) / 2;

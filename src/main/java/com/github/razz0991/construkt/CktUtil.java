@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
  */
 public class CktUtil {
 	
-	public static void messagePlayer(Player player, String message) {
+	// Single line Message
+	static void messagePlayer(Player player, String message) {
 		player.sendMessage(ChatColor.BLUE + "[Construkt] " + ChatColor.RESET + message);
 	}
 	
-	public static void messagePlayer(Player player, String[] messages) {
+	// Multiline message
+	static void messagePlayer(Player player, String[] messages) {
 		String[] outMessages = new String[2 + messages.length];
 		
 		outMessages[0] = ChatColor.BLUE + "---------- [Construkt] ----------";
@@ -29,6 +31,12 @@ public class CktUtil {
 		player.sendMessage(outMessages);
 	}
 	
+	/**
+	 * Helper method to sort two numbers from smallest to largest.
+	 * @param first
+	 * @param second
+	 * @return An <code>int[]</code> containing the smallest, then largest, number.
+	 */
 	public static int[] smallestNumber(int first, int second) {
 		int[] output = new int[2];
 		if (first > second) {
@@ -43,6 +51,14 @@ public class CktUtil {
 		}
 	}
 	
+	/**
+	 * Helper method to get a smallest to largest location 
+	 * area from a set of two locations.
+	 * @param location1
+	 * @param location2
+	 * @return A <code>Location[]</code> where the first 
+	 * location will be smaller than the second.
+	 */
 	public static Location[] areaRange(Location location1, Location location2){
 
 		int[] x, y, z;
@@ -54,7 +70,20 @@ public class CktUtil {
 				new Location(location1.getWorld(), x[1], y[1], z[1])};
 	}
 	
+	/**
+	 * Turns a location into an array.
+	 * @param loc The <code>Location</code>
+	 * @param order The order in which you want the locations values<br>
+	 * eg:<br><code>{'x', 'y', 'z'}</code> will give all values in that order<br>
+	 * <code>{'x', 'z'}</code> will ignore <code>'y'</code>
+	 * @return An <code>int[]</code> of sorted values.
+	 * @throws IllegalArgumentException if there are more than 3 axes or an 
+	 * unexpected character is entered
+	 */
 	public static int[] locationToArray(Location loc, char[] order) {
+		if (order.length > 3)
+			throw new IllegalArgumentException("Only 3 axes can be assigned in order");
+		
 		int[] output = new int[order.length];
 		for (int i = 0; i < order.length; i++) {
 			if (order[i] == 'x')
@@ -63,11 +92,25 @@ public class CktUtil {
 				output[i] = loc.getBlockY();
 			else if (order[i] == 'z')
 				output[i] = loc.getBlockZ();
+			else
+				throw new IllegalArgumentException("Invalid axis assigned in order array! Expected x, y or z, got " + order[i]);
 		}
 		return output;
 	}
 	
+	/**
+	 * Updates an existing location using an array of coordinates and an order.<br>
+	 * If not all axes are in the order variable, the Location will keep whatever axis
+	 * that is missing.
+	 * @param coords The coordinates
+	 * @param order The order of the coordinates
+	 * @param toUpdate The <code>Location</code> to update
+	 * @throws IllegalArgumentException if coords and order don't have the same length
+	 */
 	public static void updateCoordinates(int[] coords, char[] order, Location toUpdate) {
+		if (coords.length != order.length)
+			throw new IllegalArgumentException("The length of coords and order must be the same.");
+		
 		for (int i = 0; i < order.length; i++) {
 			if (order[i] == 'x')
 				toUpdate.setX(coords[i]);
@@ -78,6 +121,11 @@ public class CktUtil {
 		}
 	}
 	
+	/**
+	 * A boolean check to see if a string is an Integer
+	 * @param value The String of a possible integer
+	 * @return <code>true</code> if the value is an integer
+	 */
 	public static boolean isInteger(String value) {
 		try {
 			Integer.parseInt(value);

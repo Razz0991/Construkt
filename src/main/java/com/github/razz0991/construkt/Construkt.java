@@ -1,4 +1,16 @@
 package com.github.razz0991.construkt;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import com.github.razz0991.construkt.shapes.Shapes;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -15,18 +27,6 @@ package com.github.razz0991.construkt;
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.github.razz0991.construkt.shapes.Shapes;
-
 public class Construkt extends JavaPlugin {
 	
 	@Override
@@ -69,6 +69,7 @@ public class Construkt extends JavaPlugin {
 							return true;
 						}
 						else if (args.length == 2) {
+							// Get a parameters details.
 							plyInfo.getParameterInfo(args[1]);
 							return true;
 						}
@@ -100,6 +101,7 @@ public class Construkt extends JavaPlugin {
 					return output;
 				}
 				else if(args.length == 2 && args[0].equalsIgnoreCase("parameter")) {
+					// List of parameters
 					List<String> output = new ArrayList<String>();
 					
 					for (String par : plyInfo.getAllParameterKeys()) {

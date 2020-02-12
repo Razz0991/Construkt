@@ -1,9 +1,5 @@
 package com.github.razz0991.construkt.shapes;
-/*  Construkt Bukkit plugin for Minecraft.
- *  Copyright (C) 2020 _Razz_
- *
- *  Full disclaimer in Construkt.java
- */
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +9,11 @@ import org.bukkit.block.data.BlockData;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class HollowCuboidShape extends BaseShape{
 	
 	private final boolean borderModeDefault = false;
@@ -43,22 +44,32 @@ public class HollowCuboidShape extends BaseShape{
 		return true;
 	}
 	
+	// Checks if the loop is currently on the edge of the area
 	private boolean isEdge(AreaData data) {
-		return (data.getCurrentLocation().getBlockX() == data.getFromLocation().getBlockX() ||
-				data.getCurrentLocation().getBlockX() == data.getToLocation().getBlockX() ||
-				data.getCurrentLocation().getBlockY() == data.getFromLocation().getBlockY() ||
-				data.getCurrentLocation().getBlockY() == data.getToLocation().getBlockY() ||
-				data.getCurrentLocation().getBlockZ() == data.getFromLocation().getBlockZ() ||
-				data.getCurrentLocation().getBlockZ() == data.getToLocation().getBlockZ());
+		Location cur = data.getCurrentLocation();
+		Location from = data.getFromLocation();
+		Location to = data.getToLocation();
+		
+		return (cur.getBlockX() == from.getBlockX() ||
+				cur.getBlockX() == to.getBlockX() ||
+				cur.getBlockY() == from.getBlockY() ||
+				cur.getBlockY() == to.getBlockY() ||
+				cur.getBlockZ() == from.getBlockZ() ||
+				cur.getBlockZ() == to.getBlockZ());
 	}
 	
+	// Checks if the loop is currently on the border of the area
 	private boolean isBorder(AreaData data) {
-		boolean isXEdge = (data.getCurrentLocation().getBlockX() == data.getFromLocation().getBlockX() ||
-				data.getCurrentLocation().getBlockX() == data.getToLocation().getBlockX());
-		boolean isYEdge = (data.getCurrentLocation().getBlockY() == data.getFromLocation().getBlockY() ||
-				data.getCurrentLocation().getBlockY() == data.getToLocation().getBlockY());
-		boolean isZEdge = (data.getCurrentLocation().getBlockZ() == data.getFromLocation().getBlockZ() ||
-				data.getCurrentLocation().getBlockZ() == data.getToLocation().getBlockZ());
+		Location cur = data.getCurrentLocation();
+		Location from = data.getFromLocation();
+		Location to = data.getToLocation();
+		
+		boolean isXEdge = (cur.getBlockX() == from.getBlockX() ||
+				cur.getBlockX() == to.getBlockX());
+		boolean isYEdge = (cur.getBlockY() == from.getBlockY() ||
+				cur.getBlockY() == to.getBlockY());
+		boolean isZEdge = (cur.getBlockZ() == from.getBlockZ() ||
+				cur.getBlockZ() == to.getBlockZ());
 		
 		return ((isXEdge && isZEdge && !isYEdge) ||
 				(isXEdge && isYEdge && !isZEdge) || 

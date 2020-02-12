@@ -1,16 +1,17 @@
 package com.github.razz0991.construkt.shapes;
+
 import java.util.Map;
+
+import org.bukkit.Location;
+import org.bukkit.block.data.BlockData;
+
+import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
  *  Full disclaimer in Construkt.java
  */
-import org.bukkit.Location;
-import org.bukkit.block.data.BlockData;
-
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
-
 public class CuboidShape extends BaseShape{
 
 	@Override

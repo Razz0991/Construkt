@@ -2,11 +2,6 @@ package com.github.razz0991.construkt;
 import java.util.Map;
 
 import org.bukkit.GameMode;
-/*  Construkt Bukkit plugin for Minecraft.
- *  Copyright (C) 2020 _Razz_
- *
- *  Full disclaimer in Construkt.java
- */
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -18,6 +13,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class CktEvents implements Listener {
 	
 	@EventHandler
