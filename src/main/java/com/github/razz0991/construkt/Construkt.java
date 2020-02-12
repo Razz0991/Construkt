@@ -62,7 +62,7 @@ public class Construkt extends JavaPlugin {
 				}
 				else {
 					// Set Parameter
-					if ((args[0].equalsIgnoreCase("par") || args[0].equalsIgnoreCase("parameter")) &&
+					if (args[0].equalsIgnoreCase("parameter") &&
 							args.length >= 2) {
 						if (args.length == 3) {
 							plyInfo.setParameter(args[1], args[2]);
