@@ -64,6 +64,7 @@ public abstract class BaseShape {
 		private int[] to;
 		private int[] increment;
 		private int[] current;
+		private boolean loopFinished = false;
 		
 		AreaData(Location firstPoint, Location secondPoint, char[] order, int[] increment){
 			this.firstPoint = firstPoint;
@@ -131,6 +132,11 @@ public abstract class BaseShape {
 		}
 		
 		void incrementLoop() {
+			if (currentLocation.equals(toLocation)) {
+				loopFinished = true;
+				return;
+			}
+			
 			if (from.length != to.length && 
 					from.length != increment.length && 
 					from.length != current.length)
@@ -149,7 +155,7 @@ public abstract class BaseShape {
 		}
 		
 		boolean isLoopFinished() {
-			return currentLocation.equals(toLocation);
+			return loopFinished;
 		}
 		
 		int getYSize() {
@@ -164,15 +170,15 @@ public abstract class BaseShape {
 			return toLocation.getBlockZ() - fromLocation.getBlockZ();
 		}
 		
-		int getCurrentNormalizedX() {
+		int getCurrentRelativeX() {
 			return currentLocation.getBlockX() - fromLocation.getBlockX();
 		}
 		
-		int getCurrentNormalizedY() {
+		int getCurrentRelativeY() {
 			return currentLocation.getBlockY() - fromLocation.getBlockY();
 		}
 		
-		int getCurrentNormalizedZ() {
+		int getCurrentRelativeZ() {
 			return currentLocation.getBlockZ() - fromLocation.getBlockZ();
 		}
 	}

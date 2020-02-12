@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
@@ -16,10 +17,10 @@ import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
  */
 public class TerrainShape extends BaseShape {
 	
-	private String octaveName = "octaves";
-	private int octaveValue = 8;
-	private String scaleName = "scale";
-	private int scaleDefault = 5;
+	private final String octaveName = "octaves";
+	private final int octaveValue = 8;
+	private final String scaleName = "scale";
+	private final int scaleDefault = 5;
 
 	@Override
 	public Map<String, ShapeParameter<?>> getDefaultParameters() {
@@ -35,25 +36,22 @@ public class TerrainShape extends BaseShape {
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
 			BlockData blockData) {
 		AreaData data = new AreaData(firstPoint, secondPoint);
-		PerlinOctaveGenerator gen = new PerlinOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
+//		PerlinOctaveGenerator gen = new PerlinOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
+		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
 		gen.setScale(parseIntegerShapeParameter(parameters.get(scaleName), scaleDefault) / 100.0d);
 		
 		do {
-			if (getNoise(gen, data) >= data.getCurrentNormalizedY())
+			if (getNoise(gen, data) >= data.getCurrentRelativeY())
 				if (canPlace(data.getCurrentLocation(), parameters))
 					setBlock(blockData, data.getCurrentLocation());
 			
 			data.incrementLoop();
 		} while (!data.isLoopFinished());
 		
-		if (getNoise(gen, data) >= data.getCurrentNormalizedY())
-			if (canPlace(data.getCurrentLocation(), parameters))
-				setBlock(blockData, data.getCurrentLocation());
-		
 		return true;
 	}
 	
-	private double getNoise(PerlinOctaveGenerator generator, AreaData data) {
+	private double getNoise(SimplexOctaveGenerator generator, AreaData data) {
 		double noise = generator.noise(data.getCurrentLocation().getX(), data.getCurrentLocation().getZ(), 1, 16, true);
 		noise = (noise + 1) / 2;
 		double height = noise * data.getYSize();

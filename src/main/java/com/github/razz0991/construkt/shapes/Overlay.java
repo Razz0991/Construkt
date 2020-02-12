@@ -12,8 +12,8 @@ import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 public class Overlay extends BaseShape {
 	
-	private String depthName = "depth";
-	private int depthDefault = 1;
+	private final String depthName = "depth";
+	private final int depthDefault = 1;
 
 	@Override
 	public Map<String, ShapeParameter<?>> getDefaultParameters() {

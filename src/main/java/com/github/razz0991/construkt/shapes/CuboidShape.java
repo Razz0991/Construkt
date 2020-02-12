@@ -29,9 +29,6 @@ public class CuboidShape extends BaseShape{
 			data.incrementLoop();
 		} while (!data.isLoopFinished());
 		
-		if (canPlace(data.getCurrentLocation(), parameters))
-			setBlock(blockData, data.getCurrentLocation());
-		
 		return true;
 	}
 

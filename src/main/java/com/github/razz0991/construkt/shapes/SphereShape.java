@@ -64,11 +64,6 @@ public class SphereShape extends BaseShape{
 			data.incrementLoop();
 		} while (!data.isLoopFinished());
 		
-		if (canPlace(data.getCurrentLocation(), parameters)) {
-			if (center.distance(data.getCurrentLocation()) < dist + 0.5)
-				setBlock(blockData, data.getCurrentLocation());
-		}
-		
 		return true;
 	}
 
