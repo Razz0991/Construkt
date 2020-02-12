@@ -1,6 +1,7 @@
 package com.github.razz0991.construkt;
 import java.util.Map;
 
+import org.bukkit.GameMode;
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -10,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -102,6 +104,14 @@ public class CktEvents implements Listener {
 					ply.resetMode();
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onGameModeChange(PlayerGameModeChangeEvent ev) {
+		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
+		if (ev.getPlayer().getGameMode() == GameMode.CREATIVE && ply.isConstruktEnabled()) {
+			ply.toggleConstruktEnabled();
 		}
 	}
 }

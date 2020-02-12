@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -43,8 +44,13 @@ public class PlayerInfo {
 	}
 	
 	public void toggleConstruktEnabled() {
-		cktEnabled = !cktEnabled;
 		Player ply = getPlayer();
+		if (ply.getGameMode() != GameMode.CREATIVE) {
+			CktUtil.messagePlayer(ply, "You must be in creative mode to use Construkt");
+			return;
+		}
+		
+		cktEnabled = !cktEnabled;
 		
 		if (cktEnabled) {
 			String[] toMessage = new String[2 + parameters.size()];
@@ -59,8 +65,10 @@ public class PlayerInfo {
 			
 			CktUtil.messagePlayer(ply, toMessage);
 		}
-		else
+		else {
 			CktUtil.messagePlayer(ply, ChatColor.RED + "Building disabled");
+			resetMode();
+		}
 	}
 	
 	public Player getPlayer() {
