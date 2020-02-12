@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
@@ -36,7 +35,6 @@ public class TerrainShape extends BaseShape {
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
 			BlockData blockData) {
 		AreaData data = new AreaData(firstPoint, secondPoint);
-//		PerlinOctaveGenerator gen = new PerlinOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
 		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
 		gen.setScale(parseIntegerShapeParameter(parameters.get(scaleName), scaleDefault) / 100.0d);
 		
