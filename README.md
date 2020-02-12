@@ -19,7 +19,7 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 2)**
+**(As of Episode 4)**
 
 - Shape filling
 - Shape clearing
@@ -28,4 +28,12 @@ GNU General Public License for more details.
 **Shapes**
 
 - Cuboid
+- Hollow Cuboid
+   - Outline Parameter
 - Sphere
+   - Hollow Parameter
+- Terrain
+   - Octaves Parameter (1 - 8)
+   - Scale Parameter (1 - 10)
+- Overlay
+   - Depth Parameter (1 - 10)
