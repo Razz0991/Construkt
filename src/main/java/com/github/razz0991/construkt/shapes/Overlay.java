@@ -41,21 +41,21 @@ public class Overlay extends BaseShape {
 			if (cur.getBlock().getType() != Material.AIR) {
 				if (parseBooleanShapeParameter(parameters.get("place_in_air"), true)) {
 					int startY = cur.getBlockY() + 1;
-					int endY = startY + parseIntegerShapeParameter(parameters.get(depthName), depthDefault);
+					int endY = startY + (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
 					if (endY > data.getToLocation().getBlockY())
 						endY = data.getToLocation().getBlockY();
-					for (int y = startY; y < endY; y++) {
+					for (int y = startY; y <= endY; y++) {
 						cur.setY(y);
 						setBlock(blockData, cur);
 					}
 				}
 				else {
 					int startY = cur.getBlockY();
-					int endY = startY - parseIntegerShapeParameter(parameters.get(depthName), depthDefault);
+					int endY = startY - (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
 					if (endY < data.getFromLocation().getBlockY())
 						endY = data.getFromLocation().getBlockY();
 					
-					for (int y = startY; y > endY; y--) {
+					for (int y = startY; y >= endY; y--) {
 						cur.setY(y);
 						if (canPlace(cur, parameters)) {
 							setBlock(blockData, cur);
