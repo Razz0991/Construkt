@@ -50,7 +50,6 @@ public class CktEvents implements Listener {
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
 				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 						ply.getAllParameters(), ply.getBlockData());
-				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
 				ply.resetMode();
 			}
@@ -84,7 +83,6 @@ public class CktEvents implements Listener {
 				BooleanShapeParameter air = new BooleanShapeParameter(false);
 				parameters.put("place_in_air", air);
 				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, null);
-				CktUtil.messagePlayer(ev.getPlayer(), "Area cleared.");
 				
 				ply.resetMode();
 			}
@@ -101,7 +99,6 @@ public class CktEvents implements Listener {
 					BooleanShapeParameter air = new BooleanShapeParameter(false);
 					parameters.put("place_in_air", air);
 					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), parameters, ply.getBlockData());
-					CktUtil.messagePlayer(ev.getPlayer(), "Blocks replaced.");
 					
 					//Allow broken block to be replaced too
 					ev.setCancelled(true);
