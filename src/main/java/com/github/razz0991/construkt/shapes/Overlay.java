@@ -33,7 +33,7 @@ public class Overlay extends BaseShape {
 			BlockData blockData) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
-		data.setCurrentY(data.getSecondPoint().getBlockY());
+		data.setCurrentY(data.getToLocation().getBlockY());
 		
 		data.createFillTask(new Runnable() {
 			
