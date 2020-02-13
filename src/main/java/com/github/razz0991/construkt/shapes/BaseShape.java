@@ -89,7 +89,7 @@ public abstract class BaseShape {
 		 * @param firstPoint The first corner of the area
 		 * @param secondPoint The second corner of the area
 		 * @param order What order the loop should run through
-		 * @param increment How to increment the loop
+		 * @param reversed If the loop should be run in reverse
 		 */
 		AreaData(Location firstPoint, Location secondPoint, char[] order, boolean reversed){
 			this.firstPoint = firstPoint;
@@ -118,6 +118,7 @@ public abstract class BaseShape {
 		 * to largest.
 		 * @param firstPoint The first corner of the area
 		 * @param secondPoint The second corner of the area
+		 * @param reversed If the loop should be run in reverse
 		 */
 		AreaData(Location firstPoint, Location secondPoint, boolean reversed){
 			this(firstPoint, secondPoint, new char[] {'y', 'x', 'z'}, reversed);
