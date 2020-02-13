@@ -32,45 +32,53 @@ public class Overlay extends BaseShape {
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
 			BlockData blockData) {
 		
-		AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, new int[] {1, 1});
+		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
 		data.setCurrentY(data.getSecondPoint().getBlockY());
 		
-		do {
-			Location cur = data.getCurrentLocation();
-			int min = data.getFromLocation().getBlockY();
+		data.createFillTask(new Runnable() {
 			
-			while (cur.getBlock().getType() == Material.AIR && cur.getBlockY() >= min) {
-				cur.setY(cur.getY() - 1);
-			}
-			
-			if (cur.getBlock().getType() != Material.AIR) {
-				if (parseBooleanShapeParameter(parameters.get("place_in_air"), true)) {
-					int startY = cur.getBlockY() + 1;
-					int endY = startY + (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
-					if (endY > data.getToLocation().getBlockY())
-						endY = data.getToLocation().getBlockY();
-					for (int y = startY; y <= endY; y++) {
-						cur.setY(y);
-						setBlock(blockData, cur);
-					}
-				}
-				else {
-					int startY = cur.getBlockY();
-					int endY = startY - (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
-					if (endY < data.getFromLocation().getBlockY())
-						endY = data.getFromLocation().getBlockY();
+			@Override
+			public void run() {
+				do {
+					Location cur = data.getCurrentLocation();
+					int min = data.getFromLocation().getBlockY();
 					
-					for (int y = startY; y >= endY; y--) {
-						cur.setY(y);
-						if (canPlace(cur, parameters)) {
-							setBlock(blockData, cur);
+					while (cur.getBlock().getType() == Material.AIR && cur.getBlockY() >= min) {
+						cur.setY(cur.getY() - 1);
+					}
+					
+					if (cur.getBlock().getType() != Material.AIR) {
+						if (parseBooleanShapeParameter(parameters.get("place_in_air"), true)) {
+							int startY = cur.getBlockY() + 1;
+							int endY = startY + (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
+							if (endY > data.getToLocation().getBlockY())
+								endY = data.getToLocation().getBlockY();
+							for (int y = startY; y <= endY; y++) {
+								cur.setY(y);
+								setBlock(blockData, cur);
+							}
+						}
+						else {
+							int startY = cur.getBlockY();
+							int endY = startY - (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
+							if (endY < data.getFromLocation().getBlockY())
+								endY = data.getFromLocation().getBlockY();
+							
+							for (int y = startY; y >= endY; y--) {
+								cur.setY(y);
+								if (canPlace(cur, parameters)) {
+									setBlock(blockData, cur);
+								}
+							}
 						}
 					}
-				}
+					
+					boolean shouldWait = data.incrementLoop();
+					if (shouldWait)
+						return;
+				} while(!data.isLoopFinished());
 			}
-			
-			data.incrementLoop();
-		} while(!data.isLoopFinished());
+		});
 		
 		return true;
 	}

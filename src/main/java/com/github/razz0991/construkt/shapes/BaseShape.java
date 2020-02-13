@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.CktUtil;
+import com.github.razz0991.construkt.Construkt;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
@@ -75,9 +76,13 @@ public abstract class BaseShape {
 		private char[] order;
 		private int[] from;
 		private int[] to;
-		private int[] increment;
+		private final int increment;
 		private int[] current;
 		private boolean loopFinished = false;
+		private int taskId = -1;
+		private long lastTime = -1;
+		private final int tickLength = 50;
+		private final int taskDelay = 2;
 		
 		/**
 		 * Creates an area from two locations to cycle through block by block.
@@ -86,21 +91,25 @@ public abstract class BaseShape {
 		 * @param order What order the loop should run through
 		 * @param increment How to increment the loop
 		 */
-		AreaData(Location firstPoint, Location secondPoint, char[] order, int[] increment){
+		AreaData(Location firstPoint, Location secondPoint, char[] order, boolean reversed){
 			this.firstPoint = firstPoint;
 			this.secondPoint = secondPoint;
 			
 			Location[] definedArea = CktUtil.areaRange(firstPoint, secondPoint);
-			fromLocation = definedArea[0];
-			toLocation = definedArea[1];
+			
+			fromLocation = !reversed ? definedArea[0] : definedArea[1];
+			toLocation = !reversed ? definedArea[1] : definedArea[0];
 			currentLocation = fromLocation.clone();
 			
 			this.order = order;
-			this.increment = increment;
+			increment = !reversed ? 1 : -1;
 			
 			from = CktUtil.locationToArray(fromLocation, order);
 			to = CktUtil.locationToArray(toLocation, order);
+			
 			current = from.clone();
+			
+			lastTime = System.currentTimeMillis();
 		}
 		
 		/**
@@ -110,8 +119,8 @@ public abstract class BaseShape {
 		 * @param firstPoint The first corner of the area
 		 * @param secondPoint The second corner of the area
 		 */
-		AreaData(Location firstPoint, Location secondPoint){
-			this(firstPoint, secondPoint, new char[] {'y', 'x', 'z'}, new int[] {1, 1, 1});
+		AreaData(Location firstPoint, Location secondPoint, boolean reversed){
+			this(firstPoint, secondPoint, new char[] {'y', 'x', 'z'}, reversed);
 		}
 		
 		/**
@@ -210,28 +219,30 @@ public abstract class BaseShape {
 		
 		/**
 		 * Step to the next block in the set area.
+		 * @return true if the loop has taken longer than a tick
 		 */
-		void incrementLoop() {
+		boolean incrementLoop() {
 			if (currentLocation.equals(toLocation)) {
 				loopFinished = true;
-				return;
+				return false;
 			}
 			
-			if (from.length != to.length && 
-					from.length != increment.length && 
-					from.length != current.length)
-				return;
-			
-			current[current.length - 1] += increment[current.length - 1];
+			current[current.length - 1] += increment;
 			
 			for (int i = current.length -1; i >= 0; i--) {
-				if (current[i] == to[i] + increment[i]) {
-					current[i-1] += increment[i-1];
+				if (current[i] == to[i] + increment) {
+					current[i-1] += increment;
 					current[i] = from[i];
 				}
 			}
 			
 			CktUtil.updateCoordinates(current, order, currentLocation);
+			
+			if (System.currentTimeMillis() >= lastTime + tickLength) {
+				lastTime = System.currentTimeMillis() + taskDelay * tickLength;
+				return true;
+			}
+			return false;
 		}
 		
 		/**
@@ -239,6 +250,9 @@ public abstract class BaseShape {
 		 * @return true if the loop is finished
 		 */
 		boolean isLoopFinished() {
+			if (loopFinished && taskId != -1) {
+				cancelTask();
+			}
 			return loopFinished;
 		}
 		
@@ -288,6 +302,14 @@ public abstract class BaseShape {
 		 */
 		int getCurrentRelativeZ() {
 			return currentLocation.getBlockZ() - fromLocation.getBlockZ();
+		}
+		
+		void createFillTask(Runnable task) {
+			taskId = Construkt.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(Construkt.plugin, task, 1, taskDelay);
+		}
+		
+		void cancelTask() {
+			Construkt.plugin.getServer().getScheduler().cancelTask(taskId);
 		}
 	}
 }

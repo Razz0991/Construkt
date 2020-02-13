@@ -44,26 +44,35 @@ public class SphereShape extends BaseShape{
 
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
+		boolean reversed = blockData == null;
 		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);
-		AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1]);
-		double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
-		Location center = firstPoint;
-
-		do {
-			if (canPlace(data.getCurrentLocation(), parameters)) {
-				if (parseBooleanShapeParameter(parameters.get(hollowModeName), hollowModeDefault)) {
-					double curDist = center.distance(data.getCurrentLocation());
-					if (curDist < dist + 0.5 && curDist > dist - 0.5)
-						setBlock(blockData, data.getCurrentLocation());
-				}
-				else {
-					if (center.distance(data.getCurrentLocation()) < dist + 0.5)
-						setBlock(blockData, data.getCurrentLocation());
-				}
-			}
+		final AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1], reversed);
+		final double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
+		final Location center = firstPoint;
+		
+		data.createFillTask(new Runnable() {
 			
-			data.incrementLoop();
-		} while (!data.isLoopFinished());
+			@Override
+			public void run() {
+				do {
+					if (canPlace(data.getCurrentLocation(), parameters)) {
+						if (parseBooleanShapeParameter(parameters.get(hollowModeName), hollowModeDefault)) {
+							double curDist = center.distance(data.getCurrentLocation());
+							if (curDist < dist + 0.5 && curDist > dist - 0.5)
+								setBlock(blockData, data.getCurrentLocation());
+						}
+						else {
+							if (center.distance(data.getCurrentLocation()) < dist + 0.5)
+								setBlock(blockData, data.getCurrentLocation());
+						}
+					}
+					
+					boolean shouldWait = data.incrementLoop();
+					if (shouldWait)
+						return;
+				} while (!data.isLoopFinished());
+			}
+		});
 		
 		return true;
 	}

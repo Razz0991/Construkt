@@ -29,16 +29,20 @@ import com.github.razz0991.construkt.shapes.Shapes;
  */
 public class Construkt extends JavaPlugin {
 	
+	public static Construkt plugin;
+	
 	@Override
 	public void onEnable() {
 		getLogger().info("Construkt starting...");
 		getServer().getPluginManager().registerEvents(new CktEvents(), this);
-		getLogger().info("Construkt started.");
+		
+		plugin = this;
 		
 		for(Player ply : getServer().getOnlinePlayers()) {
 			Players.addPlayer(ply);
 		}
 		
+		getLogger().info("Construkt started.");
 	}
 	
 	@Override

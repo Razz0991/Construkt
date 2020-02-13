@@ -35,17 +35,26 @@ public class TerrainShape extends BaseShape {
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
 			BlockData blockData) {
-		AreaData data = new AreaData(firstPoint, secondPoint);
-		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
+		boolean reversed = blockData == null;
+		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
 		gen.setScale(parseIntegerShapeParameter(parameters.get(scaleName), scaleDefault) / 100.0d);
 		
-		do {
-			if (getNoise(gen, data) >= data.getCurrentRelativeY())
-				if (canPlace(data.getCurrentLocation(), parameters))
-					setBlock(blockData, data.getCurrentLocation());
+		data.createFillTask(new Runnable() {
 			
-			data.incrementLoop();
-		} while (!data.isLoopFinished());
+			@Override
+			public void run() {
+				do {
+					if (getNoise(gen, data) >= data.getCurrentRelativeY())
+						if (canPlace(data.getCurrentLocation(), parameters))
+							setBlock(blockData, data.getCurrentLocation());
+					
+					boolean shouldWait = data.incrementLoop();
+					if (shouldWait)
+						return;
+				} while (!data.isLoopFinished());
+			}
+		});
 		
 		return true;
 	}

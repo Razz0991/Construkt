@@ -21,15 +21,26 @@ public class CuboidShape extends BaseShape{
 
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
-		AreaData data = new AreaData(firstPoint, secondPoint);
-
-		do {
-			if (canPlace(data.getCurrentLocation(), parameters))
-				setBlock(blockData, data.getCurrentLocation());
-			
-			data.incrementLoop();
-		} while (!data.isLoopFinished());
+		boolean reversed = blockData == null;
+		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
 		
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				do {
+					if (canPlace(data.getCurrentLocation(), parameters))
+						setBlock(blockData, data.getCurrentLocation());
+					
+					boolean shouldWait = data.incrementLoop();
+					if (shouldWait)
+						return;
+				} while (!data.isLoopFinished());
+			}
+		};
+		
+		data.createFillTask(runnable);
+
 		return true;
 	}
 
