@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,6 +61,13 @@ public class Construkt extends JavaPlugin {
 			if (sender instanceof Player) {
 				Player player = (Player)sender;
 				PlayerInfo plyInfo = Players.getPlayerInfo(player);
+				
+				// Stop here if player doesn't have permission
+				if (!player.hasPermission("construkt.command")) {
+					CktUtil.messagePlayer(player, ChatColor.RED + "You do not have permission to use Construkt!");
+					return true;
+				}
+				
 				if (args.length == 0) {
 					plyInfo.toggleConstruktEnabled();
 					return true;
@@ -92,14 +100,17 @@ public class Construkt extends JavaPlugin {
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("construkt")) {
 			if (sender instanceof Player) {
-				PlayerInfo plyInfo = Players.getPlayerInfo((Player)sender);
+				Player player = (Player)sender;
+				PlayerInfo plyInfo = Players.getPlayerInfo(player);
 				if (args.length == 1) {
 					List<String> output = new ArrayList<String>();
-					if ("parameter".startsWith(args[0]))
+					if ("parameter".startsWith(args[0]) && 
+							player.hasPermission("construkt.command"))
 						output.add("parameter");
 					
 					for (String shape : Shapes.getAllShapes()) {
-						if (shape.startsWith(args[0]))
+						if (shape.startsWith(args[0]) && 
+								player.hasPermission("construkt.shape." + shape))
 							output.add(shape);
 					}
 					return output;

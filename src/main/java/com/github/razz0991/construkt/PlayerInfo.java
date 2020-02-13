@@ -144,6 +144,11 @@ public class PlayerInfo {
 	 */
 	public void setShape(String shape) {
 		if (Shapes.hasShape(shape)) {
+			if (!getPlayer().hasPermission("construkt.shape." + shape.toLowerCase())) {
+				CktUtil.messagePlayer(getPlayer(), ChatColor.RED + 
+						"You do not have permission to use the " + shape + " shape!");
+				return;
+			}
 			this.shape = shape;
 			clearParameters();
 			

@@ -34,18 +34,22 @@ public class CktEvents implements Listener {
 	public void onBlockPlace(BlockPlaceEvent ev) {
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
-			if(ply.getMode() == CktMode.NONE) {
-				// Begin place fill mode.
+			if(ply.getMode() == CktMode.NONE && 
+					(ev.getPlayer().hasPermission("construkt.mode.place") || 
+							ev.getPlayer().hasPermission("construkt.mode.replace"))) {
+				// Begin place mode or replace mode.
 				ply.setBlockData(ev.getBlock().getBlockData());
 				ply.setMode(CktMode.PLACE);
 				ply.setFirstLocation(ev.getBlock().getLocation());
 				
 				CktUtil.messagePlayer(ev.getPlayer(), "First block placed.");
 			}
-			else if (ply.getMode() == CktMode.PLACE) {
+			else if (ply.getMode() == CktMode.PLACE && 
+					ev.getPlayer().hasPermission("construkt.mode.place")) {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
-				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), ply.getAllParameters(), ply.getBlockData());
+				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
+						ply.getAllParameters(), ply.getBlockData());
 				CktUtil.messagePlayer(ev.getPlayer(), "Area filled.");
 				
 				ply.resetMode();
@@ -64,7 +68,8 @@ public class CktEvents implements Listener {
 	public void onBlockBreak(BlockBreakEvent ev) {
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
-			if(ply.getMode() == CktMode.NONE) {
+			if(ply.getMode() == CktMode.NONE && 
+					ev.getPlayer().hasPermission("construkt.mode.break")) {
 				// Begin break mode.
 				ply.setBlockData(ev.getBlock().getBlockData());
 				ply.setMode(CktMode.BREAK);
@@ -89,7 +94,7 @@ public class CktEvents implements Listener {
 					ply.resetMode();
 					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block placement.");
 				}
-				else {
+				else if(ev.getPlayer().hasPermission("construkt.mode.replace")){
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
 					Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();

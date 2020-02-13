@@ -19,11 +19,13 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 4)**
+**(As of Episode 5)**
 
 - Shape filling
 - Shape clearing
 - Shape replacement
+- Lagless area filling (or removal)
+- Permissions
 
 **Shapes**
 

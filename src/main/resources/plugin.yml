@@ -7,7 +7,55 @@ commands:
    construkt:
       description: Enables or disables Construkt.
       usage: /construkt
-      permission: construkt.toggle
+      permission: construkt.command
       permission-message: You don't have permission to use Construkt!
       aliases: [ckt]
-      
+permissions:
+   construkt.*:
+      description: Gives full access to Construkt
+      children:
+         construkt.command: true
+         construkt.mode.*: true
+         construkt.shape.*: true
+   construkt.command:
+      description: Allows use of Construkt's commands
+      default: op
+   construkt.mode.*:
+      description: Allows all modes, place, break, and replace
+      children:
+         construkt.mode.place: true
+         construkt.mode.break: true
+         construkt.mode.replace: true
+   construkt.mode.place:
+      description: Allows placement mode
+      default: op
+   construkt.mode.break:
+      description: Allows break mode
+      default: op
+   construkt.mode.replace:
+      description: Allows replace mode
+      default: op
+   construkt.shape.*:
+      description: Allows all shapes
+      children:
+         construkt.shape.cuboid: true
+         construkt.shape.hollow_cuboid: true
+         construkt.shape.overlay: true
+         construkt.shape.sphere: true
+         construkt.shape.terrain: true
+   construkt.shape.cuboid:
+      description: Allows use of the cuboid shape
+      default: true
+   construkt.shape.hollow_cuboid:
+      description: Allows use of the hollow cuboid shape
+      default: op
+   construkt.shape.overlay:
+      description: Allows use of the overlay shape
+      default: op
+   construkt.shape.sphere:
+      description: Allows use of the sphere shape
+      default: op
+   construkt.shape.terrain:
+      description: Allows use of the terrain shape
+      default: op
+ 
