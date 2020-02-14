@@ -26,6 +26,13 @@ GNU General Public License for more details.
 - Shape replacement
 - Lagless area filling (or removal)
 - Permissions
+- Limitations
+   - Volume limit
+   - Axis limit
+   - Permission for no limits
+   - Permission based limit groups
+   
+The plugin is basically server ready. May need some more testing to be certain. But I still want to add more features yet, so no release build for now.
 
 **Shapes**
 
