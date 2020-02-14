@@ -1,4 +1,5 @@
 package com.github.razz0991.construkt;
+
 import java.util.Map;
 
 import org.bukkit.GameMode;
@@ -46,6 +47,11 @@ public class CktEvents implements Listener {
 			}
 			else if (ply.getMode() == CktMode.PLACE && 
 					ev.getPlayer().hasPermission("construkt.mode.place")) {
+				// Check limits
+				if (ply.exceedsLimit(ev.getBlock().getLocation())) {
+					ev.setCancelled(true);
+					return;
+				}
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
 				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
@@ -77,6 +83,11 @@ public class CktEvents implements Listener {
 				CktUtil.messagePlayer(ev.getPlayer(), "First block broken.");
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
+				// Check limits
+				if (ply.exceedsLimit(ev.getBlock().getLocation())) {
+					ev.setCancelled(true);
+					return;
+				}
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
 				Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();
@@ -93,6 +104,11 @@ public class CktEvents implements Listener {
 					CktUtil.messagePlayer(ev.getPlayer(), "Undone first block placement.");
 				}
 				else if(ev.getPlayer().hasPermission("construkt.mode.replace")){
+					// Check limits
+					if (ply.exceedsLimit(ev.getBlock().getLocation())) {
+						ev.setCancelled(true);
+						return;
+					}
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
 					Map<String, ShapeParameter<?>> parameters = ply.getAllParameters();

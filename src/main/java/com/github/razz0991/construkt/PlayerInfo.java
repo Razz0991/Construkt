@@ -13,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
+import com.github.razz0991.construkt.CktConfigOptions.Limiter;
+import com.github.razz0991.construkt.CktUtil.VolumeInformation;
 import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
@@ -35,9 +37,11 @@ public class PlayerInfo {
 	private String shape = "cuboid";
 	
 	private Map<String, ShapeParameter<?>> parameters = new HashMap<String, ShapeParameter<?>>();
+	private Limiter limits = null;
 	
 	public PlayerInfo(Player player) {
 		plyId = player.getUniqueId();
+		setLimits();
 	}
 	
 	public boolean isConstruktEnabled() {
@@ -64,12 +68,71 @@ public class PlayerInfo {
 				inc++;
 			}
 			
+			setLimits();
+			
 			CktUtil.messagePlayer(ply, toMessage);
 		}
 		else {
 			CktUtil.messagePlayer(ply, ChatColor.RED + "Building disabled");
 			resetMode();
 		}
+	}
+	
+	/**
+	 * Automatically sets the players limits based on their permissions
+	 */
+	public void setLimits() {
+		if (!getPlayer().hasPermission("constukt.bypass_limits")) {
+			for (String limiter : CktConfigOptions.getAllLimitationNames()) {
+				if (getPlayer().hasPermission("construkt.limits." + limiter)) {
+					limits = CktConfigOptions.getLimitation(limiter);
+					break;
+				}
+			}
+			if (limits == null)
+				limits = CktConfigOptions.getLimitation("default");
+		}
+		else if (limits != null)
+			limits = null;
+	}
+	
+	/**
+	 * Checks if the volume of an area or one of the lengths of its
+	 * axes is larger than the players limit.
+	 * @param secondPoint The second point of the selected area
+	 * @return true if one of the limits are reached
+	 */
+	boolean exceedsLimit(Location secondPoint) {
+		if (limits == null)
+			return false;
+		
+		VolumeInformation vinfo = new VolumeInformation(getFirstLocation(), secondPoint);
+		if (vinfo.lengthExceedsMax(limits.getMaxAxisLength())) {
+			CktUtil.messagePlayer(getPlayer(), new String[] {
+					ChatColor.RED + "Distance from first block exceeds your limit!",
+					ChatColor.GRAY + "Your distances:",
+					ChatColor.GRAY + "X: " + vinfo.getXLength() + ", Y: " + 
+					vinfo.getYLength() + ", Z: " + vinfo.getZLength(),
+					ChatColor.GRAY + "Max Length: " + limits.getMaxAxisLength()});
+			return true;
+		}
+		else if(vinfo.getVolume() > limits.getMaxVolume()) {
+			CktUtil.messagePlayer(getPlayer(), new String[] {
+					ChatColor.RED + "Volume of this area exceeds your limit!",
+					ChatColor.GRAY + "Your Volume: " + vinfo.getVolume(),
+					ChatColor.GRAY + "Max Volume: " + limits.getMaxVolume()});
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Gets the players limitations
+	 * @return A <code>Limiter</code> object with the max volume and max axis length or
+	 * null if the player has no limits.
+	 */
+	public Limiter getLimitations() {
+		return limits;
 	}
 	
 	/**

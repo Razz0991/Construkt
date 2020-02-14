@@ -2,6 +2,7 @@ package com.github.razz0991.construkt;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
@@ -10,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.razz0991.construkt.CktConfigOptions.Limiter;
 import com.github.razz0991.construkt.shapes.Shapes;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -36,6 +38,23 @@ public class Construkt extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info("Construkt starting...");
 		getServer().getPluginManager().registerEvents(new CktEvents(), this);
+		saveDefaultConfig();
+		
+		Set<String> limitNames = getConfig().getConfigurationSection("limits").getKeys(false);
+		
+		for (String limitName : limitNames) {
+			int maxAxisLength = getConfig().getInt("limits." + limitName + ".maxAxisLength");
+			int maxVolume = getConfig().getInt("limits." + limitName + ".maxVolume");;
+			Limiter lmt = new Limiter(maxAxisLength, maxVolume);
+			CktConfigOptions.addLimitation(limitName, lmt);
+			getLogger().info("Added " + limitName + " limitation");
+		}
+		
+		if (!CktConfigOptions.hasLimitation("default")) {
+			Limiter lmt = new Limiter(2, 8);
+			CktConfigOptions.addLimitation("default", lmt);
+			getLogger().warning("Default values have been removed from limits, setting them to be absurdly small");
+		}
 		
 		plugin = this;
 		
@@ -53,6 +72,8 @@ public class Construkt extends JavaPlugin {
 		for (UUID id : Players.getAllPlayers()) {
 			Players.removePlayer(id);
 		}
+		
+		getLogger().info("Construkt disabled.");
 	}
 	
 	@Override

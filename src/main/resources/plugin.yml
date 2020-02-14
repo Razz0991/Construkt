@@ -14,6 +14,11 @@ permissions:
    construkt.*:
       description: Gives full access to Construkt
       children:
+         construkt.limited: true
+         construkt.bypass_limits: true
+   construkt.limited:
+      description: Gives full access but still has block limits
+      children:
          construkt.command: true
          construkt.mode.*: true
          construkt.shape.*: true
@@ -57,5 +62,8 @@ permissions:
       default: op
    construkt.shape.terrain:
       description: Allows use of the terrain shape
+      default: op
+   construkt.bypass_limits:
+      description: Allows user to bypass area limitations
       default: op
  
