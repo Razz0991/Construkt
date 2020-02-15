@@ -5,6 +5,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -20,7 +21,8 @@ public class CuboidShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, 
+			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
 		
@@ -29,7 +31,7 @@ public class CuboidShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data.getCurrentLocation(), parameters))
+					if (canPlace(data, parameters, filters))
 						setBlock(blockData, data.getCurrentLocation());
 					
 					boolean shouldWait = data.incrementLoop();

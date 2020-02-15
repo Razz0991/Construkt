@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.razz0991.construkt.CktConfigOptions.Limiter;
 import com.github.razz0991.construkt.shapes.Shapes;
+import com.github.razz0991.construkt.shapes.filters.Filters;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -98,14 +99,46 @@ public class Construkt extends JavaPlugin {
 					if (args[0].equalsIgnoreCase("parameter") &&
 							args.length >= 2) {
 						if (args.length == 3) {
-							plyInfo.setParameter(args[1], args[2]);
+							plyInfo.setParameter(args[1], args[2], false);
 							return true;
 						}
 						else if (args.length == 2) {
 							// Get a parameters details.
-							plyInfo.getParameterInfo(args[1]);
+							plyInfo.getParameterInfo(args[1], false);
 							return true;
 						}
+						CktUtil.messagePlayer(player, "Unknown parameter command!");
+					}
+					else if (args[0].equalsIgnoreCase("filter") && 
+							args.length >= 2) {
+						//Set Filter
+						if (args[1].equalsIgnoreCase("add") && 
+								args.length >= 3) {
+							plyInfo.addFilter(args[2]);
+							return true;
+						}
+						else if (args[1].equalsIgnoreCase("remove") &&
+								args.length >= 3) {
+							plyInfo.removeFilter(args[2]);
+							return true;
+						}
+						else if (args[1].equalsIgnoreCase("clear")) {
+							plyInfo.clearFilters();
+							return true;
+						}
+						else if (args[1].equalsIgnoreCase("parameter") &&
+								args.length >= 3) {
+							if (args.length >= 4) {
+								plyInfo.setParameter(args[2], args[3], true);
+								return true;
+							}
+							else if (args.length == 3) {
+								plyInfo.getParameterInfo(args[2], true);
+								return true;
+							}
+						}
+						CktUtil.messagePlayer(player, "Unknown filter command!");
+						return true;
 					}
 					// Otherwise set shape
 					String shape = args[0];
@@ -126,8 +159,13 @@ public class Construkt extends JavaPlugin {
 				if (args.length == 1) {
 					List<String> output = new ArrayList<String>();
 					if ("parameter".startsWith(args[0]) && 
-							player.hasPermission("construkt.command"))
+							player.hasPermission("construkt.command")) {
 						output.add("parameter");
+					}
+					if ("filter".startsWith(args[0]) &&
+							player.hasPermission("construkt.command")) {
+						output.add("filter");
+					}
 					
 					for (String shape : Shapes.getAllShapes()) {
 						if (shape.startsWith(args[0]) && 
@@ -140,9 +178,45 @@ public class Construkt extends JavaPlugin {
 					// List of parameters
 					List<String> output = new ArrayList<String>();
 					
-					for (String par : plyInfo.getAllParameterKeys()) {
+					for (String par : plyInfo.getAllShapeParameterKeys()) {
 						if (par.startsWith(args[1]))
 							output.add(par);
+					}
+					
+					return output;
+				}
+				else if (args.length >= 2 && args[0].equalsIgnoreCase("filter")) {
+					List<String> output = new ArrayList<String>();
+					
+					if (args.length == 2) {
+						if ("add".startsWith(args[1]))
+							output.add("add");
+						if ("remove".startsWith(args[1]))
+							output.add("remove");
+						if ("clear".startsWith(args[1]))
+							output.add("clear");
+						if ("parameter".startsWith(args[1]))
+							output.add("parameter");
+					}
+					if (args.length == 3) {
+						if (args[1].equalsIgnoreCase("add")) {
+							for (String filter : Filters.getAllFilters()) {
+								if (filter.startsWith(args[2]))
+									output.add(filter);
+							}
+						}
+						else if(args[1].equalsIgnoreCase("remove")) {
+							for (String filter : plyInfo.getFilterNames()) {
+								if (filter.startsWith(args[2]))
+									output.add(filter);
+							}
+						}
+						else if (args[1].equalsIgnoreCase("parameter")) {
+							for (String parameter : plyInfo.getAllFilterParameterKeys()) {
+								if (parameter.startsWith(args[2]))
+									output.add(parameter);
+							}
+						}
 					}
 					
 					return output;

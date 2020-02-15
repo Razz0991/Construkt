@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
@@ -27,7 +28,8 @@ public class HollowCuboidShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, 
+			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
 		
@@ -36,7 +38,7 @@ public class HollowCuboidShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data.getCurrentLocation(), parameters)) {
+					if (canPlace(data, parameters, filters)) {
 						if ((parseBooleanShapeParameter(parameters.get(borderModeName), true) &&
 								isBorder(data)) || (!parseBooleanShapeParameter(parameters.get(borderModeName), borderModeDefault) &&
 										isEdge(data)))

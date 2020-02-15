@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
@@ -30,7 +31,7 @@ public class Overlay extends BaseShape {
 
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
-			BlockData blockData) {
+			BlockData blockData, BaseFilter[] filters) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
 		data.setCurrentY(data.getToLocation().getBlockY());
@@ -55,7 +56,8 @@ public class Overlay extends BaseShape {
 								endY = data.getToLocation().getBlockY();
 							for (int y = startY; y <= endY; y++) {
 								cur.setY(y);
-								setBlock(blockData, cur);
+								if (canPlace(cur, parameters, filters, data))
+									setBlock(blockData, cur);
 							}
 						}
 						else {
@@ -66,7 +68,7 @@ public class Overlay extends BaseShape {
 							
 							for (int y = startY; y >= endY; y--) {
 								cur.setY(y);
-								if (canPlace(cur, parameters)) {
+								if (canPlace(cur, parameters, filters, data)) {
 									setBlock(blockData, cur);
 								}
 							}

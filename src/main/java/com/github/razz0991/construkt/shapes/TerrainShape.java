@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
@@ -34,7 +35,7 @@ public class TerrainShape extends BaseShape {
 
 	@Override
 	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
-			BlockData blockData) {
+			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
 		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
@@ -46,7 +47,7 @@ public class TerrainShape extends BaseShape {
 			public void run() {
 				do {
 					if (getNoise(gen, data) >= data.getCurrentRelativeY())
-						if (canPlace(data.getCurrentLocation(), parameters))
+						if (canPlace(data, parameters, filters))
 							setBlock(blockData, data.getCurrentLocation());
 					
 					boolean shouldWait = data.incrementLoop();

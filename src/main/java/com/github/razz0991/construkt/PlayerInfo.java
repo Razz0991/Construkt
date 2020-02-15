@@ -1,7 +1,9 @@
 package com.github.razz0991.construkt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +19,9 @@ import com.github.razz0991.construkt.CktConfigOptions.Limiter;
 import com.github.razz0991.construkt.CktUtil.VolumeInformation;
 import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
+import com.github.razz0991.construkt.shapes.filters.Filters;
+import com.github.razz0991.construkt.shapes.parameters.AxisShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
@@ -35,8 +40,10 @@ public class PlayerInfo {
 	
 	private CktMode mode = CktMode.NONE;
 	private String shape = "cuboid";
+	private List<String> filters = new ArrayList<String>();
 	
-	private Map<String, ShapeParameter<?>> parameters = new HashMap<String, ShapeParameter<?>>();
+	private Map<String, ShapeParameter<?>> shapePars = new HashMap<String, ShapeParameter<?>>();
+	private Map<String, ShapeParameter<?>> filterPars = new HashMap<String, ShapeParameter<?>>();
 	private Limiter limits = null;
 	
 	public PlayerInfo(Player player) {
@@ -58,7 +65,7 @@ public class PlayerInfo {
 		cktEnabled = !cktEnabled;
 		
 		if (cktEnabled) {
-			String[] toMessage = new String[2 + parameters.size()];
+			String[] toMessage = new String[2 + shapePars.size()];
 			toMessage[0] = ChatColor.AQUA + "Ready to build!";
 			toMessage[1] = ChatColor.DARK_AQUA + "Shape: " + ChatColor.RESET + shape;
 			
@@ -213,12 +220,12 @@ public class PlayerInfo {
 				return;
 			}
 			this.shape = shape;
-			clearParameters();
+			clearShapeParameters();
 			
 			if (getShape().getDefaultParameters() != null)
-				parameters = getShape().getDefaultParameters();
+				shapePars = getShape().getDefaultParameters();
 			
-			String[] toMessage = new String[1 + parameters.size()];
+			String[] toMessage = new String[1 + shapePars.size()];
 			toMessage[0] = ChatColor.AQUA + "Changed shape to " + shape;
 			int inc = 1;
 			for (String msg : getChatParameters()) {
@@ -232,10 +239,10 @@ public class PlayerInfo {
 	}
 	
 	private String[] getChatParameters() {
-		String[] toMessage = new String[parameters.size()];
+		String[] toMessage = new String[shapePars.size()];
 		int inc = 0;
-		for (String par : parameters.keySet()) {
-			ShapeParameter<?> parObj = parameters.get(par);
+		for (String par : shapePars.keySet()) {
+			ShapeParameter<?> parObj = shapePars.get(par);
 			if (parObj instanceof BooleanShapeParameter) {
 				toMessage[inc] = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
 						((BooleanShapeParameter)parObj).getParameter();
@@ -256,21 +263,32 @@ public class PlayerInfo {
 	}
 	
 	// Method for player to get information on a parameter via command.
-	void getParameterInfo(String name) {
-		if (!parameters.containsKey(name)) {
+	void getParameterInfo(String name, boolean filterParameter) {
+		String lName = name.toLowerCase();
+		if (!shapePars.containsKey(lName) && !filterParameter) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
 		}
+		else if (!filterPars.containsKey(lName) && filterParameter) {
+			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the active filters.");
+			return;
+		}
+		
 		String[] toMessage = new String[2];
-		ShapeParameter<?> parObj = parameters.get(name);
+		ShapeParameter<?> parObj = null;
+		if (!filterParameter)
+			parObj = shapePars.get(lName);
+		else
+			parObj = filterPars.get(lName);
+		
 		if (parObj instanceof BooleanShapeParameter) {
-			toMessage[0] = ChatColor.AQUA + name + " accepts boolean values.";
+			toMessage[0] = ChatColor.AQUA + lName + " accepts boolean values.";
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
 					((BooleanShapeParameter)parObj).getParameter();
 		}
 		else if (parObj instanceof IntegerShapeParameter) {
 			IntegerShapeParameter intPar = (IntegerShapeParameter)parObj;
-			toMessage[0] = ChatColor.AQUA + name + " accepts full number values.";
+			toMessage[0] = ChatColor.AQUA + lName + " accepts full number values.";
 			
 			if (intPar.isLimited()) {
 				toMessage[0] += ChatColor.GRAY + " (" + intPar.getMinValue() + " to " + intPar.getMaxValue() + ")";
@@ -278,6 +296,11 @@ public class PlayerInfo {
 			
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
 					intPar.getParameter();;
+		}
+		else if (parObj instanceof AxisShapeParameter) {
+			toMessage[0] = ChatColor.AQUA + lName + " accepts axis values " + ChatColor.GRAY + "(x, y or z)";
+			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
+					parObj.getParameter();
 		}
 		
 		CktUtil.messagePlayer(getPlayer(), toMessage);
@@ -290,58 +313,87 @@ public class PlayerInfo {
 	 * <code>null</code> if one isn't found by the name entered.
 	 */
 	public ShapeParameter<?> getParameter(String name) {
-		if (parameters.containsKey(name))
-			return parameters.get(name);
+		if (shapePars.containsKey(name))
+			return shapePars.get(name);
 		return null;
 	}
 	
 	/**
-	 * Gets all set parameter names.
+	 * Gets all set shape parameter names.
 	 * @return A <code>Set</code> of <code>Strings</code> of the parameters.
 	 */
-	public Set<String> getAllParameterKeys() {
-		return new HashSet<String>(parameters.keySet());
+	public Set<String> getAllShapeParameterKeys() {
+		return new HashSet<String>(shapePars.keySet());
 	}
 	
 	/**
-	 * Gets a copy of the <code>Map</code> containing all the set parameters.
+	 * Gets all set filter parameter names.
+	 * @return A <code>Set</code> of <code>Strings</code> of the parameters.
+	 */
+	public Set<String> getAllFilterParameterKeys() {
+		return new HashSet<String>(filterPars.keySet());
+	}
+	
+	/**
+	 * Gets a copy of the <code>Map</code> containing all the set parameters for both
+	 * shape and filter.
 	 * @return A copy of the parameters.
 	 */
 	public Map<String, ShapeParameter<?>> getAllParameters(){
-		return new HashMap<String, ShapeParameter<?>>(parameters);
+		Map<String, ShapeParameter<?>> allPars = new HashMap<String, ShapeParameter<?>>(shapePars);
+		allPars.putAll(filterPars);
+		return allPars;
 	}
 	
-	// The method run via the parameter command.
-	void setParameter(String name, String value) {
-		if (!parameters.containsKey(name)) {
+	// The method run via the parameter command or filter parameter command.
+	void setParameter(String name, String value, boolean filterParameter) {
+		String lName = name.toLowerCase();
+		if (!shapePars.containsKey(lName) && !filterParameter) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
 		}
+		else if (!filterPars.containsKey(lName) && filterParameter) {
+			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in any of your active filters");
+		}
+		
+		ShapeParameter<?> par = null;
+		if (!filterParameter)
+			par = shapePars.get(lName);
+		else
+			par = filterPars.get(lName);
 
 		if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-			if (!(parameters.get(name) instanceof BooleanShapeParameter)) {
+			if (!(par instanceof BooleanShapeParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a boolean value.");
 				return;
 			}
-			((BooleanShapeParameter)parameters.get(name)).setParameter(Boolean.parseBoolean(value));
+			((BooleanShapeParameter)par).setParameter(Boolean.parseBoolean(value));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
 			return;
 		}
 		else if (CktUtil.isInteger(value)) {
-			if (!(parameters.get(name) instanceof IntegerShapeParameter)) {
+			if (!(par instanceof IntegerShapeParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
 				return;
 			}
-			IntegerShapeParameter par = (IntegerShapeParameter)parameters.get(name);
-			par.setParameter(Integer.parseInt(value));
-			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + par.getParameter());
+			IntegerShapeParameter intPar = (IntegerShapeParameter)par;
+			intPar.setParameter(Integer.parseInt(value));
+			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + intPar.getParameter());
 			return;
+		}
+		else if (value.equalsIgnoreCase("x") || value.equalsIgnoreCase("y") || value.equalsIgnoreCase("z")) {
+			if (!(par instanceof AxisShapeParameter)) {
+				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take an axis value.");
+				return;
+			}
+			((AxisShapeParameter)par).setParameter(value.toLowerCase().charAt(0));
+			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" axis to " + par.getParameter());
 		}
 		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");
 	}
 	
-	private void clearParameters() {
-		parameters.clear();
+	private void clearShapeParameters() {
+		shapePars.clear();
 	}
 	
 	public void resetMode() {
@@ -349,5 +401,74 @@ public class PlayerInfo {
 		setMode(CktMode.NONE);
 		setFirstLocation(null);
 	}
+	
+	public void addFilter(String name) {
+		String lName = name.toLowerCase();
+		if (Filters.hasFilter(name) && !filters.contains(lName)) {
+			if (!getPlayer().hasPermission("construkt.filter." + lName)) {
+				CktUtil.messagePlayer(getPlayer(), ChatColor.RED + 
+						"You do not have permission to use the " + lName + " filter!");
+				return;
+			}
+			filters.add(name.toLowerCase());
+			
+			Map<String, ShapeParameter<?>> pars = Filters.getFilter(lName).getParameters();
+			for (String par : pars.keySet()) {
+				filterPars.put(lName + "_" + par, pars.get(par));
+			}
+			
+			CktUtil.messagePlayer(getPlayer(), ChatColor.AQUA + "Added the filter " + lName);
+			return;
+		}
+		else if(filters.contains(name.toLowerCase())) {
+			CktUtil.messagePlayer(getPlayer(), "You already have the " + lName + " filter active.");
+		}
+		CktUtil.messagePlayer(getPlayer(), "No filter found by the name \"" + lName + "\"");
+	}
+	
+	public BaseFilter[] getFilters() {
+		BaseFilter[] filters = new BaseFilter[this.filters.size()];
+		int inc = 0;
+		for (String filterName : this.filters) {
+			filters[inc++] = Filters.getFilter(filterName);
+		}
+		return filters;
+	}
+	
+	public String[] getFilterNames() {
+		String[] filters = new String[this.filters.size()];
+		int inc = 0;
+		for (String filter : this.filters) filters[inc++] = filter;
+		return filters;
+	}
+	
+	public void clearFilters() {
+		filters.clear();
+		filterPars.clear();
+		
+		CktUtil.messagePlayer(getPlayer(), "Filters cleared");
+	}
+	
+	public void removeFilter(String name) {
+		String lName = name.toLowerCase();
+		if (filters.contains(lName)) {
+			filters.remove(lName);
+			
+			for (String par : Filters.getFilter(name).getParameters().keySet()) {
+				filterPars.remove(lName + "_" + par);
+			}
+			CktUtil.messagePlayer(getPlayer(), "Removed the " + name + " filter");
+			return;
+		}
+		CktUtil.messagePlayer(getPlayer(), "You don't have a filter active with the name " + name);
+	}
 
 }
+
+
+
+
+
+
+
+

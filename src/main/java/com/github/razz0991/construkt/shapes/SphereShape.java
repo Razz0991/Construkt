@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.shapes.filters.BaseFilter;
 import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
@@ -43,11 +44,12 @@ public class SphereShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, BlockData blockData) {
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, 
+			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);
 		final AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1], reversed);
-		final double dist = (data.getToLocation().getX() - data.getFromLocation().getX()) / 2;
+		final double dist = data.getXSize() / 2;
 		final Location center = firstPoint;
 		
 		data.createFillTask(new Runnable() {
@@ -55,7 +57,7 @@ public class SphereShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data.getCurrentLocation(), parameters)) {
+					if (canPlace(data, parameters, filters)) {
 						if (parseBooleanShapeParameter(parameters.get(hollowModeName), hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < dist + 0.5 && curDist > dist - 0.5)
