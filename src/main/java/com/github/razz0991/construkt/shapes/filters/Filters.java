@@ -17,6 +17,7 @@ public class Filters {
 		addFilter(new CheckeredFilter());
 		addFilter(new SliceFilter());
 		addFilter(new RandomFilter());
+		addFilter(new NoiseFilter());
 	}
 	
 	private static void addFilter(BaseFilter filter) {
