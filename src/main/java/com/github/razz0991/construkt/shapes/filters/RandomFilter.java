@@ -26,7 +26,7 @@ public class RandomFilter extends BaseFilter {
 
 	@Override
 	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
-		double chance = parseIntegerParameter(parameters.get(parseParameterName(chanceName)), chanceDefault) / 100d;
+		double chance = parseIntegerParameter(parameters, chanceName, chanceDefault) / 100d;
 		
 		return Math.random() <= chance;
 	}

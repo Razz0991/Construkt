@@ -30,9 +30,9 @@ public class CheckeredFilter extends BaseFilter {
 
 	@Override
 	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
-		int checkerSize = parseIntegerParameter(parameters.get(parseParameterName(sizeName)), sizeDefault);
+		int checkerSize = parseIntegerParameter(parameters, sizeName, sizeDefault);
 		boolean yEven = isChecker(data.getCurrentRelativeY(), checkerSize);
-		if (parseBooleanParameter(parameters.get(parseParameterName(invertName)), invertDefault))
+		if (parseBooleanParameter(parameters, invertName, invertDefault))
 			yEven = !yEven;
 		
 		if (yEven) {

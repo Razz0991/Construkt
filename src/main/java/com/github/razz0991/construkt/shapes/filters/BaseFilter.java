@@ -30,19 +30,22 @@ public abstract class BaseFilter {
 	 */
 	public abstract boolean checkCondition(final AreaData data, final Map<String, ShapeParameter<?>> parameters);
 	
-	protected boolean parseBooleanParameter(ShapeParameter<?> par, boolean defaultValue) {
+	protected boolean parseBooleanParameter(Map<String, ShapeParameter<?>> parameters, String name, boolean defaultValue) {
+		ShapeParameter<?> par = parameters.get(parseParameterName(name));
 		if (par instanceof BooleanShapeParameter)
 			return ((BooleanShapeParameter)par).getParameter();
 		return defaultValue;
 	}
 	
-	protected int parseIntegerParameter(ShapeParameter<?> par, int defaultValue) {
+	protected int parseIntegerParameter(Map<String, ShapeParameter<?>> parameters, String name, int defaultValue) {
+		ShapeParameter<?> par = parameters.get(parseParameterName(name));
 		if (par instanceof IntegerShapeParameter)
 			return ((IntegerShapeParameter)par).getParameter();
 		return defaultValue;
 	}
 	
-	protected char parseAxisParameter(ShapeParameter<?> par, char defaultValue) {
+	protected char parseAxisParameter(Map<String, ShapeParameter<?>> parameters, String name, char defaultValue) {
+		ShapeParameter<?> par = parameters.get(parseParameterName(name));
 		if (par instanceof AxisShapeParameter)
 			return ((AxisShapeParameter)par).getParameter();
 		return defaultValue;

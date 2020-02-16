@@ -43,13 +43,13 @@ public class NoiseFilter extends BaseFilter {
 	@Override
 	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
 		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0, 
-				parseIntegerParameter(parameters.get(parseParameterName(octaveName)), octaveValue));
-		gen.setScale(parseIntegerParameter(parameters.get(parseParameterName(scaleName)), scaleDefault) / 100d);
+				parseIntegerParameter(parameters, octaveName, octaveValue));
+		gen.setScale(parseIntegerParameter(parameters, scaleName, scaleDefault) / 100d);
 		
-		double limit = parseIntegerParameter(parameters.get(parseParameterName(limitName)), limitDefault) / 100d;
+		double limit = parseIntegerParameter(parameters, limitName, limitDefault) / 100d;
 		
 		boolean output = false;
-		if (!parseBooleanParameter(parameters.get(parseParameterName(invertName)), invertDefault))
+		if (!parseBooleanParameter(parameters, invertName, invertDefault))
 			output = getNoise(gen, data) <= limit;
 		else
 			output = getNoise(gen, data) >= limit;
