@@ -10,6 +10,11 @@ import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
 import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class NoiseFilter extends BaseFilter {
 	
 	private final String octaveName = "octaves";

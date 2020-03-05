@@ -5,6 +5,11 @@ import org.bukkit.Location;
 import com.github.razz0991.construkt.CktUtil;
 import com.github.razz0991.construkt.Construkt;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class AreaData {
 	private final Location firstPoint;
 	private final Location secondPoint;
