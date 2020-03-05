@@ -19,11 +19,12 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 5)**
+**(As of Episode 6)**
 
 - Shape filling
 - Shape clearing
 - Shape replacement
+- Filters
 - Lagless area filling (or removal)
 - Permissions
 - Limitations
@@ -32,7 +33,8 @@ GNU General Public License for more details.
    - Permission for no limits
    - Permission based limit groups
    
-The plugin is basically server ready. May need some more testing to be certain. But I still want to add more features yet, so no release build for now.
+The plugin is almost server ready. There are still some features missing and limitations I 
+wish to add before a release version is built (but pre-release versions are available).
 
 **Shapes**
 
@@ -46,3 +48,42 @@ The plugin is basically server ready. May need some more testing to be certain. 
    - Scale Parameter (1 - 10)
 - Overlay
    - Depth Parameter (1 - 10)
+   
+**Filters**
+
+- Checkered
+   - Invert Parameter
+   - Size Parameter (1 - 20)
+- Noise
+   - Octaves Parameter (1 - 8)
+   - Scale Parameter (1 - 10)
+   - Limit Parameter (1 - 99)
+   - Invert Parameter
+- Random
+   - Chance Parameter (1 - 99)
+- Slice
+   - Axis Parameter (x, y, or z)
+   - Percent Parameter (1, 99)
+   - Invert Parameter
+   
+## Commands
+
+- `/construkt` *OR* `/ckt`
+   - Toggles build mode on or off.
+- `/ckt <shape>`
+   - Selects the shape to build in
+- `/ckt parameter <parameter> [value]`
+   - Sets a value for a shapes parameter
+   - Lists the details of the parameter if no value is entered
+- `/ckt filter add <filter>`
+   - Adds a filter to alter a shape
+- `/ckt filter remove <filter>`
+   - Removes a filter
+- `/ckt filter clear`
+   - Clears all filters
+- `/ckt filter parameter <parameter> [value]`
+   - Sets a value for a filters parameter
+   - Lists the details of the parameter if no value is entered
+
+
+All commands will come up with tab completion to help. No other in game help information is currently available.
