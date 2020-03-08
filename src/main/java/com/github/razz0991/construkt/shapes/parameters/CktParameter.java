@@ -5,7 +5,7 @@ package com.github.razz0991.construkt.shapes.parameters;
  *
  *  Full disclaimer in Construkt.java
  */
-public interface ShapeParameter<T> {
+public interface CktParameter<T> {
 	
 	/**
 	 * Gets the parameters value.

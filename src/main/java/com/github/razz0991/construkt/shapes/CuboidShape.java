@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -16,12 +16,12 @@ import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
 public class CuboidShape extends BaseShape{
 
 	@Override
-	public Map<String, ShapeParameter<?>> getDefaultParameters() {
+	public Map<String, CktParameter<?>> getDefaultParameters() {
 		return null;
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, 
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);

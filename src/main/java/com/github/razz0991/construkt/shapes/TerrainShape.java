@@ -8,8 +8,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -24,17 +24,17 @@ public class TerrainShape extends BaseShape {
 	private final int scaleDefault = 5;
 
 	@Override
-	public Map<String, ShapeParameter<?>> getDefaultParameters() {
-		Map<String, ShapeParameter<?>> pars = new HashMap<String, ShapeParameter<?>>();
-		IntegerShapeParameter octaves = new IntegerShapeParameter(octaveValue, 1, 8);
-		IntegerShapeParameter scale = new IntegerShapeParameter(scaleDefault, 1, 10);
+	public Map<String, CktParameter<?>> getDefaultParameters() {
+		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+		IntegerCktParameter octaves = new IntegerCktParameter(octaveValue, 1, 8);
+		IntegerCktParameter scale = new IntegerCktParameter(scaleDefault, 1, 10);
 		pars.put(octaveName, octaves);
 		pars.put(scaleName, scale);
 		return pars;
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters,
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);

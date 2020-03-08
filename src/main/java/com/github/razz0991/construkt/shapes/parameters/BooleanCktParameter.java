@@ -5,11 +5,11 @@ package com.github.razz0991.construkt.shapes.parameters;
  *
  *  Full disclaimer in Construkt.java
  */
-public class BooleanShapeParameter implements ShapeParameter<Boolean>{
+public class BooleanCktParameter implements CktParameter<Boolean>{
 	
 	private boolean value = false;
 	
-	public BooleanShapeParameter(boolean value) {
+	public BooleanCktParameter(boolean value) {
 		this.value = value;
 	}
 	

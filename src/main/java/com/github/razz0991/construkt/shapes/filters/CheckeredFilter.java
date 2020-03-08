@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -26,15 +26,15 @@ public class CheckeredFilter extends BaseFilter {
 	}
 
 	@Override
-	public Map<String, ShapeParameter<?>> getParameters() {
-		Map<String, ShapeParameter<?>> pars = new HashMap<String, ShapeParameter<?>>();
-		pars.put(invertName, new BooleanShapeParameter(invertDefault));
-		pars.put(sizeName, new IntegerShapeParameter(sizeDefault, 1, 20));
+	public Map<String, CktParameter<?>> getParameters() {
+		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+		pars.put(invertName, new BooleanCktParameter(invertDefault));
+		pars.put(sizeName, new IntegerCktParameter(sizeDefault, 1, 20));
 		return pars;
 	}
 
 	@Override
-	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
+	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
 		int checkerSize = parseIntegerParameter(parameters, sizeName, sizeDefault);
 		boolean yEven = isChecker(data.getCurrentRelativeY(), checkerSize);
 		if (parseBooleanParameter(parameters, invertName, invertDefault))

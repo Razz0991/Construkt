@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -23,14 +23,14 @@ public class RandomFilter extends BaseFilter {
 	}
 
 	@Override
-	public Map<String, ShapeParameter<?>> getParameters() {
-		Map<String, ShapeParameter<?>> pars = new HashMap<String, ShapeParameter<?>>();
-		pars.put(chanceName, new IntegerShapeParameter(chanceDefault, 1, 99));
+	public Map<String, CktParameter<?>> getParameters() {
+		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+		pars.put(chanceName, new IntegerCktParameter(chanceDefault, 1, 99));
 		return pars;
 	}
 
 	@Override
-	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
+	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
 		double chance = parseIntegerParameter(parameters, chanceName, chanceDefault) / 100d;
 		
 		return Math.random() <= chance;

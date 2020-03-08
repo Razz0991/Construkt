@@ -7,8 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -21,9 +21,9 @@ public class SphereShape extends BaseShape{
 	private final String hollowModeName = "hollow";
 
 	@Override
-	public Map<String, ShapeParameter<?>> getDefaultParameters() {
-		Map<String, ShapeParameter<?>> parameters = new HashMap<String, ShapeParameter<?>>();
-		parameters.put(hollowModeName, new BooleanShapeParameter(hollowModeDefault));
+	public Map<String, CktParameter<?>> getDefaultParameters() {
+		Map<String, CktParameter<?>> parameters = new HashMap<String, CktParameter<?>>();
+		parameters.put(hollowModeName, new BooleanCktParameter(hollowModeDefault));
 		return parameters;
 	}
 	
@@ -44,7 +44,7 @@ public class SphereShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters, 
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);

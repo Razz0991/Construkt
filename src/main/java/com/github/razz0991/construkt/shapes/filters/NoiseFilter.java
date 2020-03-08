@@ -6,9 +6,9 @@ import java.util.Map;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -32,12 +32,12 @@ public class NoiseFilter extends BaseFilter {
 	}
 
 	@Override
-	public Map<String, ShapeParameter<?>> getParameters() {
-		Map<String, ShapeParameter<?>> pars = new HashMap<String, ShapeParameter<?>>();
-		IntegerShapeParameter octaves = new IntegerShapeParameter(octaveValue, 1, 8);
-		IntegerShapeParameter scale = new IntegerShapeParameter(scaleDefault, 1, 10);
-		IntegerShapeParameter limit = new IntegerShapeParameter(limitDefault, 1, 99);
-		BooleanShapeParameter invert = new BooleanShapeParameter(invertDefault);
+	public Map<String, CktParameter<?>> getParameters() {
+		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+		IntegerCktParameter octaves = new IntegerCktParameter(octaveValue, 1, 8);
+		IntegerCktParameter scale = new IntegerCktParameter(scaleDefault, 1, 10);
+		IntegerCktParameter limit = new IntegerCktParameter(limitDefault, 1, 99);
+		BooleanCktParameter invert = new BooleanCktParameter(invertDefault);
 		pars.put(octaveName, octaves);
 		pars.put(scaleName, scale);
 		pars.put(limitName, limit);
@@ -46,7 +46,7 @@ public class NoiseFilter extends BaseFilter {
 	}
 
 	@Override
-	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
+	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
 		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0, 
 				parseIntegerParameter(parameters, octaveName, octaveValue));
 		gen.setScale(parseIntegerParameter(parameters, scaleName, scaleDefault) / 100d);

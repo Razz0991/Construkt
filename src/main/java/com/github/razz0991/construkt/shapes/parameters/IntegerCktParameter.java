@@ -5,21 +5,21 @@ package com.github.razz0991.construkt.shapes.parameters;
  *
  *  Full disclaimer in Construkt.java
  */
-public class IntegerShapeParameter implements ShapeParameter<Integer>{
+public class IntegerCktParameter implements CktParameter<Integer>{
 	
 	private int value;
 	private final boolean useLimit;
 	private final int minValue;
 	private final int maxValue;
 	
-	public IntegerShapeParameter(int value) {
+	public IntegerCktParameter(int value) {
 		this.value = value;
 		useLimit = false;
 		minValue = 0;
 		maxValue = 0;
 	}
 	
-	public IntegerShapeParameter(int value, int min, int max) {
+	public IntegerCktParameter(int value, int min, int max) {
 		this.value = value;
 		useLimit = true;
 		minValue = min;

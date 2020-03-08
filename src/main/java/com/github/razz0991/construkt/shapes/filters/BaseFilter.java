@@ -3,10 +3,10 @@ package com.github.razz0991.construkt.shapes.filters;
 import java.util.Map;
 
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.AxisShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.AxisCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -26,33 +26,33 @@ public abstract class BaseFilter {
 	 * @return A map containing the name and value of 
 	 * parameters for this filter.
 	 */
-	public abstract Map<String, ShapeParameter<?>> getParameters();
+	public abstract Map<String, CktParameter<?>> getParameters();
 	/**
 	 * A check to see if the current position should allow a 
 	 * block placement based on this filter.
 	 * @param data The area data
 	 * @return true if a block should be placed
 	 */
-	public abstract boolean checkCondition(final AreaData data, final Map<String, ShapeParameter<?>> parameters);
+	public abstract boolean checkCondition(final AreaData data, final Map<String, CktParameter<?>> parameters);
 	
-	protected boolean parseBooleanParameter(Map<String, ShapeParameter<?>> parameters, String name, boolean defaultValue) {
-		ShapeParameter<?> par = parameters.get(parseParameterName(name));
-		if (par instanceof BooleanShapeParameter)
-			return ((BooleanShapeParameter)par).getParameter();
+	protected boolean parseBooleanParameter(Map<String, CktParameter<?>> parameters, String name, boolean defaultValue) {
+		CktParameter<?> par = parameters.get(parseParameterName(name));
+		if (par instanceof BooleanCktParameter)
+			return ((BooleanCktParameter)par).getParameter();
 		return defaultValue;
 	}
 	
-	protected int parseIntegerParameter(Map<String, ShapeParameter<?>> parameters, String name, int defaultValue) {
-		ShapeParameter<?> par = parameters.get(parseParameterName(name));
-		if (par instanceof IntegerShapeParameter)
-			return ((IntegerShapeParameter)par).getParameter();
+	protected int parseIntegerParameter(Map<String, CktParameter<?>> parameters, String name, int defaultValue) {
+		CktParameter<?> par = parameters.get(parseParameterName(name));
+		if (par instanceof IntegerCktParameter)
+			return ((IntegerCktParameter)par).getParameter();
 		return defaultValue;
 	}
 	
-	protected char parseAxisParameter(Map<String, ShapeParameter<?>> parameters, String name, char defaultValue) {
-		ShapeParameter<?> par = parameters.get(parseParameterName(name));
-		if (par instanceof AxisShapeParameter)
-			return ((AxisShapeParameter)par).getParameter();
+	protected char parseAxisParameter(Map<String, CktParameter<?>> parameters, String name, char defaultValue) {
+		CktParameter<?> par = parameters.get(parseParameterName(name));
+		if (par instanceof AxisCktParameter)
+			return ((AxisCktParameter)par).getParameter();
 		return defaultValue;
 	}
 	

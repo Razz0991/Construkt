@@ -1,10 +1,10 @@
 package com.github.razz0991.construkt.shapes.parameters;
 
-public class AxisShapeParameter implements ShapeParameter<Character>{
+public class AxisCktParameter implements CktParameter<Character>{
 	
 	private char axis = 'y';
 	
-	public AxisShapeParameter(Character defaultValue) {
+	public AxisCktParameter(Character defaultValue) {
 		setParameter(defaultValue);
 	}
 

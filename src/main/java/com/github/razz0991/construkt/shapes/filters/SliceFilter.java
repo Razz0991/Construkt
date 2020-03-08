@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.AxisShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.AxisCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -29,16 +29,16 @@ public class SliceFilter extends BaseFilter {
 	}
 
 	@Override
-	public Map<String, ShapeParameter<?>> getParameters() {
-		Map<String, ShapeParameter<?>> pars = new HashMap<String, ShapeParameter<?>>();
-		pars.put(axisName, new AxisShapeParameter(axisDefault));
-		pars.put(slicePercentName, new IntegerShapeParameter(slicePercentDefault, 1, 99));
-		pars.put(invertName, new BooleanShapeParameter(invertDefault));
+	public Map<String, CktParameter<?>> getParameters() {
+		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+		pars.put(axisName, new AxisCktParameter(axisDefault));
+		pars.put(slicePercentName, new IntegerCktParameter(slicePercentDefault, 1, 99));
+		pars.put(invertName, new BooleanCktParameter(invertDefault));
 		return pars;
 	}
 
 	@Override
-	public boolean checkCondition(AreaData data, Map<String, ShapeParameter<?>> parameters) {
+	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
 		char axis = parseAxisParameter(parameters, axisName, axisDefault);
 		double perc = parseIntegerParameter(parameters, slicePercentName, slicePercentDefault) / 100d;
 		boolean invert = parseBooleanParameter(parameters, invertName, invertDefault);

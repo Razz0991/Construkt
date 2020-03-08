@@ -8,8 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerShapeParameter;
-import com.github.razz0991.construkt.shapes.parameters.ShapeParameter;
+import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -22,15 +22,15 @@ public class Overlay extends BaseShape {
 	private final int depthDefault = 1;
 
 	@Override
-	public Map<String, ShapeParameter<?>> getDefaultParameters() {
-		Map<String, ShapeParameter<?>> params = new HashMap<String, ShapeParameter<?>>();
-		IntegerShapeParameter depth = new IntegerShapeParameter(depthDefault, 1, 10);
+	public Map<String, CktParameter<?>> getDefaultParameters() {
+		Map<String, CktParameter<?>> params = new HashMap<String, CktParameter<?>>();
+		IntegerCktParameter depth = new IntegerCktParameter(depthDefault, 1, 10);
 		params.put(depthName, depth);
 		return params;
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, ShapeParameter<?>> parameters,
+	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters,
 			BlockData blockData, BaseFilter[] filters) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
