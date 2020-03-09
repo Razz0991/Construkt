@@ -65,7 +65,11 @@ public class PlayerInfo {
 		cktEnabled = !cktEnabled;
 		
 		if (cktEnabled) {
-			String[] toMessage = new String[2 + shapePars.size()];
+			int extraMessages = 2;
+			if (filters.size() > 0)
+				extraMessages = 3;
+			
+			String[] toMessage = new String[extraMessages + shapePars.size()];
 			toMessage[0] = ChatColor.AQUA + "Ready to build!";
 			toMessage[1] = ChatColor.DARK_AQUA + "Shape: " + ChatColor.RESET + shape;
 			
@@ -73,6 +77,11 @@ public class PlayerInfo {
 			for (String msg : getChatParameters()) {
 				toMessage[inc] = msg;
 				inc++;
+			}
+
+			if (filters.size() > 0) {
+				toMessage[toMessage.length - 1] = ChatColor.DARK_AQUA + "Filters: " + 
+													String.join(", ", filters);
 			}
 			
 			setLimits();
