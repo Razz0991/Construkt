@@ -7,6 +7,11 @@ import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.AxisCktParameter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class CylinderShape extends BaseShape {
 	
 	private final boolean hollowModeDefault = false;
