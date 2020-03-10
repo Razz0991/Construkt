@@ -8,6 +8,9 @@ import com.github.razz0991.construkt.shapes.AreaData;
  *
  *  Full disclaimer in Construkt.java
  */
+/**
+ * A Filter object to modify the look of a {@link BaseShape}
+ */
 public abstract class BaseFilter extends ParameterObject{
 	
 	/**

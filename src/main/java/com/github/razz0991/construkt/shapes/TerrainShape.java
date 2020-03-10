@@ -35,8 +35,8 @@ public class TerrainShape extends BaseShape {
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
-		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerParameter(octaveName, 8));
-		gen.setScale(parseIntegerParameter(scaleName, scaleDefault) / 100.0d);
+		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, getIntegerParameter(octaveName, 8));
+		gen.setScale(getIntegerParameter(scaleName, scaleDefault) / 100.0d);
 		
 		data.createFillTask(new Runnable() {
 			

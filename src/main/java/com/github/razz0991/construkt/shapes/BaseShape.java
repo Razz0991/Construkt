@@ -12,8 +12,14 @@ import com.github.razz0991.construkt.parameters.ParameterObject;
  *
  *  Full disclaimer in Construkt.java
  */
+/**
+ * A shape to generate within a defined area
+ */
 public abstract class BaseShape extends ParameterObject {
 	
+	/**
+	 * What mode blocks should be placed in
+	 */
 	protected PlaceMode placeMode = PlaceMode.AIR;
 	
 	/**
@@ -60,10 +66,17 @@ public abstract class BaseShape extends ParameterObject {
 		return false;
 	}
 	
+	/**
+	 * Sets this shapes place mode
+	 * @param mode The {@link PlaceMode} this shape should use
+	 */
 	public void setPlaceMode(PlaceMode mode) {
 		placeMode = mode;
 	}
 	
+	/**
+	 * Place mode enum to set where blocks should be placed
+	 */
 	public enum PlaceMode {
 		AIR,
 		SOLID;

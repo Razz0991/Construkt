@@ -402,10 +402,15 @@ public class PlayerInfo {
 		setFirstLocation(null);
 	}
 	
+	// Checks if the player has an active filter
 	private boolean hasFilterActive(String name) {
 		return filters.containsKey(name);
 	}
 	
+	/**
+	 * Activates a filter on the player
+	 * @param name The name of the {@link BaseFilter}
+	 */
 	public void addFilter(String name) {
 		String lName = name.toLowerCase();
 		if (Filters.hasFilter(name) && !hasFilterActive(lName)) {
@@ -426,6 +431,10 @@ public class PlayerInfo {
 		CktUtil.messagePlayer(getPlayer(), "No filter found by the name \"" + lName + "\"");
 	}
 	
+	/**
+	 * Gets all active filters on the player
+	 * @return An array containing all the {@link BaseFilter}s the player has active
+	 */
 	public BaseFilter[] getFilters() {
 		BaseFilter[] filters = new BaseFilter[this.filters.size()];
 		int inc = 0;
@@ -435,19 +444,26 @@ public class PlayerInfo {
 		return filters;
 	}
 	
-	public String[] getFilterNames() {
+	String[] getFilterNames() {
 		String[] filters = new String[this.filters.size()];
 		int inc = 0;
 		for (String filter : this.filters.keySet()) filters[inc++] = filter;
 		return filters;
 	}
 	
+	/**
+	 * Clears all active filters from the player
+	 */
 	public void clearFilters() {
 		filters.clear();
 		
 		CktUtil.messagePlayer(getPlayer(), "Filters cleared");
 	}
 	
+	/**
+	 * Removes a filter from the player
+	 * @param name The name of the {@link BaseFilter} to remove
+	 */
 	public void removeFilter(String name) {
 		String lName = name.toLowerCase();
 		if (hasFilterActive(lName)) {

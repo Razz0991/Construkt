@@ -38,8 +38,8 @@ public class HollowCuboidShape extends BaseShape{
 			public void run() {
 				do {
 					if (canPlace(data, filters)) {
-						if ((parseBooleanParameter(borderModeName, true) &&
-								isBorder(data)) || (!parseBooleanParameter(borderModeName, borderModeDefault) &&
+						if ((getBooleanParameter(borderModeName, true) &&
+								isBorder(data)) || (!getBooleanParameter(borderModeName, borderModeDefault) &&
 										isEdge(data)))
 							setBlock(blockData, data.getCurrentLocation());
 					}

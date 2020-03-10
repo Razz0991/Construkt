@@ -29,9 +29,9 @@ public class CheckeredFilter extends BaseFilter {
 	
 	@Override
 	public boolean checkCondition(AreaData data) {
-		int checkerSize = parseIntegerParameter(sizeName, sizeDefault);
+		int checkerSize = getIntegerParameter(sizeName, sizeDefault);
 		boolean yEven = isChecker(data.getCurrentRelativeY(), checkerSize);
-		if (parseBooleanParameter(invertName, invertDefault))
+		if (getBooleanParameter(invertName, invertDefault))
 			yEven = !yEven;
 		
 		if (yEven) {

@@ -33,9 +33,9 @@ public class SliceFilter extends BaseFilter {
 
 	@Override
 	public boolean checkCondition(AreaData data) {
-		char axis = parseAxisParameter(axisName, axisDefault);
-		double perc = parseIntegerParameter(slicePercentName, slicePercentDefault) / 100d;
-		boolean invert = parseBooleanParameter(invertName, invertDefault);
+		char axis = getAxisParameter(axisName, axisDefault);
+		double perc = getIntegerParameter(slicePercentName, slicePercentDefault) / 100d;
+		boolean invert = getBooleanParameter(invertName, invertDefault);
 		double length = 0;
 		int axisDist = 0;
 		

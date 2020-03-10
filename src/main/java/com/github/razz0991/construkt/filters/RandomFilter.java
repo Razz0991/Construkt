@@ -25,7 +25,7 @@ public class RandomFilter extends BaseFilter {
 
 	@Override
 	public boolean checkCondition(AreaData data) {
-		double chance = parseIntegerParameter(chanceName, chanceDefault) / 100d;
+		double chance = getIntegerParameter(chanceName, chanceDefault) / 100d;
 		
 		return Math.random() <= chance;
 	}

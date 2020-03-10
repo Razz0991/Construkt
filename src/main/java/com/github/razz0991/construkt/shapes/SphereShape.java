@@ -57,7 +57,7 @@ public class SphereShape extends BaseShape{
 			public void run() {
 				do {
 					if (canPlace(data, filters)) {
-						if (parseBooleanParameter(hollowModeName, hollowModeDefault)) {
+						if (getBooleanParameter(hollowModeName, hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < dist + 0.5 && curDist > dist - 0.5)
 								setBlock(blockData, data.getCurrentLocation());

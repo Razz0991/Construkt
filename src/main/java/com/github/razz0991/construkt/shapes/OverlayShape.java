@@ -49,7 +49,7 @@ public class OverlayShape extends BaseShape {
 					if (cur.getBlock().getType() != Material.AIR) {
 						if (placeMode == PlaceMode.AIR) {
 							int startY = cur.getBlockY() + 1;
-							int endY = startY + (parseIntegerParameter(depthName, depthDefault) - 1);
+							int endY = startY + (getIntegerParameter(depthName, depthDefault) - 1);
 							if (endY > data.getToLocation().getBlockY())
 								endY = data.getToLocation().getBlockY();
 							for (int y = startY; y <= endY; y++) {
@@ -60,7 +60,7 @@ public class OverlayShape extends BaseShape {
 						}
 						else {
 							int startY = cur.getBlockY();
-							int endY = startY - (parseIntegerParameter(depthName, depthDefault) - 1);
+							int endY = startY - (getIntegerParameter(depthName, depthDefault) - 1);
 							if (endY < data.getFromLocation().getBlockY())
 								endY = data.getFromLocation().getBlockY();
 							
