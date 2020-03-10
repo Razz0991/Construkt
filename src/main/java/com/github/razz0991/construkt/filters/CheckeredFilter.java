@@ -1,12 +1,8 @@
-package com.github.razz0991.construkt.shapes.filters;
+package com.github.razz0991.construkt.filters;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.github.razz0991.construkt.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -14,30 +10,28 @@ import com.github.razz0991.construkt.shapes.parameters.CktParameter;
  *  Full disclaimer in Construkt.java
  */
 public class CheckeredFilter extends BaseFilter {
-	
+
 	private static String invertName = "invert";
 	private static boolean invertDefault = false;
 	private static String sizeName = "size";
 	private static int sizeDefault = 1;
 	
+	public CheckeredFilter() {
+		super();
+		parameters.put(invertName, new BooleanCktParameter(invertDefault));
+		parameters.put(sizeName, new IntegerCktParameter(sizeDefault, 1, 20));
+	}
+
 	@Override
-	public String getFilterName() {
+	public String getName() {
 		return "checkered";
 	}
-
+	
 	@Override
-	public Map<String, CktParameter<?>> getParameters() {
-		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
-		pars.put(invertName, new BooleanCktParameter(invertDefault));
-		pars.put(sizeName, new IntegerCktParameter(sizeDefault, 1, 20));
-		return pars;
-	}
-
-	@Override
-	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
-		int checkerSize = parseIntegerParameter(parameters, sizeName, sizeDefault);
+	public boolean checkCondition(AreaData data) {
+		int checkerSize = parseIntegerParameter(sizeName, sizeDefault);
 		boolean yEven = isChecker(data.getCurrentRelativeY(), checkerSize);
-		if (parseBooleanParameter(parameters, invertName, invertDefault))
+		if (parseBooleanParameter(invertName, invertDefault))
 			yEven = !yEven;
 		
 		if (yEven) {

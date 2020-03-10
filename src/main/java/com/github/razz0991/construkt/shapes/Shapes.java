@@ -11,14 +11,22 @@ import java.util.Set;
  *  Full disclaimer in Construkt.java
  */
 public class Shapes {
-	private static Map<String, BaseShape> shapes = new HashMap<String, BaseShape>();
+	private static Map<String, Class<? extends BaseShape>> shapes = new HashMap<String, Class<? extends BaseShape>>();
 	
 	static {
-		shapes.put("cuboid", new CuboidShape());
-		shapes.put("sphere", new SphereShape());
-		shapes.put("hollow_cuboid", new HollowCuboidShape());
-		shapes.put("terrain", new TerrainShape());
-		shapes.put("overlay", new Overlay());
+		addShape(CuboidShape.class);
+		addShape(SphereShape.class);
+		addShape(HollowCuboidShape.class);
+		addShape(TerrainShape.class);
+		addShape(Overlay.class);
+	}
+	
+	private static void addShape(Class<? extends BaseShape> shape) {
+		try {
+			shapes.put(shape.newInstance().getName(), shape);
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -28,7 +36,11 @@ public class Shapes {
 	 */
 	public static BaseShape getShape(String name) {
 		if (shapes.containsKey(name.toLowerCase()))
-			return shapes.get(name.toLowerCase());
+			try {
+				return shapes.get(name.toLowerCase()).newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
 	

@@ -1,4 +1,4 @@
-package com.github.razz0991.construkt.shapes.filters;
+package com.github.razz0991.construkt.filters;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,17 +11,22 @@ import java.util.Set;
  *  Full disclaimer in Construkt.java
  */
 public class Filters {
-	private static Map<String, BaseFilter> filters = new HashMap<String, BaseFilter>();
+	private static Map<String, Class<? extends BaseFilter>> filters = new HashMap<String, Class<? extends BaseFilter>>();
 	
 	static {
-		addFilter(new CheckeredFilter());
-		addFilter(new SliceFilter());
-		addFilter(new RandomFilter());
-		addFilter(new NoiseFilter());
+		addFilter(CheckeredFilter.class);
+		addFilter(SliceFilter.class);
+		addFilter(RandomFilter.class);
+		addFilter(NoiseFilter.class);
 	}
 	
-	private static void addFilter(BaseFilter filter) {
-		filters.put(filter.getFilterName(), filter);
+	private static void addFilter(Class<? extends BaseFilter> filter) {
+		try {
+			filters.put(filter.newInstance().getName(), filter);
+		} catch (InstantiationException | IllegalAccessException | 
+				IllegalArgumentException | SecurityException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -31,7 +36,12 @@ public class Filters {
 	 */
 	public static BaseFilter getFilter(String name) {
 		if (filters.containsKey(name.toLowerCase()))
-			return filters.get(name.toLowerCase());
+			try {
+				return filters.get(name.toLowerCase()).newInstance();
+			} catch (InstantiationException | IllegalAccessException | 
+					IllegalArgumentException | SecurityException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
 	

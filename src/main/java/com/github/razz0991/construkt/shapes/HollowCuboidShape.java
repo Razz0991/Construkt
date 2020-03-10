@@ -1,14 +1,10 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
+import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -19,16 +15,19 @@ public class HollowCuboidShape extends BaseShape{
 	
 	private final boolean borderModeDefault = false;
 	private final String borderModeName = "border_mode";
-
-	@Override
-	public Map<String, CktParameter<?>> getDefaultParameters() {
-		Map<String, CktParameter<?>> parameters = new HashMap<String, CktParameter<?>>();
+	
+	public HollowCuboidShape() {
+		super();
 		parameters.put(borderModeName, new BooleanCktParameter(borderModeDefault));
-		return parameters;
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
+	public String getName() {
+		return "hollow_cuboid";
+	}
+
+	@Override
+	public boolean generateShape(Location firstPoint, Location secondPoint, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
@@ -38,9 +37,9 @@ public class HollowCuboidShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data, parameters, filters)) {
-						if ((parseBooleanShapeParameter(parameters.get(borderModeName), true) &&
-								isBorder(data)) || (!parseBooleanShapeParameter(parameters.get(borderModeName), borderModeDefault) &&
+					if (canPlace(data, filters)) {
+						if ((parseBooleanParameter(borderModeName, true) &&
+								isBorder(data)) || (!parseBooleanParameter(borderModeName, borderModeDefault) &&
 										isEdge(data)))
 							setBlock(blockData, data.getCurrentLocation());
 					}

@@ -1,12 +1,9 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -16,12 +13,12 @@ import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 public class CuboidShape extends BaseShape{
 
 	@Override
-	public Map<String, CktParameter<?>> getDefaultParameters() {
-		return null;
+	public String getName() {
+		return "cuboid";
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
+	public boolean generateShape(Location firstPoint, Location secondPoint, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
@@ -31,7 +28,7 @@ public class CuboidShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data, parameters, filters))
+					if (canPlace(data, filters))
 						setBlock(blockData, data.getCurrentLocation());
 					
 					boolean shouldWait = data.incrementLoop();

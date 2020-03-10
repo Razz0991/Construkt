@@ -1,15 +1,11 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
+import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -20,17 +16,19 @@ public class Overlay extends BaseShape {
 	
 	private final String depthName = "depth";
 	private final int depthDefault = 1;
-
-	@Override
-	public Map<String, CktParameter<?>> getDefaultParameters() {
-		Map<String, CktParameter<?>> params = new HashMap<String, CktParameter<?>>();
-		IntegerCktParameter depth = new IntegerCktParameter(depthDefault, 1, 10);
-		params.put(depthName, depth);
-		return params;
+	
+	public Overlay() {
+		super();
+		parameters.put(depthName, new IntegerCktParameter(depthDefault, 1, 10));
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters,
+	public String getName() {
+		return "overlay";
+	}
+
+	@Override
+	public boolean generateShape(Location firstPoint, Location secondPoint,
 			BlockData blockData, BaseFilter[] filters) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
@@ -49,26 +47,26 @@ public class Overlay extends BaseShape {
 					}
 					
 					if (cur.getBlock().getType() != Material.AIR) {
-						if (parseBooleanShapeParameter(parameters.get("place_in_air"), true)) {
+						if (placeMode == PlaceMode.AIR) {
 							int startY = cur.getBlockY() + 1;
-							int endY = startY + (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
+							int endY = startY + (parseIntegerParameter(depthName, depthDefault) - 1);
 							if (endY > data.getToLocation().getBlockY())
 								endY = data.getToLocation().getBlockY();
 							for (int y = startY; y <= endY; y++) {
 								cur.setY(y);
-								if (canPlace(cur, parameters, filters, data))
+								if (canPlace(cur, filters, data))
 									setBlock(blockData, cur);
 							}
 						}
 						else {
 							int startY = cur.getBlockY();
-							int endY = startY - (parseIntegerShapeParameter(parameters.get(depthName), depthDefault) - 1);
+							int endY = startY - (parseIntegerParameter(depthName, depthDefault) - 1);
 							if (endY < data.getFromLocation().getBlockY())
 								endY = data.getFromLocation().getBlockY();
 							
 							for (int y = startY; y >= endY; y--) {
 								cur.setY(y);
-								if (canPlace(cur, parameters, filters, data)) {
+								if (canPlace(cur, filters, data)) {
 									setBlock(blockData, cur);
 								}
 							}

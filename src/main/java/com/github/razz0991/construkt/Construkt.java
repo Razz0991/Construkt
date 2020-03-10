@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.razz0991.construkt.CktConfigOptions.Limiter;
+import com.github.razz0991.construkt.filters.Filters;
 import com.github.razz0991.construkt.shapes.Shapes;
-import com.github.razz0991.construkt.shapes.filters.Filters;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

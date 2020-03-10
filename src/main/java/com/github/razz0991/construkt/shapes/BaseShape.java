@@ -1,28 +1,21 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
+import com.github.razz0991.construkt.parameters.ParameterObject;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
  *  Full disclaimer in Construkt.java
  */
-public abstract class BaseShape {
+public abstract class BaseShape extends ParameterObject {
 	
-	/**
-	 * Gets the parameters that are available for a shape.
-	 * @return A Map containing all valid parameters or null if none are set
-	 */
-	public abstract Map<String, CktParameter<?>> getDefaultParameters();
+	protected PlaceMode placeMode = PlaceMode.AIR;
+	
 	/**
 	 * Generates a shape and places blocks via the block data entered.
 	 * @param firstPoint The first location of the area
@@ -32,8 +25,7 @@ public abstract class BaseShape {
 	 * @param filter The filter that will be used
 	 * @return true for success
 	 */
-	public abstract boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
-			BlockData blockData, BaseFilter[] filters);
+	public abstract boolean generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters);
 	
 	protected void setBlock(BlockData blockData, Location loc) {
 		if (blockData != null)
@@ -42,26 +34,25 @@ public abstract class BaseShape {
 			loc.getBlock().setType(Material.AIR);
 	}
 	
-	protected boolean canPlace(AreaData data, Map<String, CktParameter<?>> parameters, BaseFilter[] filters) {
-		return canPlace(null, parameters, filters, data);
+	protected boolean canPlace(AreaData data, BaseFilter[] filters) {
+		return canPlace(null, filters, data);
 	}
 	
-	protected boolean canPlace(Location current, Map<String, CktParameter<?>> parameters, BaseFilter[] filters, AreaData data) {
+	protected boolean canPlace(Location current, BaseFilter[] filters, AreaData data) {
 		Location cur = current;
 		if (current == null)
 			cur = data.getCurrentLocation();
 		
 		boolean placeInAir = true;
-		if (parameters.containsKey("place_in_air")) {
-			placeInAir = parseBooleanShapeParameter(parameters.get("place_in_air"), placeInAir);
-		}
+		if (placeMode == PlaceMode.SOLID)
+			placeInAir = false;
 		
 		if ((placeInAir && cur.getBlock().getType() == Material.AIR) ||
 				(!placeInAir && cur.getBlock().getType() != Material.AIR)) {
 			if(filters.length == 0)
 				return true;
 			for (BaseFilter filter : filters) {
-				if (!filter.checkCondition(data, parameters))
+				if (!filter.checkCondition(data))
 					return false;
 			}
 			return true;
@@ -69,18 +60,13 @@ public abstract class BaseShape {
 		return false;
 	}
 	
-	protected boolean parseBooleanShapeParameter(CktParameter<?> parameter, boolean defaultValue) {
-		if (parameter instanceof BooleanCktParameter) {
-			return ((BooleanCktParameter)parameter).getParameter();
-		}
-		return defaultValue;
+	public void setPlaceMode(PlaceMode mode) {
+		placeMode = mode;
 	}
 	
-	protected int parseIntegerShapeParameter(CktParameter<?> parameter, int defaultValue) {
-		if (parameter instanceof IntegerCktParameter) {
-			return ((IntegerCktParameter)parameter).getParameter();
-		}
-		return defaultValue;
+	public enum PlaceMode {
+		AIR,
+		SOLID;
 	}
 }
 

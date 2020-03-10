@@ -1,4 +1,4 @@
-package com.github.razz0991.construkt.shapes.parameters;
+package com.github.razz0991.construkt.parameters;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

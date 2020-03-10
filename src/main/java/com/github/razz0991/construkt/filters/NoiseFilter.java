@@ -1,14 +1,10 @@
-package com.github.razz0991.construkt.shapes.filters;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.github.razz0991.construkt.filters;
 
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
+import com.github.razz0991.construkt.parameters.BooleanCktParameter;
+import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.shapes.AreaData;
-import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -16,7 +12,7 @@ import com.github.razz0991.construkt.shapes.parameters.CktParameter;
  *  Full disclaimer in Construkt.java
  */
 public class NoiseFilter extends BaseFilter {
-	
+
 	private final String octaveName = "octaves";
 	private final int octaveValue = 8;
 	private final String scaleName = "scale";
@@ -25,36 +21,36 @@ public class NoiseFilter extends BaseFilter {
 	private final int limitDefault = 50;
 	private final String invertName = "invert";
 	private final boolean invertDefault = false;
-
-	@Override
-	public String getFilterName() {
-		return "noise";
-	}
-
-	@Override
-	public Map<String, CktParameter<?>> getParameters() {
-		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
+	
+	private SimplexOctaveGenerator gen;
+	
+	public NoiseFilter() {
+		super();
+		gen = new SimplexOctaveGenerator(0, 
+				parseIntegerParameter(octaveName, octaveValue));
+		gen.setScale(parseIntegerParameter(scaleName, scaleDefault) / 100d);
+		
 		IntegerCktParameter octaves = new IntegerCktParameter(octaveValue, 1, 8);
 		IntegerCktParameter scale = new IntegerCktParameter(scaleDefault, 1, 10);
 		IntegerCktParameter limit = new IntegerCktParameter(limitDefault, 1, 99);
 		BooleanCktParameter invert = new BooleanCktParameter(invertDefault);
-		pars.put(octaveName, octaves);
-		pars.put(scaleName, scale);
-		pars.put(limitName, limit);
-		pars.put(invertName, invert);
-		return pars;
+		parameters.put(octaveName, octaves);
+		parameters.put(scaleName, scale);
+		parameters.put(limitName, limit);
+		parameters.put(invertName, invert);
 	}
 
 	@Override
-	public boolean checkCondition(AreaData data, Map<String, CktParameter<?>> parameters) {
-		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0, 
-				parseIntegerParameter(parameters, octaveName, octaveValue));
-		gen.setScale(parseIntegerParameter(parameters, scaleName, scaleDefault) / 100d);
-		
-		double limit = parseIntegerParameter(parameters, limitName, limitDefault) / 100d;
+	public String getName() {
+		return "noise";
+	}
+
+	@Override
+	public boolean checkCondition(AreaData data) {
+		double limit = parseIntegerParameter(limitName, limitDefault) / 100d;
 		
 		boolean output = false;
-		if (!parseBooleanParameter(parameters, invertName, invertDefault))
+		if (!parseBooleanParameter(invertName, invertDefault))
 			output = getNoise(gen, data) <= limit;
 		else
 			output = getNoise(gen, data) >= limit;

@@ -1,15 +1,11 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
+import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -22,24 +18,25 @@ public class TerrainShape extends BaseShape {
 	private final int octaveValue = 8;
 	private final String scaleName = "scale";
 	private final int scaleDefault = 5;
-
-	@Override
-	public Map<String, CktParameter<?>> getDefaultParameters() {
-		Map<String, CktParameter<?>> pars = new HashMap<String, CktParameter<?>>();
-		IntegerCktParameter octaves = new IntegerCktParameter(octaveValue, 1, 8);
-		IntegerCktParameter scale = new IntegerCktParameter(scaleDefault, 1, 10);
-		pars.put(octaveName, octaves);
-		pars.put(scaleName, scale);
-		return pars;
+	
+	public TerrainShape() {
+		super();
+		parameters.put(octaveName, new IntegerCktParameter(octaveValue, 1, 8));
+		parameters.put(scaleName, new IntegerCktParameter(scaleDefault, 1, 10));
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters,
+	public String getName() {
+		return "terrain";
+	}
+
+	@Override
+	public boolean generateShape(Location firstPoint, Location secondPoint,
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
-		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerShapeParameter(parameters.get(octaveName), 8));
-		gen.setScale(parseIntegerShapeParameter(parameters.get(scaleName), scaleDefault) / 100.0d);
+		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, parseIntegerParameter(octaveName, 8));
+		gen.setScale(parseIntegerParameter(scaleName, scaleDefault) / 100.0d);
 		
 		data.createFillTask(new Runnable() {
 			
@@ -47,7 +44,7 @@ public class TerrainShape extends BaseShape {
 			public void run() {
 				do {
 					if (getNoise(gen, data) >= data.getCurrentRelativeY())
-						if (canPlace(data, parameters, filters))
+						if (canPlace(data, filters))
 							setBlock(blockData, data.getCurrentLocation());
 					
 					boolean shouldWait = data.incrementLoop();

@@ -1,14 +1,10 @@
 package com.github.razz0991.construkt.shapes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
-import com.github.razz0991.construkt.shapes.filters.BaseFilter;
-import com.github.razz0991.construkt.shapes.parameters.BooleanCktParameter;
-import com.github.razz0991.construkt.shapes.parameters.CktParameter;
+import com.github.razz0991.construkt.filters.BaseFilter;
+import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -19,12 +15,15 @@ public class SphereShape extends BaseShape{
 	
 	private final boolean hollowModeDefault = false;
 	private final String hollowModeName = "hollow";
+	
+	public SphereShape() {
+		super();
+		parameters.put(hollowModeName, new BooleanCktParameter(hollowModeDefault));
+	}
 
 	@Override
-	public Map<String, CktParameter<?>> getDefaultParameters() {
-		Map<String, CktParameter<?>> parameters = new HashMap<String, CktParameter<?>>();
-		parameters.put(hollowModeName, new BooleanCktParameter(hollowModeDefault));
-		return parameters;
+	public String getName() {
+		return "sphere";
 	}
 	
 	public Location[] radiusToCube(Location firstLocation, Location secondLocation) {
@@ -44,7 +43,7 @@ public class SphereShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, Map<String, CktParameter<?>> parameters, 
+	public boolean generateShape(Location firstPoint, Location secondPoint, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);
@@ -57,8 +56,8 @@ public class SphereShape extends BaseShape{
 			@Override
 			public void run() {
 				do {
-					if (canPlace(data, parameters, filters)) {
-						if (parseBooleanShapeParameter(parameters.get(hollowModeName), hollowModeDefault)) {
+					if (canPlace(data, filters)) {
+						if (parseBooleanParameter(hollowModeName, hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < dist + 0.5 && curDist > dist - 0.5)
 								setBlock(blockData, data.getCurrentLocation());

@@ -1,4 +1,4 @@
-package com.github.razz0991.construkt.shapes.parameters;
+package com.github.razz0991.construkt.parameters;
 
 public class AxisCktParameter implements CktParameter<Character>{
 	
