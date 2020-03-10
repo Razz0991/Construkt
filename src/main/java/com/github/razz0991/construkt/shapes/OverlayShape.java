@@ -12,12 +12,12 @@ import com.github.razz0991.construkt.parameters.IntegerCktParameter;
  *
  *  Full disclaimer in Construkt.java
  */
-public class Overlay extends BaseShape {
+public class OverlayShape extends BaseShape {
 	
 	private final String depthName = "depth";
 	private final int depthDefault = 1;
 	
-	public Overlay() {
+	public OverlayShape() {
 		super();
 		parameters.put(depthName, new IntegerCktParameter(depthDefault, 1, 10));
 	}

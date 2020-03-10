@@ -18,7 +18,7 @@ public class Shapes {
 		addShape(SphereShape.class);
 		addShape(HollowCuboidShape.class);
 		addShape(TerrainShape.class);
-		addShape(Overlay.class);
+		addShape(OverlayShape.class);
 	}
 	
 	private static void addShape(Class<? extends BaseShape> shape) {
