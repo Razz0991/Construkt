@@ -76,7 +76,7 @@ public class PlayerInfo {
 			}
 
 			if (filters.size() > 0) {
-				toMessage[toMessage.length - 1] = ChatColor.DARK_AQUA + "Filters: " + 
+				toMessage[toMessage.length - 1] = ChatColor.DARK_AQUA + "Filters: " + ChatColor.RESET +
 													String.join(", ", filters.keySet());
 			}
 			
@@ -258,6 +258,12 @@ public class PlayerInfo {
 				}
 				toMessage[inc] = out;
 			}
+			else if (parObj instanceof AxisCktParameter) {
+				AxisCktParameter axisPar = (AxisCktParameter)parObj;
+				String out = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
+						axisPar.getParameter();
+				toMessage[inc] = out;
+			}
 			inc++;
 		}
 		
@@ -392,6 +398,7 @@ public class PlayerInfo {
 			}
 			((AxisCktParameter)par).setParameter(value.toLowerCase().charAt(0));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" axis to " + par.getParameter());
+			return;
 		}
 		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");
 	}
