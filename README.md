@@ -19,7 +19,7 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 6)**
+**(As of Episode 7)**
 
 - Shape filling
 - Shape clearing
@@ -39,6 +39,9 @@ wish to add before a release version is built (but pre-release versions are avai
 **Shapes**
 
 - Cuboid
+- Cylinder
+   - Axis Parameter
+   - Hollow Parameter
 - Hollow Cuboid
    - Outline Parameter
 - Sphere
