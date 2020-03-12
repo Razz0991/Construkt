@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.ParameterObject;
 
@@ -31,13 +32,18 @@ public abstract class BaseShape extends ParameterObject {
 	 * @param filter The filter that will be used
 	 * @return true for success
 	 */
-	public abstract boolean generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters);
+	public abstract CktBlockContainer generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters);
 	
 	protected void setBlock(BlockData blockData, Location loc) {
 		if (blockData != null)
 			loc.getBlock().setBlockData(blockData.clone());
 		else
 			loc.getBlock().setType(Material.AIR);
+	}
+	
+	protected void setBlock(BlockData blockData, Location loc, CktBlockContainer container) {
+		container.addBlock(loc.getBlock().getBlockData(), loc);
+		setBlock(blockData, loc);
 	}
 	
 	protected boolean canPlace(AreaData data, BaseFilter[] filters) {

@@ -52,8 +52,10 @@ public class CktEvents implements Listener {
 				//Fill area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block placed, filling area.");
 				ply.getShape().setPlaceMode(PlaceMode.AIR);
-				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
+				CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 						ply.getBlockData(), ply.getFilters());
+				
+				ply.addUndo(undo);
 				
 				ply.resetMode();
 			}
@@ -89,8 +91,9 @@ public class CktEvents implements Listener {
 				//Clear area.
 				CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, clearing area.");
 				ply.getShape().setPlaceMode(PlaceMode.SOLID);
-				ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
+				CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 						null, ply.getFilters());
+				ply.addUndo(undo);
 				
 				ply.resetMode();
 			}
@@ -109,8 +112,9 @@ public class CktEvents implements Listener {
 					// Replace mode
 					CktUtil.messagePlayer(ev.getPlayer(), "Second block broken, replacing blocks.");
 					ply.getShape().setPlaceMode(PlaceMode.SOLID);
-					ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
+					CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 							ply.getBlockData(), ply.getFilters());
+					ply.addUndo(undo);
 					
 					//Allow broken block to be replaced too
 					ev.setCancelled(true);

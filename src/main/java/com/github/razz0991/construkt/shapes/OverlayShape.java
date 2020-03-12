@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 
@@ -28,10 +29,11 @@ public class OverlayShape extends BaseShape {
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint,
+	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint,
 			BlockData blockData, BaseFilter[] filters) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
+		final CktBlockContainer container = new CktBlockContainer();
 		data.setCurrentY(data.getToLocation().getBlockY());
 		
 		data.createFillTask(new Runnable() {
@@ -55,7 +57,7 @@ public class OverlayShape extends BaseShape {
 							for (int y = startY; y <= endY; y++) {
 								cur.setY(y);
 								if (canPlace(cur, filters, data))
-									setBlock(blockData, cur);
+									setBlock(blockData, cur, container);
 							}
 						}
 						else {
@@ -67,7 +69,7 @@ public class OverlayShape extends BaseShape {
 							for (int y = startY; y >= endY; y--) {
 								cur.setY(y);
 								if (canPlace(cur, filters, data)) {
-									setBlock(blockData, cur);
+									setBlock(blockData, cur, container);
 								}
 							}
 						}
@@ -80,7 +82,7 @@ public class OverlayShape extends BaseShape {
 			}
 		});
 		
-		return true;
+		return container;
 	}
 
 }

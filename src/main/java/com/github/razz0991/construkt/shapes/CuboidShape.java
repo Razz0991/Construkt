@@ -3,6 +3,7 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -18,10 +19,11 @@ public class CuboidShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, 
+	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final CktBlockContainer container = new CktBlockContainer();
 		
 		Runnable runnable = new Runnable() {
 			
@@ -29,7 +31,7 @@ public class CuboidShape extends BaseShape{
 			public void run() {
 				do {
 					if (canPlace(data, filters))
-						setBlock(blockData, data.getCurrentLocation());
+						setBlock(blockData, data.getCurrentLocation(), container);
 					
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
@@ -40,7 +42,7 @@ public class CuboidShape extends BaseShape{
 		
 		data.createFillTask(runnable);
 
-		return true;
+		return container;
 	}
 
 }

@@ -147,6 +147,18 @@ public class Construkt extends JavaPlugin {
 				}
 			}
 		}
+		else if(cmd.getName().equalsIgnoreCase("construktundo") || cmd.getName().equalsIgnoreCase("construktredo")) {
+			if (sender instanceof Player) {
+				Player ply = (Player)sender;
+				PlayerInfo plyInfo = Players.getPlayerInfo(ply);
+				
+				if (cmd.getName().equalsIgnoreCase("construktundo"))
+					plyInfo.undo();
+				else
+					plyInfo.redo();
+				return true;
+			}
+		}
 		return false;
 	}
 	

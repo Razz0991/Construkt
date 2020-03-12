@@ -3,6 +3,7 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.AxisCktParameter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
@@ -51,12 +52,14 @@ public class CylinderShape extends BaseShape {
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters) {
+	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		Location[] cylinderBoundry = radiusToCube(firstPoint, secondPoint);
 		final AreaData data = new AreaData(cylinderBoundry[0], cylinderBoundry[1], reversed);
+		final CktBlockContainer container = new CktBlockContainer();
 		final char axis = getAxisParameter(axisName, axisDefault);
 		double dist;
+		
 		switch (axis) {
 		case 'y':
 			dist = data.getXSize() / 2;
@@ -90,11 +93,11 @@ public class CylinderShape extends BaseShape {
 						if (getBooleanParameter(hollowModeName, hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < finalDist + 0.5 && curDist > finalDist - 0.5)
-								setBlock(blockData, data.getCurrentLocation());
+								setBlock(blockData, data.getCurrentLocation(), container);
 						}
 						else {
 							if (center.distance(data.getCurrentLocation()) < finalDist + 0.5)
-								setBlock(blockData, data.getCurrentLocation());
+								setBlock(blockData, data.getCurrentLocation(), container);
 						}
 					}
 					
@@ -105,7 +108,7 @@ public class CylinderShape extends BaseShape {
 			}
 		});
 		
-		return true;
+		return container;
 	}
 
 	@Override

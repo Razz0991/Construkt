@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 
@@ -31,10 +32,11 @@ public class TerrainShape extends BaseShape {
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint,
+	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint,
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final CktBlockContainer container = new CktBlockContainer();
 		final SimplexOctaveGenerator gen = new SimplexOctaveGenerator(0L, getIntegerParameter(octaveName, 8));
 		gen.setScale(getIntegerParameter(scaleName, scaleDefault) / 100.0d);
 		
@@ -45,7 +47,7 @@ public class TerrainShape extends BaseShape {
 				do {
 					if (getNoise(gen, data) >= data.getCurrentRelativeY())
 						if (canPlace(data, filters))
-							setBlock(blockData, data.getCurrentLocation());
+							setBlock(blockData, data.getCurrentLocation(), container);
 					
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
@@ -54,7 +56,7 @@ public class TerrainShape extends BaseShape {
 			}
 		});
 		
-		return true;
+		return container;
 	}
 	
 	// Gets the noise from the current location in the loop

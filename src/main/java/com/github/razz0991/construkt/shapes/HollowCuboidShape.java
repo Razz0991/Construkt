@@ -3,6 +3,7 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.CktBlockContainer;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 
@@ -27,10 +28,11 @@ public class HollowCuboidShape extends BaseShape{
 	}
 
 	@Override
-	public boolean generateShape(Location firstPoint, Location secondPoint, 
+	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint, 
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final CktBlockContainer container = new CktBlockContainer();
 		
 		data.createFillTask(new Runnable() {
 			
@@ -41,7 +43,7 @@ public class HollowCuboidShape extends BaseShape{
 						if ((getBooleanParameter(borderModeName, true) &&
 								isBorder(data)) || (!getBooleanParameter(borderModeName, borderModeDefault) &&
 										isEdge(data)))
-							setBlock(blockData, data.getCurrentLocation());
+							setBlock(blockData, data.getCurrentLocation(), container);
 					}
 					
 					boolean shouldWait = data.incrementLoop();
@@ -51,7 +53,7 @@ public class HollowCuboidShape extends BaseShape{
 			}
 		});
 		
-		return true;
+		return container;
 	}
 	
 	// Checks if the loop is currently on the edge of the area

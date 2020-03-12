@@ -10,6 +10,18 @@ commands:
       permission: construkt.command
       permission-message: You don't have permission to use Construkt!
       aliases: [ckt]
+   construktundo:
+      description: Undo a change made in Construkt.
+      usage: /construcktundo
+      permission: construkt.undo
+      permission-message: You don't have permission to undo in Construkt!
+      aliases: [cktundo, cktu]
+   construktredo:
+      description: Redo a change made in Construkt.
+      usage: /construcktredo
+      permission: construkt.redo
+      permission-message: You don't have permission to redo in Construkt!
+      aliases: [cktredo, cktr]
 permissions:
    construkt.*:
       description: Gives full access to Construkt
@@ -20,10 +32,15 @@ permissions:
       description: Gives full access but still has block limits
       children:
          construkt.command: true
+         construkt.undo: true
+         construkt.redo: true
          construkt.mode.*: true
          construkt.shape.*: true
    construkt.command:
       description: Allows use of Construkt's commands
+      default: op
+   construkt.undo:
+      description: Allows a player to use undo
       default: op
    construkt.mode.*:
       description: Allows all modes, place, break, and replace

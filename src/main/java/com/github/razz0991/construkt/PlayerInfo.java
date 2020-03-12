@@ -41,6 +41,8 @@ public class PlayerInfo {
 	private Map<String, BaseFilter> filters = new HashMap<String, BaseFilter>();
 
 	private Limiter limits = null;
+	private List<CktBlockContainer> undoList = new ArrayList<CktBlockContainer>();
+	private List<CktBlockContainer> redoList = new ArrayList<CktBlockContainer>();
 	
 	public PlayerInfo(Player player) {
 		plyId = player.getUniqueId();
@@ -480,6 +482,48 @@ public class PlayerInfo {
 			return;
 		}
 		CktUtil.messagePlayer(getPlayer(), "You don't have a filter active with the name " + name);
+	}
+	
+	public void addUndo(CktBlockContainer container) {
+		addUndoRedo(container, undoList);
+	}
+	
+	public void addRedo(CktBlockContainer container) {
+		addUndoRedo(container, redoList);
+	}
+	
+	private void addUndoRedo(CktBlockContainer container, List<CktBlockContainer> list) {
+		if (container == null)
+			return;
+		
+		list.add(0, container);
+		if (list.size() > 10) // TODO remove magic number
+			list.remove(undoList.size() - 1);
+	}
+	
+	public void undo() {
+		if (undoRedo(undoList, redoList))
+			CktUtil.messagePlayer(getPlayer(), "Undone changes.");
+		else
+			CktUtil.messagePlayer(getPlayer(), "Nothing to undo");
+	}
+	
+	public void redo() {
+		if (undoRedo(redoList, undoList))
+			CktUtil.messagePlayer(getPlayer(), "Redone changes.");
+		else
+			CktUtil.messagePlayer(getPlayer(), "Nothing to redo");
+	}
+	
+	private boolean undoRedo(List<CktBlockContainer> from, List<CktBlockContainer> to) {
+		if (!from.isEmpty()) {
+			CktBlockContainer cont = from.get(0).replaceBlocks();
+			addUndoRedo(cont, to);
+			
+			from.remove(0);
+			return true;
+		}
+		return false;
 	}
 
 }
