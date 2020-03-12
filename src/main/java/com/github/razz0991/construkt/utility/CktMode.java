@@ -1,4 +1,4 @@
-package com.github.razz0991.construkt;
+package com.github.razz0991.construkt.utility;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

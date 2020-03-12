@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.github.razz0991.construkt.shapes.BaseShape.PlaceMode;
+import com.github.razz0991.construkt.utility.CktBlockContainer;
+import com.github.razz0991.construkt.utility.CktMode;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

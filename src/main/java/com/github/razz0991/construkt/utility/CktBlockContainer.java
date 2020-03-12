@@ -1,10 +1,12 @@
-package com.github.razz0991.construkt;
+package com.github.razz0991.construkt.utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
+
+import com.github.razz0991.construkt.Construkt;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

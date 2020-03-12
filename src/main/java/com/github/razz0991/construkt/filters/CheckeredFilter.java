@@ -2,7 +2,7 @@ package com.github.razz0991.construkt.filters;
 
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
-import com.github.razz0991.construkt.shapes.AreaData;
+import com.github.razz0991.construkt.utility.AreaData;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_

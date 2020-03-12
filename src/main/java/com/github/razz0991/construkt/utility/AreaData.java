@@ -1,4 +1,4 @@
-package com.github.razz0991.construkt.shapes;
+package com.github.razz0991.construkt.utility;
 
 import org.bukkit.Location;
 

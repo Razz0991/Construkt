@@ -23,6 +23,8 @@ import com.github.razz0991.construkt.parameters.CktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
+import com.github.razz0991.construkt.utility.CktBlockContainer;
+import com.github.razz0991.construkt.utility.CktMode;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
