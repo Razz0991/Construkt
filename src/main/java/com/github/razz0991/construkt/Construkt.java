@@ -37,10 +37,24 @@ public class Construkt extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		getLogger().info("Construkt starting...");
 		getServer().getPluginManager().registerEvents(new CktEvents(), this);
+		
+		// Configuration stuff
 		saveDefaultConfig();
 		
+		// Check for missing config keys and save them into the config file.
+		boolean newKeys = false;
+		for (String key : getConfig().getDefaults().getKeys(true)) {
+			if (!getConfig().contains(key, true)) {
+				getConfig().set(key, getConfig().getDefaults().get(key));
+				getLogger().info("Added missing config option: " + key);
+				newKeys = true;
+			}
+		}
+		if (newKeys)
+			saveConfig();
+		
+		// Apply config options to the plugin
 		Set<String> limitNames = getConfig().getConfigurationSection("limits").getKeys(false);
 		
 		for (String limitName : limitNames) {
@@ -51,12 +65,9 @@ public class Construkt extends JavaPlugin {
 			getLogger().info("Added " + limitName + " limitation");
 		}
 		
-		if (!CktConfigOptions.hasLimitation("default")) {
-			Limiter lmt = new Limiter(2, 8);
-			CktConfigOptions.addLimitation("default", lmt);
-			getLogger().warning("Default values have been removed from limits, setting them to be absurdly small");
-		}
+		CktConfigOptions.setUndoRedoLimit(getConfig().getInt("undoRedoLimit"));
 		
+		// Final initialization
 		plugin = this;
 		
 		for(Player ply : getServer().getOnlinePlayers()) {
@@ -68,8 +79,6 @@ public class Construkt extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		getLogger().info("Construkt disabling...");
-		
 		for (UUID id : Players.getAllPlayers()) {
 			Players.removePlayer(id);
 		}

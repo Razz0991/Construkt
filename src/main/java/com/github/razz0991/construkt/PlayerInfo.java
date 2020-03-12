@@ -499,7 +499,7 @@ public class PlayerInfo {
 			return;
 		
 		list.add(0, container);
-		if (list.size() > 10) // TODO remove magic number
+		if (list.size() > CktConfigOptions.getUndoRedoLimit())
 			list.remove(undoList.size() - 1);
 	}
 	

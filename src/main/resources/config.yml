@@ -2,3 +2,4 @@ limits:
    default: # DO NOT remove default values! Changes allowed but no removal.
       maxAxisLength: 48 # 3 chunks
       maxVolume: 32768 # 2 chunks cubed
+undoRedoLimit: 10

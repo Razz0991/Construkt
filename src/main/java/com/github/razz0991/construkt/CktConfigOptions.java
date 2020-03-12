@@ -13,6 +13,7 @@ import java.util.Set;
 class CktConfigOptions {
 	
 	static private Map<String, Limiter> limitations = new HashMap<String, Limiter>();
+	static private int undoRedoLimit = 10;
 	
 	static Limiter getLimitation(String name) {
 		if (limitations.containsKey(name.toLowerCase()))
@@ -30,6 +31,14 @@ class CktConfigOptions {
 	
 	static boolean hasLimitation(String name) { 
 		return limitations.containsKey(name.toLowerCase());
+	}
+	
+	static void setUndoRedoLimit(int limit) {
+		undoRedoLimit = limit;
+	}
+	
+	public static int getUndoRedoLimit() {
+		return undoRedoLimit;
 	}
 	
 	static class Limiter {
