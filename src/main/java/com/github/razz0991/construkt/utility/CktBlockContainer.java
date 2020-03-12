@@ -22,25 +22,39 @@ public class CktBlockContainer {
 	private final int tickLength = 50;
 	private final int taskDelay = 2;
 	
+	/**
+	 * A {@link BlockData} history container to store undos and redos
+	 */
 	public CktBlockContainer() {
 		blocks = new ArrayList<BlockInfo>();
 	}
 	
+	/**
+	 * Add {@link BlockData} to the history
+	 * @param data The {@link BlockData} to store
+	 * @param location The {@link Location} to where the block was
+	 */
 	public void addBlock(BlockData data, Location location) {
 		blocks.add(0, new BlockInfo(data, location));
 	}
 	
-	public BlockInfo nextBlock() {
+	// Cycles over the blocks, for the replaceBlocks() function to use
+	private BlockInfo nextBlock() {
 		if (isFinished()) {
 			return null;
 		}
 		return blocks.get(loopPos++);
 	}
 	
+	/**
+	 * Checks if the replaceBlocks() loop is finished
+	 * @return true if the loop is complete
+	 */
 	public boolean isFinished() {
 		return loopPos == blocks.size();
 	}
 	
+	// The fill task for replaceBlocks()
 	private void createFillTask(Runnable task) {
 		taskId = Construkt.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(Construkt.plugin, task, 1, taskDelay);
 	}
@@ -49,6 +63,10 @@ public class CktBlockContainer {
 		Construkt.plugin.getServer().getScheduler().cancelTask(taskId);
 	}
 	
+	/**
+	 * Replaces the blocks that are stored in the history
+	 * @return The blocks that were there before the change
+	 */
 	public CktBlockContainer replaceBlocks() {
 		final CktBlockContainer container = new CktBlockContainer();
 		createFillTask(new Runnable() {
@@ -75,6 +93,7 @@ public class CktBlockContainer {
 		return container;
 	}
 	
+	// Helper class to store both BlockData and Location
 	private class BlockInfo {
 		private BlockData data;
 		private Location location;
