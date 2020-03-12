@@ -50,7 +50,7 @@ public class HollowCuboidShape extends BaseShape{
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while (!data.isLoopFinished());
+				} while (!data.isLoopFinished(container));
 			}
 		});
 		

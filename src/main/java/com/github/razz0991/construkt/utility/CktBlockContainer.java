@@ -21,6 +21,7 @@ public class CktBlockContainer {
 	private long lastTime = -1;
 	private final int tickLength = 50;
 	private final int taskDelay = 2;
+	private boolean isFinalized = false;
 	
 	/**
 	 * A {@link BlockData} history container to store undos and redos
@@ -38,6 +39,23 @@ public class CktBlockContainer {
 		blocks.add(0, new BlockInfo(data, location));
 	}
 	
+	/**
+	 * Finalize this container so it can be run.
+	 * If this container is not finalized, the replaceBlocks() function will
+	 * not run.
+	 */
+	public void finalize() {
+		isFinalized = true;
+	}
+	
+	/**
+	 * Check if this container has been finalized.
+	 * @return true if the container has been finalized.
+	 */
+	public boolean isFinalized() {
+		return isFinalized;
+	}
+	
 	// Cycles over the blocks, for the replaceBlocks() function to use
 	private BlockInfo nextBlock() {
 		if (isFinished()) {
@@ -47,7 +65,7 @@ public class CktBlockContainer {
 	}
 	
 	/**
-	 * Checks if the replaceBlocks() loop is finished
+	 * Checks if the {@code replaceBlocks()} loop is finished
 	 * @return true if the loop is complete
 	 */
 	public boolean isFinished() {
@@ -65,9 +83,13 @@ public class CktBlockContainer {
 	
 	/**
 	 * Replaces the blocks that are stored in the history
-	 * @return The blocks that were there before the change
+	 * @return A {@link CktBlockContainer} blocks that were there before the change<br>
+	 * null if this container hasn't been finalized
 	 */
 	public CktBlockContainer replaceBlocks() {
+		if (!isFinalized)
+			return null;
+		
 		final CktBlockContainer container = new CktBlockContainer();
 		createFillTask(new Runnable() {
 			
@@ -87,6 +109,7 @@ public class CktBlockContainer {
 					}
 				} while (!isFinished());
 				
+				container.finalize();
 				cancelTask();
 			}
 		});

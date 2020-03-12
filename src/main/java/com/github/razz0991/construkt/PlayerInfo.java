@@ -519,11 +519,20 @@ public class PlayerInfo {
 	
 	private boolean undoRedo(List<CktBlockContainer> from, List<CktBlockContainer> to) {
 		if (!from.isEmpty()) {
-			CktBlockContainer cont = from.get(0).replaceBlocks();
-			addUndoRedo(cont, to);
-			
-			from.remove(0);
-			return true;
+			CktBlockContainer result = null;
+			int index = 0;
+			for (CktBlockContainer cont : from) {
+				if (cont.isFinalized()) {
+					result = cont.replaceBlocks();
+					break;
+				}
+				index++;
+			}
+			if (result != null) {
+				addUndoRedo(result, to);
+				from.remove(index);
+				return true;
+			}
 		}
 		return false;
 	}

@@ -191,12 +191,23 @@ public class AreaData {
 	
 	/**
 	 * Checks if the loop is finished.
-	 * @return true if the loop is finished
+	 * @return
 	 */
 	public boolean isLoopFinished() {
+		return isLoopFinished(null);
+	}
+	
+	/**
+	 * Checks if the loop is finished and finalizes a {@link CktBlockContainer}.
+	 * @param container The {@link CktBlockContainer} to finalize if the loop is finished
+	 * @return true if the loop is finished
+	 */
+	public boolean isLoopFinished(CktBlockContainer container) {
 		if (loopFinished && taskId != -1) {
 			cancelTask();
 		}
+		if (loopFinished && container != null)
+			container.finalize();
 		return loopFinished;
 	}
 	
