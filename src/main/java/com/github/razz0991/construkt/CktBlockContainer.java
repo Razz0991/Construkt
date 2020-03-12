@@ -25,7 +25,7 @@ public class CktBlockContainer {
 	}
 	
 	public void addBlock(BlockData data, Location location) {
-		blocks.add(new BlockInfo(data, location));
+		blocks.add(0, new BlockInfo(data, location));
 	}
 	
 	public BlockInfo nextBlock() {
