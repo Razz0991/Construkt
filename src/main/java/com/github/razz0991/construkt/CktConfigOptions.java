@@ -57,7 +57,6 @@ class CktConfigOptions {
 			Material mat = Material.getMaterial(upperName);
 			if (mat != null && !blacklistMaterials.contains(mat)) {
 				blacklistMaterials.add(mat);
-				Construkt.plugin.getLogger().info("Added Material: " + mat.toString());
 				return true;
 			}
 		}
@@ -83,7 +82,6 @@ class CktConfigOptions {
 				if (mat.toString().matches(format)) {
 					if (mat != null && !blacklistMaterials.contains(mat)) {
 						blacklistMaterials.add(mat);
-						Construkt.plugin.getLogger().info("Added Material: " + mat.toString());
 						itemAdded = true;
 					}
 				}
