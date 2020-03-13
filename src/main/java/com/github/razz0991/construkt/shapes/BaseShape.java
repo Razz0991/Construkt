@@ -8,6 +8,7 @@ import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.ParameterObject;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
+import com.github.razz0991.construkt.utility.AreaInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -34,6 +35,17 @@ public abstract class BaseShape extends ParameterObject {
 	 * @return true for success
 	 */
 	public abstract CktBlockContainer generateShape(Location firstPoint, Location secondPoint, BlockData blockData, BaseFilter[] filters);
+	
+	/**
+	 * Gets the actual volume of the shape. Basic shapes only need the first and second point, however
+	 * the sphere uses radial sizes so it will be different.
+	 * @param firstPoint The first point for the area
+	 * @param secondPoint The second point for the area
+	 * @return {@link AreaInfo} with the relevant data
+	 */
+	public AreaInfo getVolumeInformation(Location firstPoint, Location secondPoint) {
+		return new AreaInfo(firstPoint, secondPoint);
+	}
 	
 	protected void setBlock(BlockData blockData, Location loc) {
 		if (blockData != null)

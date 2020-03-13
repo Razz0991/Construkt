@@ -14,7 +14,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
 import com.github.razz0991.construkt.CktConfigOptions.Limiter;
-import com.github.razz0991.construkt.CktUtil.VolumeInformation;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.filters.Filters;
 import com.github.razz0991.construkt.parameters.AxisCktParameter;
@@ -25,6 +24,7 @@ import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
 import com.github.razz0991.construkt.utility.CktMode;
+import com.github.razz0991.construkt.utility.AreaInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -98,7 +98,7 @@ public class PlayerInfo {
 	 * Automatically sets the players limits based on their permissions
 	 */
 	public void setLimits() {
-		if (!getPlayer().hasPermission("constukt.bypass_limits")) {
+		if (!getPlayer().hasPermission("construkt.bypass_limits")) {
 			for (String limiter : CktConfigOptions.getAllLimitationNames()) {
 				if (getPlayer().hasPermission("construkt.limits." + limiter)) {
 					limits = CktConfigOptions.getLimitation(limiter);
@@ -122,7 +122,7 @@ public class PlayerInfo {
 		if (limits == null)
 			return false;
 		
-		VolumeInformation vinfo = new VolumeInformation(getFirstLocation(), secondPoint);
+		AreaInfo vinfo = shape.getVolumeInformation(getFirstLocation(), secondPoint);
 		if (vinfo.lengthExceedsMax(limits.getMaxAxisLength())) {
 			CktUtil.messagePlayer(getPlayer(), new String[] {
 					ChatColor.RED + "Distance from first block exceeds your limit!",

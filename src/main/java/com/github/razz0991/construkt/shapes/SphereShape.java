@@ -7,6 +7,7 @@ import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
+import com.github.razz0991.construkt.utility.AreaInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -30,17 +31,8 @@ public class SphereShape extends BaseShape{
 	
 	public Location[] radiusToCube(Location firstLocation, Location secondLocation) {
 		// Sphere uses radius locations, so need different locations.
-		double dist = firstLocation.distance(secondLocation);
-		dist = Math.ceil(dist);
-		Location newFirst = new Location(firstLocation.getWorld(), 
-				firstLocation.getX() - dist, 
-				firstLocation.getY() - dist, 
-				firstLocation.getZ() - dist);
-		Location newSecond = new Location(firstLocation.getWorld(), 
-				firstLocation.getX() + dist, 
-				firstLocation.getY() + dist, 
-				firstLocation.getZ() + dist);
-		Location[] output = {newFirst, newSecond};
+		AreaInfo info = getVolumeInformation(firstLocation, secondLocation);
+		Location[] output = {info.getFirstLocation(), info.getSecondLocation()};
 		return output;
 	}
 
@@ -79,6 +71,22 @@ public class SphereShape extends BaseShape{
 		});
 		
 		return container;
+	}
+
+	@Override
+	public AreaInfo getVolumeInformation(Location firstPoint, Location secondPoint) {
+
+		double dist = firstPoint.distance(secondPoint);
+		dist = Math.ceil(dist);
+		Location newFirst = new Location(firstPoint.getWorld(), 
+				firstPoint.getX() - dist, 
+				firstPoint.getY() - dist, 
+				firstPoint.getZ() - dist);
+		Location newSecond = new Location(firstPoint.getWorld(), 
+				firstPoint.getX() + dist, 
+				firstPoint.getY() + dist, 
+				firstPoint.getZ() + dist);
+		return new AreaInfo(newFirst, newSecond);
 	}
 
 }

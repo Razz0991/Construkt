@@ -8,6 +8,7 @@ import com.github.razz0991.construkt.parameters.AxisCktParameter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
+import com.github.razz0991.construkt.utility.AreaInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -29,26 +30,8 @@ public class CylinderShape extends BaseShape {
 	
 	public Location[] radiusToCube(Location firstLocation, Location secondLocation) {
 		// Cylinder uses a radial axis, so need different locations.
-		Location temp = secondLocation.clone();
-		char axis = getAxisParameter(axisName, axisDefault);
-		if (axis == 'y')
-			temp.setY(firstLocation.getY());
-		else if (axis == 'x')
-			temp.setX(firstLocation.getX());
-		else if (axis == 'z')
-			temp.setZ(firstLocation.getZ());
-		
-		double dist = firstLocation.distance(temp);
-		dist = Math.ceil(dist);
-		Location newFirst = new Location(firstLocation.getWorld(), 
-				axis != 'x' ? firstLocation.getX() - dist : firstLocation.getX(), 
-				axis != 'y' ? firstLocation.getY() - dist : firstLocation.getY(), 
-				axis != 'z' ? firstLocation.getZ() - dist : firstLocation.getZ());
-		Location newSecond = new Location(firstLocation.getWorld(), 
-				axis != 'x' ? firstLocation.getX() + dist : secondLocation.getX(), 
-				axis != 'y' ? firstLocation.getY() + dist : secondLocation.getY(), 
-				axis != 'z' ? firstLocation.getZ() + dist : secondLocation.getZ());
-		Location[] output = {newFirst, newSecond};
+		AreaInfo info = getVolumeInformation(firstLocation, secondLocation);
+		Location[] output = {info.getFirstLocation(), info.getSecondLocation()};
 		return output;
 	}
 
@@ -115,6 +98,30 @@ public class CylinderShape extends BaseShape {
 	@Override
 	public String getName() {
 		return "cylinder";
+	}
+
+	@Override
+	public AreaInfo getVolumeInformation(Location firstPoint, Location secondPoint) {
+		Location temp = secondPoint.clone();
+		char axis = getAxisParameter(axisName, axisDefault);
+		if (axis == 'y')
+			temp.setY(firstPoint.getY());
+		else if (axis == 'x')
+			temp.setX(firstPoint.getX());
+		else if (axis == 'z')
+			temp.setZ(firstPoint.getZ());
+		
+		double dist = firstPoint.distance(temp);
+		dist = Math.ceil(dist);
+		Location newFirst = new Location(firstPoint.getWorld(), 
+				axis != 'x' ? firstPoint.getX() - dist : firstPoint.getX(), 
+				axis != 'y' ? firstPoint.getY() - dist : firstPoint.getY(), 
+				axis != 'z' ? firstPoint.getZ() - dist : firstPoint.getZ());
+		Location newSecond = new Location(firstPoint.getWorld(), 
+				axis != 'x' ? firstPoint.getX() + dist : secondPoint.getX(), 
+				axis != 'y' ? firstPoint.getY() + dist : secondPoint.getY(), 
+				axis != 'z' ? firstPoint.getZ() + dist : secondPoint.getZ());
+		return new AreaInfo(newFirst, newSecond);
 	}
 
 }
