@@ -3,3 +3,46 @@ limits:
       maxAxisLength: 48 # 3 chunks
       maxVolume: 32768 # 2 chunks cubed
 undoRedoLimit: 10
+blacklist:
+   - tall_grass
+   - lilac
+   - rose_bush
+   - peony
+   - large_fern
+   - sunflower
+   - ?_door
+   - ?_button
+   - ?_pressure_plate
+   - string
+   - cake
+   - banner
+   - barrel
+   - beacon
+   - bed
+   - beehive
+   - bell
+   - blast_furnace
+   - brewing_stand
+   - campfire
+   - chest
+   - command_block
+   - ?_command_block
+   - comparator
+   - conduit
+   - spawner
+   - daylight_detector
+   - dispenser
+   - dropper
+   - enchanting_table
+   - ender_chest
+   - end_gateway
+   - furnace
+   - hopper
+   - jukebox
+   - lectern
+   - shulker_box
+   - ?_shulker_box
+   - sign
+   - ?_skull
+   - ?_head
+   - smoker

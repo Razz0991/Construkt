@@ -536,6 +536,16 @@ public class PlayerInfo {
 		}
 		return false;
 	}
+	
+	/**
+	 * Gets the value of the specified permission, if set.<br><br>
+	 * If a permission override is not set on this object, the default value of the permission will be returned.
+	 * @param permission Name of the permission
+	 * @return Value of the permission
+	 */
+	public boolean hasPermission(String permission) {
+		return getPlayer().hasPermission(permission);
+	}
 
 }
 

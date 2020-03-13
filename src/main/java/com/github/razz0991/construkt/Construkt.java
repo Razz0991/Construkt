@@ -37,6 +37,7 @@ public class Construkt extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+		plugin = this;
 		getServer().getPluginManager().registerEvents(new CktEvents(), this);
 		
 		// Configuration stuff
@@ -67,8 +68,13 @@ public class Construkt extends JavaPlugin {
 		
 		CktConfigOptions.setUndoRedoLimit(getConfig().getInt("undoRedoLimit"));
 		
+		for (String matName : getConfig().getStringList("blacklist")) {
+			if (!CktConfigOptions.addBlacklistMaterial(matName)) {
+				getLogger().info(matName + " is not a valid material name for blacklist."); 
+			}
+		}
+		
 		// Final initialization
-		plugin = this;
 		
 		for(Player ply : getServer().getOnlinePlayers()) {
 			Players.addPlayer(ply);

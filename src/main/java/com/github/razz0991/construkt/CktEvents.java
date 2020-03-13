@@ -1,6 +1,8 @@
 package com.github.razz0991.construkt;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,6 +32,16 @@ public class CktEvents implements Listener {
 		Players.removePlayer(ev.getPlayer());
 	}
 	
+	private boolean hasPermissions(PlayerInfo ply, Block block) {
+		if (!ply.hasPermission("construkt.bypass_blacklist") && 
+				CktConfigOptions.isMaterialBlacklisted(block.getType())) {
+			CktUtil.messagePlayer(ply.getPlayer().getPlayer(), 
+					ChatColor.RED + "This block is blacklisted from usage!");
+			return false;
+		}
+		return true;
+	}
+	
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent ev) {
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
@@ -37,6 +49,10 @@ public class CktEvents implements Listener {
 			if(ply.getMode() == CktMode.NONE && 
 					(ev.getPlayer().hasPermission("construkt.mode.place") || 
 							ev.getPlayer().hasPermission("construkt.mode.replace"))) {
+				if (!hasPermissions(ply, ev.getBlock())) {
+					ev.setCancelled(true);
+					return;
+				}
 				// Begin place mode or replace mode.
 				ply.setBlockData(ev.getBlock().getBlockData());
 				ply.setMode(CktMode.PLACE);
@@ -57,7 +73,8 @@ public class CktEvents implements Listener {
 				CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 						ply.getBlockData(), ply.getFilters());
 				
-				ply.addUndo(undo);
+				if (ply.hasPermission("construkt.undo"))
+					ply.addUndo(undo);
 				
 				ply.resetMode();
 			}
@@ -77,6 +94,10 @@ public class CktEvents implements Listener {
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE && 
 					ev.getPlayer().hasPermission("construkt.mode.break")) {
+				if (!hasPermissions(ply, ev.getBlock())) {
+					ev.setCancelled(true);
+					return;
+				}
 				// Begin break mode.
 				ply.setBlockData(ev.getBlock().getBlockData());
 				ply.setMode(CktMode.BREAK);
@@ -95,7 +116,9 @@ public class CktEvents implements Listener {
 				ply.getShape().setPlaceMode(PlaceMode.SOLID);
 				CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 						null, ply.getFilters());
-				ply.addUndo(undo);
+				
+				if (ply.hasPermission("construkt.undo"))
+					ply.addUndo(undo);
 				
 				ply.resetMode();
 			}
@@ -116,7 +139,9 @@ public class CktEvents implements Listener {
 					ply.getShape().setPlaceMode(PlaceMode.SOLID);
 					CktBlockContainer undo = ply.getShape().generateShape(ply.getFirstLocation(), ev.getBlock().getLocation(), 
 							ply.getBlockData(), ply.getFilters());
-					ply.addUndo(undo);
+					
+					if (ply.hasPermission("construkt.undo"))
+						ply.addUndo(undo);
 					
 					//Allow broken block to be replaced too
 					ev.setCancelled(true);

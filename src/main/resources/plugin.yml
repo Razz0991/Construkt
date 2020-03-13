@@ -27,7 +27,7 @@ permissions:
       description: Gives full access to Construkt
       children:
          construkt.limited: true
-         construkt.bypass_limits: true
+         construkt.no_limits: true
    construkt.limited:
       description: Gives full access but still has block limits
       children:
@@ -83,4 +83,12 @@ permissions:
    construkt.bypass_limits:
       description: Allows user to bypass area limitations
       default: op
+   construkt.bypass_blacklist:
+      description: Allows user to bypass the blacklisted blocks
+      default: op
+   construkt.no_limits:
+      description: Bypass all limitations
+      children:
+         construkt.bypass_limits: true
+         construkt.bypass_blacklist: true
  
