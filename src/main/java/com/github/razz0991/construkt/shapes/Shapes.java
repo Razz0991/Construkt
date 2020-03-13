@@ -20,6 +20,7 @@ public class Shapes {
 		addShape(TerrainShape.class);
 		addShape(OverlayShape.class);
 		addShape(CylinderShape.class);
+		addShape(LineShape.class);
 	}
 	
 	private static void addShape(Class<? extends BaseShape> shape) {
