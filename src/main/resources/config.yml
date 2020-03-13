@@ -42,7 +42,7 @@ blacklist:
    - lectern
    - shulker_box
    - ?_shulker_box
-   - sign
+   - ?_sign
    - ?_skull
    - ?_head
    - smoker
