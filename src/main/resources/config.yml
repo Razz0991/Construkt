@@ -15,10 +15,10 @@ blacklist:
    - ?_pressure_plate
    - string
    - cake
-   - banner
+   - ?_banner
    - barrel
    - beacon
-   - bed
+   - ?_bed
    - beehive
    - bell
    - blast_furnace
