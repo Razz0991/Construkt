@@ -5,6 +5,11 @@ import org.bukkit.entity.Player;
 
 import com.github.intellectualsites.plotsquared.plot.PlotSquared;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class PlotSquaredProtection implements ProtectionBase {
 
 	@Override

@@ -5,6 +5,11 @@ import org.bukkit.entity.Player;
 
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class GriefPreventionProtection implements ProtectionBase {
 
 	@Override

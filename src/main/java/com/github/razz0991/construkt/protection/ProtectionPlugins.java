@@ -6,6 +6,11 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+/*  Construkt Bukkit plugin for Minecraft.
+ *  Copyright (C) 2020 _Razz_
+ *
+ *  Full disclaimer in Construkt.java
+ */
 public class ProtectionPlugins {
 	
 	private static List<ProtectionBase> protectionPlugins = new ArrayList<ProtectionBase>();
