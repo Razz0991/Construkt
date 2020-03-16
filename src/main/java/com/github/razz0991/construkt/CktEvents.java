@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -170,6 +171,15 @@ public class CktEvents implements Listener {
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
 		if (ev.getPlayer().getGameMode() == GameMode.CREATIVE && ply.isConstruktEnabled()) {
 			ply.toggleConstruktEnabled();
+		}
+	}
+	
+	@EventHandler
+	public void onWorldChange(PlayerChangedWorldEvent ev) {
+		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
+		if(ply.isConstruktEnabled()) {
+			ply.toggleConstruktEnabled();
+			ply.resetMode();
 		}
 	}
 }
