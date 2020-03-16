@@ -1,9 +1,12 @@
 package com.github.razz0991.construkt.shapes;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.github.razz0991.construkt.PlayerInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -36,11 +39,12 @@ public class Shapes {
 	 * @param name The name of the shape
 	 * @return The Shape or null if none is found.
 	 */
-	public static BaseShape getShape(String name) {
+	public static BaseShape getShape(PlayerInfo ply, String name) {
 		if (shapes.containsKey(name.toLowerCase()))
 			try {
-				return shapes.get(name.toLowerCase()).newInstance();
-			} catch (InstantiationException | IllegalAccessException e) {
+				return shapes.get(name.toLowerCase()).getDeclaredConstructor(PlayerInfo.class).newInstance(ply);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | 
+					InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
 		return null;

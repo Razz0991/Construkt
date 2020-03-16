@@ -8,6 +8,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
@@ -18,6 +19,14 @@ import com.github.razz0991.construkt.utility.CktBlockContainer;
  *  Full disclaimer in Construkt.java
  */
 public class LineShape extends BaseShape {
+
+	public LineShape() {
+		super();
+	}
+	
+	public LineShape(PlayerInfo plyInfo) {
+		super(plyInfo);
+	}
 
 	@Override
 	public CktBlockContainer generateShape(Location firstPoint, Location secondPoint, BlockData blockData,
@@ -53,7 +62,7 @@ public class LineShape extends BaseShape {
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while (!data.isLoopFinished(container));
+				} while (!data.isLoopFinished(container, ply));
 			}
 		};
 		

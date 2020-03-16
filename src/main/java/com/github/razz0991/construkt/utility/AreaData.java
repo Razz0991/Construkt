@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 import com.github.razz0991.construkt.CktUtil;
 import com.github.razz0991.construkt.Construkt;
+import com.github.razz0991.construkt.PlayerInfo;
 
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
@@ -193,8 +194,8 @@ public class AreaData {
 	 * Checks if the loop is finished.
 	 * @return
 	 */
-	public boolean isLoopFinished() {
-		return isLoopFinished(null);
+	public boolean isLoopFinished(PlayerInfo ply) {
+		return isLoopFinished(null, ply);
 	}
 	
 	/**
@@ -202,12 +203,13 @@ public class AreaData {
 	 * @param container The {@link CktBlockContainer} to finalize if the loop is finished
 	 * @return true if the loop is finished
 	 */
-	public boolean isLoopFinished(CktBlockContainer container) {
+	public boolean isLoopFinished(CktBlockContainer container, PlayerInfo ply) {
 		if (loopFinished && taskId != -1) {
 			cancelTask();
 		}
 		if (loopFinished && container != null)
 			container.finalize();
+		ply.setCanBuild(true);
 		return loopFinished;
 	}
 	

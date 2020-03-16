@@ -3,6 +3,7 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
@@ -21,6 +22,10 @@ public class SphereShape extends BaseShape{
 	
 	public SphereShape() {
 		super();
+	}
+	
+	public SphereShape(PlayerInfo plyInfo) {
+		super(plyInfo);
 		parameters.put(hollowModeName, new BooleanCktParameter(hollowModeDefault));
 	}
 
@@ -66,7 +71,7 @@ public class SphereShape extends BaseShape{
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while (!data.isLoopFinished(container));
+				} while (!data.isLoopFinished(container, ply));
 			}
 		});
 		

@@ -39,20 +39,31 @@ public class PlayerInfo {
 	private Location firstLocation = null;
 	
 	private CktMode mode = CktMode.NONE;
-	private BaseShape shape = Shapes.getShape("cuboid");
+	private BaseShape shape;
 	private Map<String, BaseFilter> filters = new HashMap<String, BaseFilter>();
 
 	private Limiter limits = null;
 	private List<CktBlockContainer> undoList = new ArrayList<CktBlockContainer>();
 	private List<CktBlockContainer> redoList = new ArrayList<CktBlockContainer>();
 	
+	private boolean canBuild = true;
+	
 	public PlayerInfo(Player player) {
 		plyId = player.getUniqueId();
+		shape = Shapes.getShape(this, "cuboid");
 		setLimits();
 	}
 	
 	public boolean isConstruktEnabled() {
 		return cktEnabled;
+	}
+	
+	public void setCanBuild(boolean value) {
+		canBuild = value;
+	}
+	
+	public boolean getCanBuild() {
+		return canBuild;
 	}
 	
 	public void toggleConstruktEnabled() {
@@ -228,7 +239,7 @@ public class PlayerInfo {
 						"You do not have permission to use the " + shape + " shape!");
 				return;
 			}
-			this.shape = Shapes.getShape(shape);
+			this.shape = Shapes.getShape(this, shape);
 //			clearShapeParameters();
 			
 			String[] toMessage = new String[1 + this.shape.getParameterNames().size()];

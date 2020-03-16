@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
@@ -21,6 +22,10 @@ public class OverlayShape extends BaseShape {
 	
 	public OverlayShape() {
 		super();
+	}
+	
+	public OverlayShape(PlayerInfo plyInfo) {
+		super(plyInfo);
 		parameters.put(depthName, new IntegerCktParameter(depthDefault, 1, 10));
 	}
 
@@ -79,7 +84,7 @@ public class OverlayShape extends BaseShape {
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while(!data.isLoopFinished(container));
+				} while(!data.isLoopFinished(container, ply));
 			}
 		});
 		

@@ -9,10 +9,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.razz0991.construkt.CktConfigOptions.Limiter;
 import com.github.razz0991.construkt.filters.Filters;
+import com.github.razz0991.construkt.protection.GriefPreventionProtection;
+import com.github.razz0991.construkt.protection.PlotSquaredProtection;
+import com.github.razz0991.construkt.protection.ProtectionPlugins;
+import com.github.razz0991.construkt.protection.WorldGuardProtection;
 import com.github.razz0991.construkt.shapes.Shapes;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -72,6 +77,24 @@ public class Construkt extends JavaPlugin {
 			if (!CktConfigOptions.addBlacklistMaterial(matName)) {
 				getLogger().info(matName + " is not a valid material name for blacklist."); 
 			}
+		}
+		
+		// Protection plugins
+		PluginManager pManag = getServer().getPluginManager();
+		
+		if (pManag.getPlugin("WorldGuard") != null) {
+			ProtectionPlugins.addProtectionPlugin(new WorldGuardProtection());
+			getLogger().info("Enabled WorldGuard protection support");
+		}
+		
+		if (pManag.getPlugin("PlotSquared") != null) {
+			ProtectionPlugins.addProtectionPlugin(new PlotSquaredProtection());
+			getLogger().info("Enabled PlotSquared protection support");
+		}
+		
+		if (pManag.getPlugin("GriefPrevention") != null) {
+			ProtectionPlugins.addProtectionPlugin(new GriefPreventionProtection());
+			getLogger().info("Enabled GriefPrevention protection support");
 		}
 		
 		// Final initialization

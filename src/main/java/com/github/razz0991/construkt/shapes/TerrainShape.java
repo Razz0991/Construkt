@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
@@ -23,6 +24,10 @@ public class TerrainShape extends BaseShape {
 	
 	public TerrainShape() {
 		super();
+	}
+	
+	public TerrainShape(PlayerInfo plyInfo) {
+		super(plyInfo);
 		parameters.put(octaveName, new IntegerCktParameter(octaveValue, 1, 8));
 		parameters.put(scaleName, new IntegerCktParameter(scaleDefault, 1, 10));
 	}
@@ -53,7 +58,7 @@ public class TerrainShape extends BaseShape {
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while (!data.isLoopFinished(container));
+				} while (!data.isLoopFinished(container, ply));
 			}
 		});
 		

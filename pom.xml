@@ -35,7 +35,19 @@
  	<repository>
  		<id>spigot-repo</id>
  		<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
- 	</repository> 
+ 	</repository>
+ 	<repository>
+ 		<id>sk89q-repo</id>
+ 		<url>https://maven.enginehub.org/repo/</url>
+ 	</repository>
+ 	 <repository>
+         <id>p2-repo</id>
+         <url>http://ci.athion.net/job/PlotSquared-Releases/ws/mvn/</url>
+     </repository>
+     <repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
   </repositories>
   <dependencies>
   	<dependency>
@@ -44,6 +56,86 @@
   		<version>1.15.2-R0.1-SNAPSHOT</version>
   		<type>jar</type>
   		<scope>provided</scope>
+  		<exclusions>
+  			<exclusion>
+  				<groupId>com.google.guava</groupId>
+  				<artifactId>guava</artifactId>
+  			</exclusion>
+  		</exclusions>
   	</dependency>
+  	<dependency>
+        <groupId>com.sk89q.worldguard</groupId>
+        <artifactId>worldguard-bukkit</artifactId>
+        <version>7.0.2</version>
+        <scope>provided</scope>
+        <exclusions>
+        	<exclusion>
+        		<groupId>com.sk89q</groupId>
+        		<artifactId>commandbook</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>io.papermc</groupId>
+        		<artifactId>paperlib</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>org.bstats</groupId>
+        		<artifactId>bstats-bukkit</artifactId>
+        	</exclusion>
+        </exclusions>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.github.intellectualsites.plotsquared</groupId>
+        <artifactId>PlotSquared-API</artifactId>
+        <version>4.453</version>
+        <scope>provided</scope>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.jetbrains.kotlin</groupId>
+        		<artifactId>kotlin-stdlib</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>com.squareup.okio</groupId>
+        		<artifactId>okio</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>com.squareup.okhttp3</groupId>
+        		<artifactId>okhttp</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>com.github.Sauilitired</groupId>
+        		<artifactId>Jenkins4J</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>com.google.guava</groupId>
+        		<artifactId>guava</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>net.kyori</groupId>
+        		<artifactId>text-serializer-plain</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>net.kyori</groupId>
+        		<artifactId>text-serializer-legacy</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>net.kyori</groupId>
+        		<artifactId>text-serializer-gson</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>net.kyori</groupId>
+        		<artifactId>text-api</artifactId>
+        	</exclusion>
+        	<exclusion>
+        		<groupId>org.projectlombok</groupId>
+        		<artifactId>lombok</artifactId>
+        	</exclusion>
+        </exclusions>
+  	</dependency>
+  	<dependency>
+	    <groupId>com.github.TechFortress</groupId>
+	    <artifactId>GriefPrevention</artifactId>
+	    <version>16.13.0</version>
+	    <scope>provided</scope>
+	</dependency>
   </dependencies>
 </project>

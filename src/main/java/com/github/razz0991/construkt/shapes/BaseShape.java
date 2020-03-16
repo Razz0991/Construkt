@@ -4,8 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.ParameterObject;
+import com.github.razz0991.construkt.protection.ProtectionPlugins;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
 import com.github.razz0991.construkt.utility.AreaInfo;
@@ -24,6 +26,15 @@ public abstract class BaseShape extends ParameterObject {
 	 * What mode blocks should be placed in
 	 */
 	protected PlaceMode placeMode = PlaceMode.AIR;
+	protected PlayerInfo ply;
+	
+	public BaseShape() {
+		this(null);
+	}
+	
+	public BaseShape(PlayerInfo plyInfo) {
+		ply = plyInfo;
+	}
 	
 	/**
 	 * Generates a shape and places blocks via the block data entered.
@@ -47,16 +58,24 @@ public abstract class BaseShape extends ParameterObject {
 		return new AreaInfo(firstPoint, secondPoint);
 	}
 	
-	protected void setBlock(BlockData blockData, Location loc) {
+	protected BlockData setBlock(BlockData blockData, Location loc) {
+		if (!ProtectionPlugins.canBuild(loc, ply.getPlayer()))
+			return null;
+		
+		BlockData before = loc.getBlock().getBlockData();
+		
 		if (blockData != null)
 			loc.getBlock().setBlockData(blockData.clone());
 		else
 			loc.getBlock().setType(Material.AIR);
+		
+		return before;
 	}
 	
 	protected void setBlock(BlockData blockData, Location loc, CktBlockContainer container) {
-		container.addBlock(loc.getBlock().getBlockData(), loc);
-		setBlock(blockData, loc);
+		BlockData data = setBlock(blockData, loc);
+		if (data != null)
+			container.addBlock(data, loc);
 	}
 	
 	protected boolean canPlace(AreaData data, BaseFilter[] filters) {

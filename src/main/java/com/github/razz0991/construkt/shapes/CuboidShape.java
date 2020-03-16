@@ -3,6 +3,7 @@ package com.github.razz0991.construkt.shapes;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 
+import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.utility.AreaData;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
@@ -13,6 +14,14 @@ import com.github.razz0991.construkt.utility.CktBlockContainer;
  *  Full disclaimer in Construkt.java
  */
 public class CuboidShape extends BaseShape{
+
+	public CuboidShape() {
+		super();
+	}
+	
+	public CuboidShape(PlayerInfo plyInfo) {
+		super(plyInfo);
+	}
 
 	@Override
 	public String getName() {
@@ -37,7 +46,7 @@ public class CuboidShape extends BaseShape{
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)
 						return;
-				} while (!data.isLoopFinished(container));
+				} while (!data.isLoopFinished(container, ply));
 			}
 		};
 		

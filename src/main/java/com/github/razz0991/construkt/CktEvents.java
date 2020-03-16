@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.github.razz0991.construkt.protection.ProtectionPlugins;
 import com.github.razz0991.construkt.shapes.BaseShape.PlaceMode;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
 import com.github.razz0991.construkt.utility.CktMode;
@@ -42,8 +44,12 @@ public class CktEvents implements Listener {
 		return true;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent ev) {
+		if (ev.isCancelled() || 
+				!ProtectionPlugins.canBuild(ev.getBlock().getLocation(), ev.getPlayer()))
+			return;
+		
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE && 
@@ -76,6 +82,7 @@ public class CktEvents implements Listener {
 				if (ply.hasPermission("construkt.undo"))
 					ply.addUndo(undo);
 				
+				ply.setCanBuild(false);
 				ply.resetMode();
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
@@ -88,8 +95,12 @@ public class CktEvents implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent ev) {
+		if (ev.isCancelled() || 
+				!ProtectionPlugins.canBuild(ev.getBlock().getLocation(), ev.getPlayer()))
+			return;
+		
 		PlayerInfo ply = Players.getPlayerInfo(ev.getPlayer());
 		if (ply.isConstruktEnabled() && !ev.getPlayer().isSneaking()) {
 			if(ply.getMode() == CktMode.NONE && 
@@ -120,6 +131,7 @@ public class CktEvents implements Listener {
 				if (ply.hasPermission("construkt.undo"))
 					ply.addUndo(undo);
 				
+				ply.setCanBuild(false);
 				ply.resetMode();
 			}
 			else if (ply.getMode() == CktMode.PLACE) {
@@ -146,6 +158,7 @@ public class CktEvents implements Listener {
 					//Allow broken block to be replaced too
 					ev.setCancelled(true);
 					
+					ply.setCanBuild(false);
 					ply.resetMode();
 				}
 			}
