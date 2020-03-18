@@ -19,19 +19,21 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 7)**
+**(As of Episode 8)**
 
 - Shape filling
 - Shape clearing
 - Shape replacement
 - Filters
 - Lagless area filling (or removal)
+- Undo and Redo command
 - Permissions
 - Limitations
    - Volume limit
    - Axis limit
    - Permission for no limits
    - Permission based limit groups
+   - Blacklisted blocks
    
 The plugin is almost server ready. There are still some features missing and limitations I 
 wish to add before a release version is built (but pre-release versions are available).
@@ -44,13 +46,14 @@ wish to add before a release version is built (but pre-release versions are avai
    - Hollow Parameter
 - Hollow Cuboid
    - Outline Parameter
+- Line
+- Overlay
+   - Depth Parameter (1 - 10)
 - Sphere
    - Hollow Parameter
 - Terrain
    - Octaves Parameter (1 - 8)
    - Scale Parameter (1 - 10)
-- Overlay
-   - Depth Parameter (1 - 10)
    
 **Filters**
 
@@ -87,6 +90,10 @@ wish to add before a release version is built (but pre-release versions are avai
 - `/ckt filter parameter <parameter> [value]`
    - Sets a value for a filters parameter
    - Lists the details of the parameter if no value is entered
+- `/construktundo` *OR* `/cktundo` *OR* `/cktu`
+   - Undo a change made with Construkt
+- `/construktredo` *OR* `/cktredo` *OR* `/cktr`
+   - Redo a previous undo made with Construkt
 
 
 All commands will come up with tab completion to help. No other in game help information is currently available.
