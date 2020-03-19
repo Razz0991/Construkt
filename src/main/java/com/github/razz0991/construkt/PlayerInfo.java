@@ -20,6 +20,7 @@ import com.github.razz0991.construkt.parameters.AxisCktParameter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.parameters.CktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.parameters.LongCktParameter;
 import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
@@ -281,6 +282,12 @@ public class PlayerInfo {
 						axisPar.getParameter();
 				toMessage[inc] = out;
 			}
+			else if (parObj instanceof LongCktParameter) {
+				LongCktParameter longPar = (LongCktParameter)parObj;
+				String out = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
+						longPar.getParameter();
+				toMessage[inc] = out;
+			}
 			inc++;
 		}
 		
@@ -329,6 +336,11 @@ public class PlayerInfo {
 		}
 		else if (parameter instanceof AxisCktParameter) {
 			toMessage[0] = ChatColor.AQUA + name + " accepts axis values " + ChatColor.GRAY + "(x, y or z)";
+			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
+					parameter.getParameter();
+		}
+		else if (parameter instanceof LongCktParameter) {
+			toMessage[0] = ChatColor.AQUA + name + " accepts full number values.";
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
 					parameter.getParameter();
 		}
@@ -407,14 +419,20 @@ public class PlayerInfo {
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
 			return;
 		}
-		else if (CktUtil.isInteger(value)) {
-			if (!(parameter instanceof IntegerCktParameter)) {
-				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
+		else if (CktUtil.isNumber(value)) {
+			if (parameter instanceof IntegerCktParameter) {
+				IntegerCktParameter intPar = (IntegerCktParameter)parameter;
+				intPar.setParameter(Integer.parseInt(value));
+				CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + intPar.getParameter());
 				return;
 			}
-			IntegerCktParameter intPar = (IntegerCktParameter)parameter;
-			intPar.setParameter(Integer.parseInt(value));
-			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + intPar.getParameter());
+			else if (parameter instanceof LongCktParameter) {
+				LongCktParameter longPar = (LongCktParameter)parameter;
+				longPar.setParameter(Long.parseLong(value));
+				CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + longPar.getParameter());
+				return;
+			}
+			CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
 			return;
 		}
 		else if (value.equalsIgnoreCase("x") || value.equalsIgnoreCase("y") || value.equalsIgnoreCase("z")) {
@@ -472,6 +490,7 @@ public class PlayerInfo {
 		BaseFilter[] filters = new BaseFilter[this.filters.size()];
 		int inc = 0;
 		for (BaseFilter filter : this.filters.values()) {
+			filter.runPreChecks();
 			filters[inc++] = filter;
 		}
 		return filters;

@@ -1,9 +1,12 @@
 package com.github.razz0991.construkt.filters;
 
+import java.util.Random;
+
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.parameters.LongCktParameter;
 import com.github.razz0991.construkt.utility.AreaData;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -21,28 +24,45 @@ public class NoiseFilter extends BaseFilter {
 	private final int limitDefault = 50;
 	private final String invertName = "invert";
 	private final boolean invertDefault = false;
+	private final String randomSeedName = "random_seed";
+	private final boolean randomSeedDefault = true;
+	private final String seedName = "seed";
+	private final long seedDefault = 0L;
 	
 	private SimplexOctaveGenerator gen;
 	
 	public NoiseFilter() {
 		super();
-		gen = new SimplexOctaveGenerator(0, 
-				getIntegerParameter(octaveName, octaveValue));
-		gen.setScale(getIntegerParameter(scaleName, scaleDefault) / 100d);
-		
 		IntegerCktParameter octaves = new IntegerCktParameter(octaveValue, 1, 8);
 		IntegerCktParameter scale = new IntegerCktParameter(scaleDefault, 1, 10);
 		IntegerCktParameter limit = new IntegerCktParameter(limitDefault, 1, 99);
 		BooleanCktParameter invert = new BooleanCktParameter(invertDefault);
+		BooleanCktParameter randomSeed = new BooleanCktParameter(randomSeedDefault);
+		LongCktParameter seed = new LongCktParameter(seedDefault);
 		parameters.put(octaveName, octaves);
 		parameters.put(scaleName, scale);
 		parameters.put(limitName, limit);
 		parameters.put(invertName, invert);
+		parameters.put(randomSeedName, randomSeed);
+		parameters.put(seedName, seed);
 	}
 
 	@Override
 	public String getName() {
 		return "noise";
+	}
+	
+	@Override
+	public void runPreChecks() {
+		long seed = getLongParameter(seedName, seedDefault);
+		if (getBooleanParameter(randomSeedName, randomSeedDefault)) {
+			Random rand = new Random();
+			seed = rand.nextLong();
+		}
+		
+		gen = new SimplexOctaveGenerator(seed, 
+				getIntegerParameter(octaveName, octaveValue));
+		gen.setScale(getIntegerParameter(scaleName, scaleDefault) / 100d);
 	}
 
 	@Override

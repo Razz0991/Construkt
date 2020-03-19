@@ -20,4 +20,8 @@ public abstract class BaseFilter extends ParameterObject{
 	 * @return true if a block should be placed
 	 */
 	public abstract boolean checkCondition(final AreaData data);
+	
+	public void runPreChecks() {
+		// Do nothing
+	}
 }

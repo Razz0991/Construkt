@@ -122,18 +122,23 @@ public class CktUtil {
 	}
 	
 	/**
-	 * A boolean check to see if a string is an Integer
-	 * @param value The String of a possible integer
+	 * A boolean check to see if a string is a whole number
+	 * @param value The String of a possible whole number
 	 * @return <code>true</code> if the value is an integer
 	 */
-	public static boolean isInteger(String value) {
+	public static boolean isNumber(String value) {
 		try {
 			Integer.parseInt(value);
 			return true;
 		}
 		catch (NumberFormatException e) {
-			return false;
+			try {
+				Long.parseLong(value);
+				return true;
+			}
+			catch (NumberFormatException er) {}
 		}
+		return false;
 	}
 
 }

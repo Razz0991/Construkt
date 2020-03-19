@@ -96,6 +96,21 @@ public abstract class ParameterObject {
 		return defaultValue;
 	}
 	
+	/**
+	 * Gets a long parameter from this objects parameters
+	 * @param name The name of the parameter
+	 * @param defaultValue The default value
+	 * @return The long value of this parameter of the defaultValue
+	 * if not set
+	 */
+	protected long getLongParameter(String name, long defaultValue) {
+		CktParameter<?> par = parameters.get(repairParameterName(name));
+		if (par instanceof LongCktParameter) {
+			return ((LongCktParameter)par).getParameter();
+		}
+		return defaultValue;
+	}
+	
 	// Gets the name of the parameter as seen by the player
 	protected String parseParameterName(String parameterName) {
 		return getName() + "." + parameterName;
