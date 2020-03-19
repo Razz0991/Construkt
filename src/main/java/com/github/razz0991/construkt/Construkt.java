@@ -137,12 +137,12 @@ public class Construkt extends JavaPlugin {
 					if (args[0].equalsIgnoreCase("parameter") &&
 							args.length >= 2) {
 						if (args.length == 3) {
-							plyInfo.setParameter(args[1], args[2], false);
+							plyInfo.setShapeParameter(args[1], args[2]);
 							return true;
 						}
 						else if (args.length == 2) {
 							// Get a parameters details.
-							plyInfo.getParameterInfo(args[1], false);
+							plyInfo.getShapeParameterInfo(args[1]);
 							return true;
 						}
 						CktUtil.messagePlayer(player, "Unknown parameter command!");
@@ -167,16 +167,27 @@ public class Construkt extends JavaPlugin {
 						else if (args[1].equalsIgnoreCase("parameter") &&
 								args.length >= 3) {
 							if (args.length >= 4) {
-								plyInfo.setParameter(args[2], args[3], true);
+								plyInfo.setFilterParameter(args[2], args[3]);
 								return true;
 							}
 							else if (args.length == 3) {
-								plyInfo.getParameterInfo(args[2], true);
+								plyInfo.getFilterParameterInfo(args[2]);
 								return true;
 							}
 						}
 						CktUtil.messagePlayer(player, "Unknown filter command!");
 						return true;
+					}
+					else if(args[0].equalsIgnoreCase("settings") && args.length >= 2) {
+						if (args[1].equalsIgnoreCase("exact_copy")) {
+							if (args.length == 2) {
+								plyInfo.getUseExactCopyInfo();
+							}
+							else {
+								plyInfo.setUseExactCopy(args[2]);
+							}
+							return true;
+						}
 					}
 					// Otherwise set shape
 					String shape = args[0];
@@ -215,6 +226,9 @@ public class Construkt extends JavaPlugin {
 					if ("filter".startsWith(args[0]) &&
 							player.hasPermission("construkt.command")) {
 						output.add("filter");
+					}
+					if ("settings".startsWith(args[0])) {
+						output.add("settings");
 					}
 					
 					for (String shape : Shapes.getAllShapes()) {
@@ -269,6 +283,14 @@ public class Construkt extends JavaPlugin {
 						}
 					}
 					
+					return output;
+				}
+				else if (args.length >= 2 && args[0].equalsIgnoreCase("settings")) {
+					List<String> output = new ArrayList<String>();
+					if (args.length == 2) {
+						if ("exact_copy".startsWith(args[1]))
+							output.add("exact_copy");
+					}
 					return output;
 				}
 				else if(args.length >= 2) {

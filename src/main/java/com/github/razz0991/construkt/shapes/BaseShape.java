@@ -64,8 +64,12 @@ public abstract class BaseShape extends ParameterObject {
 		
 		BlockData before = loc.getBlock().getBlockData();
 		
-		if (blockData != null)
-			loc.getBlock().setBlockData(blockData.clone());
+		if (blockData != null) {
+			if (ply.useExactCopy())
+				loc.getBlock().setBlockData(blockData.clone());
+			else
+				loc.getBlock().setType(blockData.getMaterial());
+		}
 		else
 			loc.getBlock().setType(Material.AIR);
 		

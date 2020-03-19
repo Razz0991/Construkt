@@ -46,6 +46,8 @@ public class PlayerInfo {
 	private List<CktBlockContainer> undoList = new ArrayList<CktBlockContainer>();
 	private List<CktBlockContainer> redoList = new ArrayList<CktBlockContainer>();
 	
+	BooleanCktParameter exactCopy = new BooleanCktParameter(true);
+	
 	private boolean canBuild = true;
 	
 	public PlayerInfo(Player player) {
@@ -285,33 +287,38 @@ public class PlayerInfo {
 		return toMessage;
 	}
 	
-	// Method for player to get information on a parameter via command.
-	void getParameterInfo(String name, boolean filterParameter) {
+	// Parameter info methods for commands
+	void getShapeParameterInfo(String name) {
 		String lName = name.toLowerCase();
-		if (!filterParameter && !shape.hasParameter(name)) {
+		if (!shape.hasParameter(name)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
 		}
-		else if (filterParameter && !hasFilterParameter(lName)) {
+		
+		getParameterInfo(name, shape.getParameter(lName));
+	}
+	
+	void getFilterParameterInfo(String name) {
+		String lName = name.toLowerCase();
+		if (!hasFilterParameter(lName)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the active filters.");
 			return;
 		}
 		
+		getParameterInfo(name, getFilterParameter(lName));
+	}
+	
+	private void getParameterInfo(String name, CktParameter<?> parameter) {
 		String[] toMessage = new String[2];
-		CktParameter<?> parObj = null;
-		if (!filterParameter)
-			parObj = shape.getParameter(lName);
-		else
-			parObj = getFilterParameter(lName);
 		
-		if (parObj instanceof BooleanCktParameter) {
-			toMessage[0] = ChatColor.AQUA + lName + " accepts boolean values.";
+		if (parameter instanceof BooleanCktParameter) {
+			toMessage[0] = ChatColor.AQUA + name + " accepts boolean values.";
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
-					((BooleanCktParameter)parObj).getParameter();
+					((BooleanCktParameter)parameter).getParameter();
 		}
-		else if (parObj instanceof IntegerCktParameter) {
-			IntegerCktParameter intPar = (IntegerCktParameter)parObj;
-			toMessage[0] = ChatColor.AQUA + lName + " accepts full number values.";
+		else if (parameter instanceof IntegerCktParameter) {
+			IntegerCktParameter intPar = (IntegerCktParameter)parameter;
+			toMessage[0] = ChatColor.AQUA + name + " accepts full number values.";
 			
 			if (intPar.isLimited()) {
 				toMessage[0] += ChatColor.GRAY + " (" + intPar.getMinValue() + " to " + intPar.getMaxValue() + ")";
@@ -320,10 +327,10 @@ public class PlayerInfo {
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET + 
 					intPar.getParameter();;
 		}
-		else if (parObj instanceof AxisCktParameter) {
-			toMessage[0] = ChatColor.AQUA + lName + " accepts axis values " + ChatColor.GRAY + "(x, y or z)";
+		else if (parameter instanceof AxisCktParameter) {
+			toMessage[0] = ChatColor.AQUA + name + " accepts axis values " + ChatColor.GRAY + "(x, y or z)";
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
-					parObj.getParameter();
+					parameter.getParameter();
 		}
 		
 		CktUtil.messagePlayer(getPlayer(), toMessage);
@@ -369,50 +376,54 @@ public class PlayerInfo {
 		return null;
 	}
 	
-	// The method run via the parameter command or filter parameter command.
-	void setParameter(String name, String value, boolean filterParameter) {
+	// Set parameters via commands
+	void setShapeParameter(String name, String value) {
 		String lName = name.toLowerCase();
-		if (!filterParameter && !shape.hasParameter(lName)) {
+		if (!shape.hasParameter(lName)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in the " + shape + " shape.");
 			return;
 		}
-		else if (filterParameter && !hasFilterParameter(lName)) {
+		
+		setParameter(name, shape.getParameter(lName), value);
+	}
+	
+	void setFilterParameter(String name, String value) {
+		String lName = name.toLowerCase();
+		if (!hasFilterParameter(lName)) {
 			CktUtil.messagePlayer(getPlayer(), "No parameter called \"" + name + "\" is in any of your active filters");
 			return;
 		}
 		
-		CktParameter<?> par = null;
-		if (!filterParameter)
-			par = shape.getParameter(lName);
-		else
-			par = getFilterParameter(lName);
-
+		setParameter(name, getFilterParameter(lName), value);
+	}
+	
+	private void setParameter(String name, CktParameter<?> parameter, String value) {
 		if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-			if (!(par instanceof BooleanCktParameter)) {
+			if (!(parameter instanceof BooleanCktParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a boolean value.");
 				return;
 			}
-			((BooleanCktParameter)par).setParameter(Boolean.parseBoolean(value));
+			((BooleanCktParameter)parameter).setParameter(Boolean.parseBoolean(value));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
 			return;
 		}
 		else if (CktUtil.isInteger(value)) {
-			if (!(par instanceof IntegerCktParameter)) {
+			if (!(parameter instanceof IntegerCktParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
 				return;
 			}
-			IntegerCktParameter intPar = (IntegerCktParameter)par;
+			IntegerCktParameter intPar = (IntegerCktParameter)parameter;
 			intPar.setParameter(Integer.parseInt(value));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + intPar.getParameter());
 			return;
 		}
 		else if (value.equalsIgnoreCase("x") || value.equalsIgnoreCase("y") || value.equalsIgnoreCase("z")) {
-			if (!(par instanceof AxisCktParameter)) {
+			if (!(parameter instanceof AxisCktParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take an axis value.");
 				return;
 			}
-			((AxisCktParameter)par).setParameter(value.toLowerCase().charAt(0));
-			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" axis to " + par.getParameter());
+			((AxisCktParameter)parameter).setParameter(value.toLowerCase().charAt(0));
+			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" axis to " + parameter.getParameter());
 			return;
 		}
 		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");
@@ -556,6 +567,22 @@ public class PlayerInfo {
 	 */
 	public boolean hasPermission(String permission) {
 		return getPlayer().hasPermission(permission);
+	}
+	
+	/**
+	 * Checks if the player has exact copy enabled for block placement.
+	 * @return true if exact copy is enabled
+	 */
+	public boolean useExactCopy() {
+		return exactCopy.getParameter();
+	}
+	
+	void setUseExactCopy(String value) {
+		setParameter("exact copy", exactCopy, value);
+	}
+	
+	void getUseExactCopyInfo() {
+		getParameterInfo("exact copy", exactCopy);
 	}
 
 }
