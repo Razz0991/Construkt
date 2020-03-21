@@ -170,6 +170,7 @@ public class CktEvents implements Listener {
 				
 				ply.setCanBuild(false);
 				ply.resetMode();
+				ev.setCancelled(true);
 			}
 			else if (ply.getMode() == CktMode.PLACE) {
 				if (ply.getFirstLocation().equals(ev.getBlock().getLocation())) {

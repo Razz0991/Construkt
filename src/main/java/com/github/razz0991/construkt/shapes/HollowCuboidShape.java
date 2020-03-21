@@ -38,6 +38,7 @@ public class HollowCuboidShape extends BaseShape{
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		
 		data.createFillTask(new Runnable() {
@@ -49,7 +50,7 @@ public class HollowCuboidShape extends BaseShape{
 						if ((getBooleanParameter(borderModeName, true) &&
 								isBorder(data)) || (!getBooleanParameter(borderModeName, borderModeDefault) &&
 										isEdge(data)))
-							setBlock(blockData, data.getCurrentLocation(), container);
+							setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 					}
 					
 					boolean shouldWait = data.incrementLoop();

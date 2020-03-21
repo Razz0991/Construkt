@@ -52,6 +52,7 @@ public class TerrainShape extends BaseShape {
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		long seed = getLongParameter(seedName, seedDefault);
 		if (getBooleanParameter(randomSeedName, randomSeedDefault)) {
@@ -68,7 +69,7 @@ public class TerrainShape extends BaseShape {
 				do {
 					if (getNoise(gen, data) >= data.getCurrentRelativeY())
 						if (canPlace(data, filters))
-							setBlock(blockData, data.getCurrentLocation(), container);
+							setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 					
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)

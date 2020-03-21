@@ -33,6 +33,7 @@ public class LineShape extends BaseShape {
 			BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		
 		double distance = secondPoint.distance(firstPoint);
@@ -56,7 +57,7 @@ public class LineShape extends BaseShape {
 				do {
 					if (canPlace(data, filters)) {
 						if (locations.contains(data.getCurrentLocation()))
-							setBlock(blockData, data.getCurrentLocation(), container);
+							setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 					}
 					
 					boolean shouldWait = data.incrementLoop();

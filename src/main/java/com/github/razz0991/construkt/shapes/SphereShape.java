@@ -47,6 +47,7 @@ public class SphereShape extends BaseShape{
 		boolean reversed = blockData == null;
 		Location[] sphereBoundry = radiusToCube(firstPoint, secondPoint);
 		final AreaData data = new AreaData(sphereBoundry[0], sphereBoundry[1], reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		final double dist = data.getXSize() / 2;
 		final Location center = firstPoint;
@@ -60,11 +61,11 @@ public class SphereShape extends BaseShape{
 						if (getBooleanParameter(hollowModeName, hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < dist + 0.5 && curDist > dist - 0.5)
-								setBlock(blockData, data.getCurrentLocation(), container);
+								setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 						}
 						else {
 							if (center.distance(data.getCurrentLocation()) < dist + 0.5)
-								setBlock(blockData, data.getCurrentLocation(), container);
+								setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 						}
 					}
 					

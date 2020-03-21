@@ -63,26 +63,41 @@ public abstract class BaseShape extends ParameterObject {
 		return new AreaInfo(firstPoint, secondPoint);
 	}
 	
-	protected BlockData setBlock(BlockData blockData, Location loc) {
+	protected BlockData setBlock(BlockData blockData, Location loc, BlockData strictBlock) {
 		if (!ProtectionPlugins.canBuild(loc, ply.getPlayer()))
 			return null;
 		
 		BlockData before = loc.getBlock().getBlockData();
 		
 		if (blockData != null) {
-			if (ply.useExactCopy())
-				loc.getBlock().setBlockData(blockData.clone());
-			else
-				loc.getBlock().setType(blockData.getMaterial());
+			if (ply.useExactCopy()) {
+				if (!ply.isStrictBreak() || placeMode == PlaceMode.AIR ||
+						loc.getBlock().getType() == strictBlock.getMaterial())
+					loc.getBlock().setBlockData(blockData.clone());
+				else
+					return null;
+			}
+			else {
+				if (!ply.isStrictBreak() || placeMode == PlaceMode.AIR ||
+						loc.getBlock().getType() == strictBlock.getMaterial())
+					loc.getBlock().setType(blockData.getMaterial());
+				else
+					return null;
+			}
 		}
-		else
-			loc.getBlock().setType(Material.AIR);
+		else {
+			if (!ply.isStrictBreak() ||
+					loc.getBlock().getType() == strictBlock.getMaterial())
+				loc.getBlock().setType(Material.AIR);
+			else
+				return null;
+		}
 		
 		return before;
 	}
 	
-	protected void setBlock(BlockData blockData, Location loc, CktBlockContainer container) {
-		BlockData data = setBlock(blockData, loc);
+	protected void setBlock(BlockData blockData, Location loc, CktBlockContainer container, BlockData strictBlock) {
+		BlockData data = setBlock(blockData, loc, strictBlock);
 		if (data != null)
 			container.addBlock(data, loc);
 	}

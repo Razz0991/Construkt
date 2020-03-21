@@ -33,6 +33,7 @@ public class CuboidShape extends BaseShape{
 			BlockData blockData, BaseFilter[] filters) {
 		boolean reversed = blockData == null;
 		final AreaData data = new AreaData(firstPoint, secondPoint, reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		
 		Runnable runnable = new Runnable() {
@@ -41,7 +42,7 @@ public class CuboidShape extends BaseShape{
 			public void run() {
 				do {
 					if (canPlace(data, filters))
-						setBlock(blockData, data.getCurrentLocation(), container);
+						setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 					
 					boolean shouldWait = data.incrementLoop();
 					if (shouldWait)

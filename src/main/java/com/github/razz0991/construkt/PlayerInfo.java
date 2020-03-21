@@ -49,6 +49,7 @@ public class PlayerInfo {
 	private List<CktBlockContainer> redoList = new ArrayList<CktBlockContainer>();
 	
 	BooleanCktParameter exactCopy = new BooleanCktParameter(true);
+	BooleanCktParameter strictBreak = new BooleanCktParameter(false);
 	
 	private boolean canBuild = true;
 	
@@ -625,7 +626,6 @@ public class PlayerInfo {
 	
 	/**
 	 * Checks if the player has exact copy enabled for block placement.
-	 * @return true if exact copy is enabled
 	 */
 	public boolean useExactCopy() {
 		return exactCopy.getParameter();
@@ -637,6 +637,29 @@ public class PlayerInfo {
 	
 	void getUseExactCopyInfo() {
 		getParameterInfo("exact copy", exactCopy);
+	}
+	
+	/**
+	 * Checks if the player is using strict breaking rules
+	 */
+	public boolean isStrictBreak() {
+		return strictBreak.getParameter();
+	}
+	
+	void setStrictBreakParameter(String value) {
+		setParameter("strict break", strictBreak, value);
+	}
+	
+	void getStrictBreakInfo() {
+		getParameterInfo("strict break", strictBreak);
+	}
+	
+	List<String> getSettingAutoComplete(String setting, String comparitor) {
+		if (setting.equals("strict_break"))
+			return strictBreak.getAutoComplete(comparitor);
+		else if (setting.equals("exact_copy"))
+			return exactCopy.getAutoComplete(comparitor);
+		return null;
 	}
 
 }

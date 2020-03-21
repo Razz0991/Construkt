@@ -45,6 +45,7 @@ public class CylinderShape extends BaseShape {
 		boolean reversed = blockData == null;
 		Location[] cylinderBoundry = radiusToCube(firstPoint, secondPoint);
 		final AreaData data = new AreaData(cylinderBoundry[0], cylinderBoundry[1], reversed);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		final char axis = getAxisParameter(axisName, axisDefault);
 		double dist;
@@ -82,11 +83,11 @@ public class CylinderShape extends BaseShape {
 						if (getBooleanParameter(hollowModeName, hollowModeDefault)) {
 							double curDist = center.distance(data.getCurrentLocation());
 							if (curDist < finalDist + 0.5 && curDist > finalDist - 0.5)
-								setBlock(blockData, data.getCurrentLocation(), container);
+								setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 						}
 						else {
 							if (center.distance(data.getCurrentLocation()) < finalDist + 0.5)
-								setBlock(blockData, data.getCurrentLocation(), container);
+								setBlock(blockData, data.getCurrentLocation(), container, strictBlock);
 						}
 					}
 					

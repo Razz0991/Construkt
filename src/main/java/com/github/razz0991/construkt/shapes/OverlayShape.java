@@ -39,6 +39,7 @@ public class OverlayShape extends BaseShape {
 			BlockData blockData, BaseFilter[] filters) {
 		
 		final AreaData data = new AreaData(firstPoint, secondPoint, new char[] {'x', 'z'}, false);
+		final BlockData strictBlock = secondPoint.getBlock().getBlockData().clone();
 		final CktBlockContainer container = new CktBlockContainer();
 		data.setCurrentY(data.getToLocation().getBlockY());
 		
@@ -63,7 +64,7 @@ public class OverlayShape extends BaseShape {
 							for (int y = startY; y <= endY; y++) {
 								cur.setY(y);
 								if (canPlace(cur, filters, data))
-									setBlock(blockData, cur, container);
+									setBlock(blockData, cur, container, strictBlock);
 							}
 						}
 						else {
@@ -75,7 +76,7 @@ public class OverlayShape extends BaseShape {
 							for (int y = startY; y >= endY; y--) {
 								cur.setY(y);
 								if (canPlace(cur, filters, data)) {
-									setBlock(blockData, cur, container);
+									setBlock(blockData, cur, container, strictBlock);
 								}
 							}
 						}

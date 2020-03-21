@@ -189,6 +189,13 @@ public class Construkt extends JavaPlugin {
 							}
 							return true;
 						}
+						else if (args[1].equalsIgnoreCase("strict_break")) {
+							if (args.length == 2)
+								plyInfo.getStrictBreakInfo();
+							else
+								plyInfo.setStrictBreakParameter(args[2]);
+							return true;
+						}
 					}
 					// Otherwise set shape
 					String shape = args[0];
@@ -306,6 +313,13 @@ public class Construkt extends JavaPlugin {
 					if (args.length == 2) {
 						if ("exact_copy".startsWith(args[1]))
 							output.add("exact_copy");
+						if ("strict_break".startsWith(args[1]))
+							output.add("strict_break");
+					}
+					else if(args.length == 3) {
+						output = plyInfo.getSettingAutoComplete(args[1], args[2]);
+						if (output == null)
+							output = new ArrayList<String>();
 					}
 					return output;
 				}
