@@ -1,5 +1,8 @@
 package com.github.razz0991.construkt.parameters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -21,6 +24,16 @@ public class BooleanCktParameter implements CktParameter<Boolean>{
 	@Override
 	public void setParameter(Boolean parameter) {
 		value = parameter;
+	}
+
+	@Override
+	public List<String> getAutoComplete(String comparitor) {
+		List<String> out = new ArrayList<String>();
+		if ("true".startsWith(comparitor))
+			out.add("true");
+		if ("false".startsWith(comparitor))
+			out.add("false");
+		return out;
 	}
 
 }

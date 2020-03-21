@@ -67,6 +67,7 @@ permissions:
          construkt.shape.sphere: true
          construkt.shape.terrain: true
          construkt.shape.line: true
+         construkt.shape.tree: true
    construkt.shape.cuboid:
       description: Allows use of the cuboid shape
       default: true
@@ -84,6 +85,9 @@ permissions:
       default: op
    construkt.shape.line:
       description: Allows use of the line shape
+      default: op
+   construkt.shape.tree:
+      description: Allows use of the tree shape
       default: op
    construkt.bypass_limits:
       description: Allows user to bypass area limitations

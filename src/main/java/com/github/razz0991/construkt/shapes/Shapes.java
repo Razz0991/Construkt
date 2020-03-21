@@ -24,6 +24,7 @@ public class Shapes {
 		addShape(OverlayShape.class);
 		addShape(CylinderShape.class);
 		addShape(LineShape.class);
+		addShape(TreeShape.class);
 	}
 	
 	private static void addShape(Class<? extends BaseShape> shape) {

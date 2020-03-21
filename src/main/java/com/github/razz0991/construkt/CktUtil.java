@@ -1,7 +1,11 @@
 package com.github.razz0991.construkt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -139,6 +143,38 @@ public class CktUtil {
 			catch (NumberFormatException er) {}
 		}
 		return false;
+	}
+	
+	/**
+	 * Matches all materials with name input.<br><br>
+	 * Multiple materials may be matched by using a "?".<br> For example:<br>
+	 * "?_LOG" will match all log types. (Acacia, Oak, Jungle, etc.)
+	 * @param name The name to match.
+	 * @return A list of all matched materials.
+	 */
+	public static List<Material> matchMaterial(String name) {
+		String format = name.toUpperCase();
+		if (format.startsWith("?")) {
+			format = format.replace("?", ".+(");
+		}
+		else {
+			format = "(" + format;
+		}
+		format = format.replace("?", ").+(");
+		if (format.endsWith("("))
+			format = format.substring(0, format.length() - 1);
+		else {
+			format += ")";
+		}
+		List<Material> mats = new ArrayList<Material>();
+		
+		for (Material mat : Material.values()) {
+			if (mat.toString().matches(format)) {
+				mats.add(mat);
+			}
+		}
+		
+		return mats;
 	}
 
 }

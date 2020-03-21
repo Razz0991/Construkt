@@ -27,6 +27,11 @@ public abstract class BaseShape extends ParameterObject {
 	 */
 	protected PlaceMode placeMode = PlaceMode.AIR;
 	protected PlayerInfo ply;
+	/**
+	 * Whether this shape uses a single location
+	 */
+	protected boolean usingSingleLocation = false;
+	protected boolean cancelPointPlacement = false;
 	
 	public BaseShape() {
 		this(null);
@@ -106,6 +111,14 @@ public abstract class BaseShape extends ParameterObject {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isUsingSingleLocation() {
+		return usingSingleLocation;
+	}
+	
+	public boolean isCancelingPointPlacement() {
+		return cancelPointPlacement;
 	}
 	
 	/**

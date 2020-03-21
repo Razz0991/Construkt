@@ -20,6 +20,7 @@ import com.github.razz0991.construkt.parameters.AxisCktParameter;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.parameters.CktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
+import com.github.razz0991.construkt.parameters.ListCktParameter;
 import com.github.razz0991.construkt.parameters.LongCktParameter;
 import com.github.razz0991.construkt.shapes.BaseShape;
 import com.github.razz0991.construkt.shapes.Shapes;
@@ -243,7 +244,7 @@ public class PlayerInfo {
 				return;
 			}
 			this.shape = Shapes.getShape(this, shape);
-//			clearShapeParameters();
+			resetMode();
 			
 			String[] toMessage = new String[1 + this.shape.getParameterNames().size()];
 			toMessage[0] = ChatColor.AQUA + "Changed shape to " + shape;
@@ -287,6 +288,15 @@ public class PlayerInfo {
 				String out = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
 						longPar.getParameter();
 				toMessage[inc] = out;
+			}
+			else if (parObj instanceof ListCktParameter) {
+				ListCktParameter listPar = (ListCktParameter)parObj;
+				String out = ChatColor.DARK_AQUA + par + ": " + ChatColor.RESET + 
+						listPar.getParameter();
+				toMessage[inc] = out;
+			}
+			else {
+				toMessage[inc] = "UNKNOWN PARAMETER";
 			}
 			inc++;
 		}
@@ -344,6 +354,15 @@ public class PlayerInfo {
 			toMessage[1] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
 					parameter.getParameter();
 		}
+		else if (parameter instanceof ListCktParameter) {
+			toMessage = new String[3];
+			ListCktParameter par = (ListCktParameter)parameter;
+			toMessage[0] = ChatColor.AQUA + name + " accepts predefined values from a list.";
+			toMessage[1] = ChatColor.DARK_AQUA + "Possible Values: " + ChatColor.RESET + 
+					String.join(", ", par.getPossibleValues());
+			toMessage[2] = ChatColor.DARK_AQUA + "CurrentValue: " + ChatColor.RESET +
+					par.getParameter();
+		}
 		
 		CktUtil.messagePlayer(getPlayer(), toMessage);
 	}
@@ -368,7 +387,10 @@ public class PlayerInfo {
 		return keys;
 	}
 	
-	private boolean hasFilterParameter(String name) {
+	// Checks if a filter has a parameter, 
+	// name includes the filter name and the filters parameter,
+	// separated by a "."
+	boolean hasFilterParameter(String name) {
 		if (!name.contains("."))
 			return false;
 		String filterName = name.split("\\.")[0];
@@ -378,7 +400,9 @@ public class PlayerInfo {
 		return false;
 	}
 	
-	private CktParameter<?> getFilterParameter(String name) {
+	// Gets filters parameter, name includes the filter name and the filters parameter,
+	// separated by a "."
+	CktParameter<?> getFilterParameter(String name) {
 		if (!name.contains("."))
 			return null;
 		String filterName = name.split("\\.")[0];
@@ -410,7 +434,18 @@ public class PlayerInfo {
 	}
 	
 	private void setParameter(String name, CktParameter<?> parameter, String value) {
-		if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+		if (parameter instanceof ListCktParameter) {
+			ListCktParameter par = (ListCktParameter)parameter;
+			
+			if (par.hasValue(value)) {
+				par.setParameter(value);
+				CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
+				return;
+			}
+			CktUtil.messagePlayer(getPlayer(), "Invalid parameter value. List values are case sensitive!");
+			return;
+		}
+		else if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
 			if (!(parameter instanceof BooleanCktParameter)) {
 				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a boolean value.");
 				return;

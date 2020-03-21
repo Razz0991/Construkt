@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.razz0991.construkt.CktConfigOptions.Limiter;
 import com.github.razz0991.construkt.filters.Filters;
+import com.github.razz0991.construkt.parameters.CktParameter;
 import com.github.razz0991.construkt.protection.GriefPreventionProtection;
 import com.github.razz0991.construkt.protection.PlotSquaredProtection;
 import com.github.razz0991.construkt.protection.ProtectionPlugins;
@@ -219,12 +220,10 @@ public class Construkt extends JavaPlugin {
 				PlayerInfo plyInfo = Players.getPlayerInfo(player);
 				if (args.length == 1) {
 					List<String> output = new ArrayList<String>();
-					if ("parameter".startsWith(args[0]) && 
-							player.hasPermission("construkt.command")) {
+					if ("parameter".startsWith(args[0])) {
 						output.add("parameter");
 					}
-					if ("filter".startsWith(args[0]) &&
-							player.hasPermission("construkt.command")) {
+					if ("filter".startsWith(args[0])) {
 						output.add("filter");
 					}
 					if ("settings".startsWith(args[0])) {
@@ -238,13 +237,22 @@ public class Construkt extends JavaPlugin {
 					}
 					return output;
 				}
-				else if(args.length == 2 && args[0].equalsIgnoreCase("parameter")) {
+				else if(args.length >= 2 && args[0].equalsIgnoreCase("parameter")) {
 					// List of parameters
 					List<String> output = new ArrayList<String>();
 					
-					for (String par : plyInfo.getAllShapeParameterKeys()) {
-						if (par.startsWith(args[1]))
-							output.add(par);
+					if (args.length == 2) {
+						for (String par : plyInfo.getAllShapeParameterKeys()) {
+							if (par.startsWith(args[1]))
+								output.add(par);
+						}
+					}
+					else if (args.length == 3) {
+						if (plyInfo.getShape().hasParameter(args[1])) {
+							output = plyInfo.getShape().getParameter(args[1]).getAutoComplete(args[2]);
+							if (output == null)
+								output = new ArrayList<String>();
+						}
 					}
 					
 					return output;
@@ -280,6 +288,14 @@ public class Construkt extends JavaPlugin {
 								if (parameter.startsWith(args[2]))
 									output.add(parameter);
 							}
+						}
+					}
+					if (args.length == 4 && args[1].equalsIgnoreCase("parameter")) {
+						if (plyInfo.hasFilterParameter(args[2])) {
+							CktParameter<?> par = plyInfo.getFilterParameter(args[2]);
+							output = par.getAutoComplete(args[3]);
+							if (output == null)
+								output = new ArrayList<String>();
 						}
 					}
 					

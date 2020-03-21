@@ -1,5 +1,7 @@
 package com.github.razz0991.construkt.parameters;
 
+import java.util.List;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -17,5 +19,7 @@ public interface CktParameter<T> {
 	 * @param parameter The value for the parameter
 	 */
 	public void setParameter(T parameter);
+	
+	public List<String> getAutoComplete(String comparitor);
 
 }

@@ -60,12 +60,30 @@ public class CktEvents implements Listener {
 					ev.setCancelled(true);
 					return;
 				}
-				// Begin place mode or replace mode.
-				ply.setBlockData(ev.getBlock().getBlockData());
-				ply.setMode(CktMode.PLACE);
-				ply.setFirstLocation(ev.getBlock().getLocation());
-				
-				CktUtil.messagePlayer(ev.getPlayer(), "First block placed.");
+				if (!ply.getShape().isUsingSingleLocation()) {
+					// Begin place mode or replace mode.
+					ply.setBlockData(ev.getBlock().getBlockData());
+					ply.setMode(CktMode.PLACE);
+					ply.setFirstLocation(ev.getBlock().getLocation());
+					
+					CktUtil.messagePlayer(ev.getPlayer(), "First block placed.");
+				}
+				else {
+					ply.getShape().setPlaceMode(PlaceMode.AIR);
+					CktBlockContainer undo = ply.getShape().generateShape(ev.getBlock().getLocation(), null, 
+							ev.getBlock().getBlockData(), ply.getFilters());
+					
+					if (ply.hasPermission("construkt.undo"))
+						ply.addUndo(undo);
+					
+					ply.setCanBuild(false);
+					ply.resetMode();
+					
+					CktUtil.messagePlayer(ev.getPlayer(), "Filling Shape.");
+					
+					if (ply.getShape().isCancelingPointPlacement())
+						ev.setCancelled(true);
+				}
 			}
 			else if (ply.getMode() == CktMode.PLACE && 
 					ev.getPlayer().hasPermission("construkt.mode.place")) {
@@ -110,12 +128,30 @@ public class CktEvents implements Listener {
 					ev.setCancelled(true);
 					return;
 				}
-				// Begin break mode.
-				ply.setBlockData(ev.getBlock().getBlockData());
-				ply.setMode(CktMode.BREAK);
-				ply.setFirstLocation(ev.getBlock().getLocation());
-				
-				CktUtil.messagePlayer(ev.getPlayer(), "First block broken.");
+				if (!ply.getShape().isUsingSingleLocation()) {
+					// Begin break mode.
+					ply.setBlockData(ev.getBlock().getBlockData());
+					ply.setMode(CktMode.BREAK);
+					ply.setFirstLocation(ev.getBlock().getLocation());
+					
+					CktUtil.messagePlayer(ev.getPlayer(), "First block broken.");
+				}
+				else {
+					ply.getShape().setPlaceMode(PlaceMode.SOLID);
+					CktBlockContainer undo = ply.getShape().generateShape(ev.getBlock().getLocation(), null, 
+							null, ply.getFilters());
+					
+					if (ply.hasPermission("construkt.undo"))
+						ply.addUndo(undo);
+					
+					ply.setCanBuild(false);
+					ply.resetMode();
+					
+					CktUtil.messagePlayer(ev.getPlayer(), "Clearing Shape.");
+
+					if (ply.getShape().isCancelingPointPlacement())
+						ev.setCancelled(true);
+				}
 			}
 			else if (ply.getMode() == CktMode.BREAK) {
 				// Check limits

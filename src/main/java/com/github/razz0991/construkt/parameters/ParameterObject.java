@@ -100,13 +100,28 @@ public abstract class ParameterObject {
 	 * Gets a long parameter from this objects parameters
 	 * @param name The name of the parameter
 	 * @param defaultValue The default value
-	 * @return The long value of this parameter of the defaultValue
+	 * @return The long value of this parameter or the defaultValue
 	 * if not set
 	 */
 	protected long getLongParameter(String name, long defaultValue) {
 		CktParameter<?> par = parameters.get(repairParameterName(name));
 		if (par instanceof LongCktParameter) {
 			return ((LongCktParameter)par).getParameter();
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Gets a list parameter from this objects parameters
+	 * @param name The name of the parameter
+	 * @param defaultValue The default value
+	 * @return The selected item from the list or the defaultValue
+	 * if not set
+	 */
+	protected String getListParameter(String name, String defaultValue) {
+		CktParameter<?> par = parameters.get(repairParameterName(name));
+		if (par instanceof ListCktParameter) {
+			return ((ListCktParameter)par).getParameter();
 		}
 		return defaultValue;
 	}

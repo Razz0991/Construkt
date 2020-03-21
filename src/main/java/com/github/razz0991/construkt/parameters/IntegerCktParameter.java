@@ -1,5 +1,7 @@
 package com.github.razz0991.construkt.parameters;
 
+import java.util.List;
+
 /*  Construkt Bukkit plugin for Minecraft.
  *  Copyright (C) 2020 _Razz_
  *
@@ -65,6 +67,11 @@ public class IntegerCktParameter implements CktParameter<Integer>{
 	 */
 	public int getMaxValue() {
 		return maxValue;
+	}
+
+	@Override
+	public List<String> getAutoComplete(String comparitor) {
+		return null;
 	}
 
 }
