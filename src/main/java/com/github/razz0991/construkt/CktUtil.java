@@ -176,6 +176,14 @@ public class CktUtil {
 		
 		return mats;
 	}
+	
+	/**
+	 * Linearly interpolates between 2 values.
+	 * @return The interpolation
+	 */
+	public static double lerp(double from, double to, double amount) {
+		return (1 - amount) * from + amount * to;
+	}
 
 }
 

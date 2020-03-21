@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
+import com.github.razz0991.construkt.CktUtil;
 import com.github.razz0991.construkt.parameters.BooleanCktParameter;
 import com.github.razz0991.construkt.parameters.IntegerCktParameter;
 import com.github.razz0991.construkt.parameters.LongCktParameter;
@@ -28,6 +29,10 @@ public class NoiseFilter extends BaseFilter {
 	private final boolean randomSeedDefault = true;
 	private final String seedName = "seed";
 	private final long seedDefault = 0L;
+	private final String smoothEdgeName = "smooth_edge";
+	private final boolean smoothEdgeDefault = false;
+	private final String smoothDistanceName = "smooth_distance";
+	private final int smoothDistanceDefault = 3;
 	
 	private SimplexOctaveGenerator gen;
 	
@@ -45,6 +50,8 @@ public class NoiseFilter extends BaseFilter {
 		parameters.put(invertName, invert);
 		parameters.put(randomSeedName, randomSeed);
 		parameters.put(seedName, seed);
+		parameters.put(smoothEdgeName, new BooleanCktParameter(smoothEdgeDefault));
+		parameters.put(smoothDistanceName, new IntegerCktParameter(smoothDistanceDefault, 0, 10));
 	}
 
 	@Override
@@ -69,11 +76,23 @@ public class NoiseFilter extends BaseFilter {
 	public boolean checkCondition(AreaData data) {
 		double limit = getIntegerParameter(limitName, limitDefault) / 100d;
 		
+		final boolean smoothEdge = getBooleanParameter(smoothEdgeName, smoothEdgeDefault);
+		final int smoothDistance = getIntegerParameter(smoothDistanceName, smoothDistanceDefault);
+		
+		double noise = getNoise(gen, data);
+		if (smoothEdge) {
+			double edgeDist = data.currentDistanceToAnyEdge();
+			if (edgeDist <= smoothDistance) {
+				double edgeNorm = edgeDist / smoothDistance;
+				noise = CktUtil.lerp(noise, 1d,  1 - edgeNorm);
+			}
+		}
+		
 		boolean output = false;
 		if (!getBooleanParameter(invertName, invertDefault))
-			output = getNoise(gen, data) <= limit;
+			output = noise <= limit;
 		else
-			output = getNoise(gen, data) >= limit;
+			output = noise >= limit;
 		
 		return output;
 	}

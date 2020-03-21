@@ -252,7 +252,42 @@ public class AreaData {
 	public int getCurrentRelativeY() {
 		return Math.abs(currentLocation.getBlockY() - fromLocation.getBlockY());
 	}
+
+	/**
+	 * Gets the closest distance to either X edge.
+	 */
+	public int currentDistanceToXEdge() {
+		int side1 = Math.abs(currentLocation.getBlockX() - fromLocation.getBlockX());
+		int side2 = Math.abs(currentLocation.getBlockX() - toLocation.getBlockX());
+		return Math.min(side1, side2);
+	}
+
+	/**
+	 * Gets the closest distance to either Y edge.
+	 */
+	public int currentDistanceToYEdge() {
+		int side1 = Math.abs(currentLocation.getBlockY() - fromLocation.getBlockY());
+		int side2 = Math.abs(currentLocation.getBlockY() - toLocation.getBlockY());
+		return Math.min(side1, side2);
+	}
 	
+	/**
+	 * Gets the closest distance to either Z edge.
+	 */
+	public int currentDistanceToZEdge() {
+		int side1 = Math.abs(currentLocation.getBlockZ() - fromLocation.getBlockZ());
+		int side2 = Math.abs(currentLocation.getBlockZ() - toLocation.getBlockZ());
+		return Math.min(side1, side2);
+	}
+	
+	/**
+	 * Gets the current blocks distance to any of the axial edges.
+	 */
+	public int currentDistanceToAnyEdge() {
+		return Math.min(
+				Math.min(currentDistanceToXEdge(), currentDistanceToYEdge()), 
+				currentDistanceToZEdge());
+	}
 	/**
 	 * Gets the Z position of where the loop is currently at.
 	 * @return The Z value.
