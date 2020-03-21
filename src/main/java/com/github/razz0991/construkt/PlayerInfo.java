@@ -361,8 +361,12 @@ public class PlayerInfo {
 			toMessage[0] = ChatColor.AQUA + name + " accepts predefined values from a list.";
 			toMessage[1] = ChatColor.DARK_AQUA + "Possible Values: " + ChatColor.RESET + 
 					String.join(", ", par.getPossibleValues());
-			toMessage[2] = ChatColor.DARK_AQUA + "CurrentValue: " + ChatColor.RESET +
+			toMessage[2] = ChatColor.DARK_AQUA + "Current Value: " + ChatColor.RESET +
 					par.getParameter();
+		}
+		else {
+			toMessage[0] = ChatColor.RED + "Undefined Parameter!";
+			toMessage[1] = "Please report this as a bug!";
 		}
 		
 		CktUtil.messagePlayer(getPlayer(), toMessage);
@@ -446,41 +450,44 @@ public class PlayerInfo {
 			CktUtil.messagePlayer(getPlayer(), "Invalid parameter value. List values are case sensitive!");
 			return;
 		}
-		else if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-			if (!(parameter instanceof BooleanCktParameter)) {
-				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a boolean value.");
+		else if (parameter instanceof BooleanCktParameter) {
+			if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
+				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" takes a boolean value.");
 				return;
 			}
 			((BooleanCktParameter)parameter).setParameter(Boolean.parseBoolean(value));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + value);
 			return;
 		}
-		else if (CktUtil.isNumber(value)) {
+		else if (parameter instanceof IntegerCktParameter || parameter instanceof LongCktParameter) {
+			if (!CktUtil.isNumber(value)) {
+				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" takes a number value.");
+				return;
+			}
+			
 			if (parameter instanceof IntegerCktParameter) {
 				IntegerCktParameter intPar = (IntegerCktParameter)parameter;
 				intPar.setParameter(Integer.parseInt(value));
 				CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + intPar.getParameter());
 				return;
 			}
-			else if (parameter instanceof LongCktParameter) {
+			else {
 				LongCktParameter longPar = (LongCktParameter)parameter;
 				longPar.setParameter(Long.parseLong(value));
 				CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" to " + longPar.getParameter());
 				return;
 			}
-			CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take a number value.");
-			return;
 		}
-		else if (value.equalsIgnoreCase("x") || value.equalsIgnoreCase("y") || value.equalsIgnoreCase("z")) {
-			if (!(parameter instanceof AxisCktParameter)) {
-				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" does not take an axis value.");
+		else if (parameter instanceof AxisCktParameter) {
+			if (!value.equalsIgnoreCase("x") && !value.equalsIgnoreCase("y") && !value.equalsIgnoreCase("z")) {
+				CktUtil.messagePlayer(getPlayer(), "\"" + name + "\" takes an axis value.");
 				return;
 			}
 			((AxisCktParameter)parameter).setParameter(value.toLowerCase().charAt(0));
 			CktUtil.messagePlayer(getPlayer(), "Set \"" + name + "\" axis to " + parameter.getParameter());
 			return;
 		}
-		CktUtil.messagePlayer(getPlayer(), "\"" + value + "\" is not a valid value.");
+		CktUtil.messagePlayer(getPlayer(), "Undefined parameter! Please report this as a bug!");
 	}
 	
 	public void resetMode() {
