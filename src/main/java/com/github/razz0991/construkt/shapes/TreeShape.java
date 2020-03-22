@@ -17,6 +17,7 @@ import com.github.razz0991.construkt.Construkt;
 import com.github.razz0991.construkt.PlayerInfo;
 import com.github.razz0991.construkt.filters.BaseFilter;
 import com.github.razz0991.construkt.parameters.ListCktParameter;
+import com.github.razz0991.construkt.utility.AreaInfo;
 import com.github.razz0991.construkt.utility.CktBlockContainer;
 
 /*  Construkt Bukkit plugin for Minecraft.
@@ -166,6 +167,11 @@ public class TreeShape extends BaseShape {
 		public Material getLeavesMaterial() {
 			return leaves;
 		}
+	}
+	
+	@Override
+	public AreaInfo getVolumeInformation(Location firstPoint, Location secondPoint) {
+		return super.getVolumeInformation(firstPoint, firstPoint);
 	}
 
 }
