@@ -25,6 +25,7 @@ public class Shapes {
 		addShape(CylinderShape.class);
 		addShape(LineShape.class);
 		addShape(TreeShape.class);
+		addShape(CopyShape.class);
 	}
 	
 	private static void addShape(Class<? extends BaseShape> shape) {
