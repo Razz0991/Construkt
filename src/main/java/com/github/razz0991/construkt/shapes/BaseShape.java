@@ -60,7 +60,10 @@ public abstract class BaseShape extends ParameterObject {
 	 * @return {@link AreaInfo} with the relevant data
 	 */
 	public AreaInfo getVolumeInformation(Location firstPoint, Location secondPoint) {
-		return new AreaInfo(firstPoint, secondPoint);
+		if (!isUsingSingleLocation())
+			return new AreaInfo(firstPoint, secondPoint);
+		else
+			return new AreaInfo(firstPoint, firstPoint);
 	}
 	
 	protected BlockData setBlock(BlockData blockData, Location loc, BlockData strictBlock) {
@@ -68,6 +71,8 @@ public abstract class BaseShape extends ParameterObject {
 			return null;
 		
 		BlockData before = loc.getBlock().getBlockData();
+		if (strictBlock == null)
+			strictBlock = Material.AIR.createBlockData();
 		
 		if (blockData != null) {
 			if (ply.useExactCopy()) {
