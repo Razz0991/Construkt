@@ -19,7 +19,7 @@ GNU General Public License for more details.
 [GNU direct link](https://www.gnu.org/licenses/)
 
 ## Current Features
-**(As of Episode 8)**
+**(As of Episode 9)**
 
 - Shape filling
 - Shape clearing
@@ -42,35 +42,48 @@ wish to add before a release version is built (but pre-release versions are avai
 
 - Cuboid
 - Cylinder
-   - Axis Parameter
-   - Hollow Parameter
+   - Axis
+   - Hollow
 - Hollow Cuboid
-   - Outline Parameter
+   - Outline
 - Line
 - Overlay
-   - Depth Parameter (1 - 10)
+   - Depth (1 - 10)
 - Sphere
-   - Hollow Parameter
+   - Hollow
 - Terrain
-   - Octaves Parameter (1 - 8)
-   - Scale Parameter (1 - 10)
+   - Octaves (1 - 8)
+   - Scale (1 - 10)
+   - Seed
+   - Random Seed
+   - Smooth Edge
+   - Smooth Height (0 - 100)
+   - Smooth Distance
+- Tree
+   - Tree Type
+- Copy (Early Development)
+   - Paste Mode
    
 **Filters**
 
 - Checkered
-   - Invert Parameter
-   - Size Parameter (1 - 20)
+   - Invert
+   - Size (1 - 20)
 - Noise
-   - Octaves Parameter (1 - 8)
-   - Scale Parameter (1 - 10)
-   - Limit Parameter (1 - 99)
-   - Invert Parameter
+   - Octaves (1 - 8)
+   - Scale (1 - 10)
+   - Limit (1 - 99)
+   - Invert
+   - Seed
+   - Random Seed
+   - Smooth Edge
+   - Smooth Distance
 - Random
-   - Chance Parameter (1 - 99)
+   - Chance (1 - 99)
 - Slice
-   - Axis Parameter (x, y, or z)
-   - Percent Parameter (1, 99)
-   - Invert Parameter
+   - Axis (x, y, or z)
+   - Percent (1, 99)
+   - Invert
    
 ## Commands
 
